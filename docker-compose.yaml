@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:latest
+    container_name: database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: nienlu@nNganhY2023
+      MYSQL_DATABASE: db_nienluan
+      MYSQL_USER: nienluan
+      MYSQL_PASSWORD: nienlu@n2023
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
