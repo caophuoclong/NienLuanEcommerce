@@ -5,11 +5,5 @@
   "compilerOptions": {
     "deleteOutDir": true
   },
-  "spec": {
-    "class": false,
-    "component": true,
-    "module": false,
-    "service": false,
-    "controller": false
-  }
+  "spec": false
 }

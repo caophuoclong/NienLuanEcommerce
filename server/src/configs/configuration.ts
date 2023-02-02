@@ -8,5 +8,10 @@ export default ()=>({
         username: process.env.DATABASE_USERNAME,
         name: process.env.DATABASE_NAME,
         host:process.env.DATABASE_HOST,
+    },
+    jwt:{
+        secret: process.env.JWT_SECRET,
+        accessTokenExpire: process.env.JWT_ACCESS_TOKEN_EXPIRE,
+        refreshTokenExpire: process.env.JWT_REFRESH_TOKEN_EXPIRE,
     }
 })

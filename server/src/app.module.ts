@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { ConfigsModule } from './configs/configs.module';
 import { ProductsModule } from './products/products.module';
@@ -9,4 +9,6 @@ import { AuthModule } from './auth/auth.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule{
+ 
+}
