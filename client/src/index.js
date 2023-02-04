@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
@@ -9,6 +9,10 @@ import Home from './pages/Home';
 import Product from './pages/Product';
 import NotFound from './pages/NotFound';
 import { DefaultLayout } from './Layouts';
+import "./i18n";
+import { useAppDispatch } from './app/hooks';
+import { changeLanguage } from 'i18next';
+import { setDarkMode, changeLang } from './app/slices/setting.slice';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -25,9 +29,22 @@ const router = createBrowserRouter([
     errorElement: <NotFound/>
   },
 ]);
+const App = ()=>{
+  const dispatch = useAppDispatch();
+  useEffect(()=>{
+    const lang = window.localStorage.getItem("lang") || "vi";
+    const darkMode = window.localStorage.getItem("darkMode") || false;
+    dispatch(changeLang(lang));
+    dispatch(setDarkMode(darkMode));
+    changeLanguage(lang);
+  },[])
+  return (
+    <RouterProvider router={router}/>
+  )
+}
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router}/>
+    <App/>
   </Provider>,
 );
 
