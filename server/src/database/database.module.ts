@@ -3,8 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigsModule } from 'src/configs/configs.module';
 import { AuthEntity } from './entities/auth.entity';
-import { UserEntity } from './entities/user.entity';
-import { ShopEntity } from './entities/shop.entity';
+import { Customer } from './entities/customer';
+import Address from './entities/address';
+import { AdministrativeRegion } from './entities/address/administrativeRegion';
+import { AdministrativeUnit } from './entities/address/administrativeUnit';
+import { Province } from './entities/address/province';
+import { District } from './entities/address/district';
+import { Ward } from './entities/address/ward';
 
 @Module({
   imports: [
@@ -26,11 +31,11 @@ import { ShopEntity } from './entities/shop.entity';
           username: config.username,
           password: config.password,
           database: config.name,
-          entities: [AuthEntity, UserEntity, ShopEntity],
+          entities: [AuthEntity, Customer, Address, AdministrativeRegion, AdministrativeUnit, Province, District, Ward],
           synchronize: true,
         };
       },
-      inject: [ConfigService],
+      inject: [ConfigService]
     }),
   ],
 })
