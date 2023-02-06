@@ -23,22 +23,29 @@ const ChangeLanguage = () => {
     dispatch(changeLang(lang))
     changeLanguage(lang);
   }
+  const imageSize = 16
   return (
     <div
       ref={changeLanaugeRef}
       className="realative cursor-pointer"
       onClick={() => setShowOptionLanguage((prev) => !prev)}
     >
-        Change language with i18n
-      <img className="mx-1" width={32} height={32} src={lang === 'vi' ? VN : US} />
-      <div className={`absolute ${showOptionLanguage ? 'block' : 'hidden'} bg-gray-100`}>
+      <div className="flex">
+        <img className="mx-1" width={imageSize} height={imageSize} src={lang === 'vi' ? VN : US} />
+        <span className="text-sm">{
+          lang === 'vi' ? 'Tiếng Việt' : 'English'
+        }</span>
+      </div>
+      <div className={`absolute ${showOptionLanguage ? 'block' : 'hidden'} bg-[#212d4c] drop-shadow-2xl
+
+`}>
         <div className="">
           <div
             onClick={()=>handleChangeLanguage('vi')}
             htmlFor="vi"
             className="flex gap-2 hover:bg-blue-500 hover:text-white rounded-lg items-center px-1 box-border"
           >
-            <img width={32} height={32} src={VN} />
+            <img width={imageSize} height={imageSize} src={VN} />
             <span className="text-sm">Tiếng Việt</span>
           </div>
           <div
@@ -46,7 +53,7 @@ const ChangeLanguage = () => {
             htmlFor="en"
             className="flex gap-2 hover:bg-blue-500 hover:text-white rounded-lg items-center px-1 box-border"
           >
-            <img width={32} height={32} src={US} />
+            <img width={imageSize} height={imageSize} src={US} />
             <span className="text-sm">English</span>
           </div>
         </div>
