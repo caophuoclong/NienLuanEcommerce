@@ -9,10 +9,12 @@ async function bootstrap() {
   const config = new DocumentBuilder()
   .setTitle("Ecommerce Application")
   .setVersion("1.0")
+  .addServer("/api")
+  .addBearerAuth()
   .build();
   const documet = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("/api",app, documet);
   app.setGlobalPrefix("/api");
+  SwaggerModule.setup("api",app, documet);
   app.useGlobalGuards(new RolesGuard(new Reflector()));
   app.use(cookieParser())
   await app.listen(3003);
