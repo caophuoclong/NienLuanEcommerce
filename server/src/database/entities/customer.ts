@@ -2,15 +2,18 @@ import { GenderEnum } from "src/enum/gender.enum";
 import { AfterUpdate, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AuthEntity } from "./auth.entity";
 import Address from "./address";
+import { Product } from "./product";
+import { Cart } from './cart/index';
+import { CreditCart } from "./creditCart";
+import { Payment } from "./payment";
+import { Coupon } from "./coupon";
 
 @Entity()
 export class Customer{
 @PrimaryGeneratedColumn('uuid')
   _id: string;
   @OneToOne(() => AuthEntity, auth => auth.username)
-  @JoinColumn({
-    name: "username"
-  })
+  @JoinColumn()
   auth: AuthEntity;
   @Column({
     nullable: true,
@@ -27,7 +30,7 @@ export class Customer{
   @Column({
     nullable: true
   })
-  name: string;
+  shop_name: string;
   @Column({
     type: 'date',
     nullable: true,
@@ -53,6 +56,18 @@ export class Customer{
   updatedAt: number;
   @OneToMany(()=> Address, address => address.customer)
   address: Address[];
+  @OneToMany(() => Product, product => product.shop)
+  products: Product[];
+  @OneToOne(()=> Cart, cart => cart.customer)
+  @JoinColumn()
+  cart: Cart;
+  @OneToMany(()=>CreditCart, creditCart => creditCart.customer)
+  creditCards: CreditCart[]; 
+  @OneToMany(()=> Payment, payment => payment.customer)
+  payments: Payment[];
+  @ManyToMany(()=> Coupon, coupon => coupon.user)
+  storedCoupon: Coupon[]
+
   @AfterUpdate()
   afterUpdate() {
     this.updatedAt = Date.now();
