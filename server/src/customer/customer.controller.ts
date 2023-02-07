@@ -9,6 +9,6 @@ import { RolesEnum } from 'src/enum/roles.enum';
 export class CustomerController {
     @Get()
     getMe(){
-
+        return "me"
     }
 }

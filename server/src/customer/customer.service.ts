@@ -17,7 +17,9 @@ export class CustomerService implements ICustomer {
     data: Partial<{ firstName: string; lastName: string; middleName: string; name: string }>,
   ) {
     try {
-      const user = this.customerEntity.create({ auth, ...data });
+      const user = this.customerEntity.create({ auth: {
+        username: auth.username
+      }, ...data });
       return await this.customerEntity.save(user);
     } catch (error) {
       const message = error.message;
