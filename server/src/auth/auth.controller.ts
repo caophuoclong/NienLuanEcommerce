@@ -7,6 +7,7 @@ import { RolesEnum } from 'src/enum/roles.enum';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from './auth.guard';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('auth')
 @ApiTags("Authentication")
@@ -14,6 +15,8 @@ export class AuthController {
     constructor(
         private readonly authService: AuthService
     ){}
+    @Public()
+
     @Post("/register")
     @ApiOkResponse({
         description: "Register successfully"
@@ -24,6 +27,8 @@ export class AuthController {
         return "Create user successfully";
 
     }
+    @Public()
+
     @Post("/login")
     async login(@Body() dto: LoginDTO, @Res({
         passthrough: true
@@ -32,8 +37,10 @@ export class AuthController {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
         })
-        res.json(accessToken);
+        return (accessToken);
     }
+    @Public()
+
     @Get("/refreshToken")
     async refreshToken(@Req() request: Request){
         const refreshToken = request.cookies["refreshToken"];

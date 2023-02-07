@@ -15,12 +15,13 @@ export class RolesGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const user = request.user;
+
     if(!user){
       throw new ForbiddenException("could not determine role");
     }
     return this.matchRole(roles, user.role);
   }
-  private matchRole(roles: Array<RolesEnum>, userRoles: Array<RolesEnum> ): boolean{
+  private matchRole(roles: Array<RolesEnum>, ...userRoles: Array<RolesEnum> ): boolean{
     return userRoles.some(role => roles.includes(role));
   }
 }

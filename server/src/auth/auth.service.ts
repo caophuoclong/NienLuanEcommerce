@@ -24,7 +24,6 @@ export class AuthService {
     ){}
     async registration(dto: RegistrationDTO){
         try{
-
         const {firstName, lastName, middleName, name, ...authDTO} = dto;
         const auth = await this.authRepository.save({
             ...authDTO,
@@ -41,11 +40,13 @@ export class AuthService {
             case RolesEnum.SHOP:
                 await this.customerService.create(auth, {
                     name
-                })
+                });
+                break;
             case RolesEnum.ADMIN:
                 await this.customerService.create(auth, {
                     name
                 });
+                break;
             default:
                 throw new BadRequestException("Role is not supported");
         }
@@ -105,6 +106,7 @@ export class AuthService {
         return checkPassword(newPassword, password);
     }
     private generateToken(expire: string, data: {} = {}){
+        console.log(data);
         return this.jwtService.sign(data,{
             expiresIn: expire,
         })
