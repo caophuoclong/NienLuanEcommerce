@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import * as bcrypt from "bcrypt"
 import * as dotenv from "dotenv";
 dotenv.config()
     const PEPPER = process.env.PASSWORD_PEPPER;

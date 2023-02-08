@@ -3,9 +3,11 @@ import Header from './Header'
 
 export default function Default({children}) {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
         <Header/>
-        {children}
+        <main className={`px-[10rem]`}>
+          {children}
+        </main>
     </div>
   )
 }

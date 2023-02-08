@@ -8,9 +8,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthEntity } from 'src/database/entities/auth.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { CustomerModule } from '../customer/customer.module';
+import { CacheModule } from 'src/cache/cache.module';
 
 @Module({
-  imports: [ConfigModule,TypeOrmModule.forFeature([AuthEntity]),
+  imports: [ConfigModule,TypeOrmModule.forFeature([AuthEntity], ),CustomerModule,
+  CacheModule,
   PassportModule,
   JwtModule.registerAsync({
     imports: [ConfigsModule],

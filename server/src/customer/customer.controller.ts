@@ -6,9 +6,9 @@ import { RolesEnum } from 'src/enum/roles.enum';
 @Controller('user')
 @UseGuards(JwtAuthGuard)
 @Roles(RolesEnum.USER)
-export class UserController {
+export class CustomerController {
     @Get()
     getMe(){
-
+        return "me"
     }
 }
