@@ -11,7 +11,7 @@ const NavBar = () => {
         <ChangeLanguage />
       </div>
       <div className="flex gap-x-4">
-        <Link to="/sigin">{t('Sign In')}</Link>
+        <Link to="/signin">{t('Sign In')}</Link>
         <Link to="/register">{t('Create an Account')}</Link>
       </div>
     </div>
