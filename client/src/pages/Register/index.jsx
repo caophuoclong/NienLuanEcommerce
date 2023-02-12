@@ -1,8 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
-import LogIn from "../LogIn";
 import { FaFacebookF, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
-import { MdLockOutline } from 'react-icons/md';
 
 export default function Register() {
   return (
@@ -21,7 +18,7 @@ export default function Register() {
 
           <div>
             <a
-              href="./sigin"
+              href="/signin"
               className="border-2 text-white border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-green-500">
               SIGN IN
             </a>

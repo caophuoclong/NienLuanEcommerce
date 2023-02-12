@@ -46,7 +46,7 @@ export default function Slider({
       >
         {carousel.map((item, index) => (
           <Link to={item.to}>
-            <img src={item.src} className={`h-[${height}] rounded-lg w-[${width}]`} />
+            <img src={item.src} className={`h-[320px] rounded-lg w-[${width}]`} />
           </Link>
         ))}
       </Carousel>
