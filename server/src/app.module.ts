@@ -8,9 +8,10 @@ import { CustomerModule } from './customer/customer.module';
 import { ShopModule } from './shop/shop.module';
 import { CartModule } from './cart/cart.module';
 import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
-  imports: [DatabaseModule, ConfigsModule, ProductsModule, AuthModule, CustomerModule, ShopModule, CartModule, ProductModule],
+  imports: [DatabaseModule, ConfigsModule, ProductsModule, AuthModule, CustomerModule, ShopModule, CartModule, ProductModule, CategoryModule],
   controllers: [],
   providers: [],
 })

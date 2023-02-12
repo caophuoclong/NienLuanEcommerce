@@ -106,7 +106,6 @@ export class AuthService {
         return checkPassword(newPassword, password);
     }
     private generateToken(expire: string, data: {} = {}){
-        console.log(data);
         return this.jwtService.sign(data,{
             expiresIn: expire,
         })

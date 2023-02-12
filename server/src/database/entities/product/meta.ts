@@ -12,7 +12,11 @@ export class ProductMeta{
     type: string;
     @Column()
     price: number;
-    @Column()
+    @Column(
+        {
+            default: 0
+        }
+    )
     sold: number;
     @ManyToOne(()=> Product, product=> product.meta)
     @JoinColumn()

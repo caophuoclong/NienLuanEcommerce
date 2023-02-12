@@ -25,7 +25,6 @@ export class AuthController {
         // console.log(dto);
         await this.authService.registration(dto);
         return "Create user successfully";
-
     }
     @Public()
 
@@ -44,7 +43,7 @@ export class AuthController {
     @Get("/refreshToken")
     async refreshToken(@Req() request: Request){
         const refreshToken = request.cookies["refreshToken"];
-        console.log("🚀 ~ file: auth.controller.ts:40 ~ AuthController ~ refreshToken ~ refreshToken", refreshToken)
+        // console.log("🚀 ~ file: auth.controller.ts:40 ~ AuthController ~ refreshToken ~ refreshToken", refreshToken)
         if(!refreshToken){
             throw new BadRequestException("Refresh token is not provided");
         }

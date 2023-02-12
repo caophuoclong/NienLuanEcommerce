@@ -18,6 +18,7 @@ import { CartItem } from './entities/cart/cartItem';
 import { CreditCart } from './entities/creditCart';
 import { Payment } from './entities/payment';
 import { Coupon } from './entities/coupon';
+import { TreeCategory } from './entities/category_category.entity';
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import { Coupon } from './entities/coupon';
           username: config.username,
           password: config.password,
           database: config.name,
-          entities: [AuthEntity, Customer, Address, AdministrativeRegion, AdministrativeUnit, Province, District, Ward, Category, Product, ProductMeta, Cart, CartItem, CreditCart, Payment, Coupon],
+          entities: [AuthEntity, Customer, Address, AdministrativeRegion, AdministrativeUnit, Province, District, Ward, Category, Product, ProductMeta, Cart, CartItem, CreditCart, Payment, Coupon, TreeCategory],
           synchronize: true,
         };
       },
