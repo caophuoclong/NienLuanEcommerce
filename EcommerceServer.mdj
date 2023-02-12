@@ -2335,38 +2335,6 @@
 										},
 										{
 											"_type": "ERDColumnView",
-											"_id": "AAAAAAGGESrMd+k4Vh0=",
-											"_parent": {
-												"$ref": "AAAAAAGGESiVa+i/5Z8="
-											},
-											"model": {
-												"$ref": "AAAAAAGGESrMYek1PDg="
-											},
-											"visible": false,
-											"font": "Arial;13;0",
-											"left": 989,
-											"top": 242,
-											"width": 157.97265625,
-											"height": 13
-										},
-										{
-											"_type": "ERDColumnView",
-											"_id": "AAAAAAGGESrW5uk/0L0=",
-											"_parent": {
-												"$ref": "AAAAAAGGESiVa+i/5Z8="
-											},
-											"model": {
-												"$ref": "AAAAAAGGESrW1+k8Ek4="
-											},
-											"visible": false,
-											"font": "Arial;13;0",
-											"left": 989,
-											"top": 257,
-											"width": 157.97265625,
-											"height": 13
-										},
-										{
-											"_type": "ERDColumnView",
 											"_id": "AAAAAAGGES6B+elpp80=",
 											"_parent": {
 												"$ref": "AAAAAAGGESiVa+i/5Z8="
@@ -2379,13 +2347,28 @@
 											"top": 266,
 											"width": 157.97265625,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGGL8SCS2fdKSQ=",
+											"_parent": {
+												"$ref": "AAAAAAGGESiVa+i/5Z8="
+											},
+											"model": {
+												"$ref": "AAAAAAGGL8SCPmfa/7M="
+											},
+											"font": "Arial;13;0",
+											"left": 1045,
+											"top": 281,
+											"width": 157.97265625,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1040,
 									"top": 231,
 									"width": 167.97265625,
-									"height": 53
+									"height": 68
 								}
 							],
 							"font": "Arial;13;0",
@@ -7347,7 +7330,7 @@
 							"length": 0,
 							"foreignKey": true,
 							"referenceTo": {
-								"$ref": "AAAAAAGGC0/A5YSC/J4="
+								"$ref": "AAAAAAGGL8SCPmfa/7M="
 							}
 						},
 						{
@@ -7584,39 +7567,20 @@
 						},
 						{
 							"_type": "ERDColumn",
-							"_id": "AAAAAAGGESrMYek1PDg=",
-							"_parent": {
-								"$ref": "AAAAAAGGESiVa+i7smA="
-							},
-							"name": "district_code",
-							"length": 0,
-							"primaryKey": true,
-							"foreignKey": true,
-							"referenceTo": {
-								"$ref": "AAAAAAGGC0+kc4R0WR8="
-							}
-						},
-						{
-							"_type": "ERDColumn",
-							"_id": "AAAAAAGGESrW1+k8Ek4=",
-							"_parent": {
-								"$ref": "AAAAAAGGESiVa+i7smA="
-							},
-							"name": "ward_code",
-							"length": 0,
-							"primaryKey": true,
-							"foreignKey": true,
-							"referenceTo": {
-								"$ref": "AAAAAAGGC0/A5YSC/J4="
-							}
-						},
-						{
-							"_type": "ERDColumn",
 							"_id": "AAAAAAGGES6B4ulm1AY=",
 							"_parent": {
 								"$ref": "AAAAAAGGESiVa+i7smA="
 							},
 							"name": "detail",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGGL8SCPmfa/7M=",
+							"_parent": {
+								"$ref": "AAAAAAGGESiVa+i7smA="
+							},
+							"name": "_id",
 							"length": 0
 						}
 					]
