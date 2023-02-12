@@ -13,7 +13,8 @@ import "./i18n";
 import { useAppDispatch } from './app/hooks';
 import { changeLanguage } from 'i18next';
 import { setDarkMode, changeLang } from './app/slices/setting.slice';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import LogIn from './pages/LogIn';
+import Register from './pages/Register';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -26,6 +27,16 @@ const router = createBrowserRouter([
   {
     path: '/product/:id',
     element: <Product />,
+    errorElement: <NotFound/>
+  },
+  {
+    path: 'signin',
+    element: <LogIn />,
+    errorElement: <NotFound/>
+  },
+  {
+    path: 'register',
+    element: <Register />,
     errorElement: <NotFound/>
   },
 ]);
