@@ -22,7 +22,7 @@ function DropDownCategories(){
   const ref = useRef(null);
   window.addEventListener("click", (e)=>{
     const target = e.target;
-    if(!ref.current.contains(target)){
+    if(ref.current !== null && !ref.current.contains(target)){
       setShowDropdown(false)
     }
   })

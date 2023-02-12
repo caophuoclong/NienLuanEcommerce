@@ -13,7 +13,7 @@ import "./i18n";
 import { useAppDispatch } from './app/hooks';
 import { changeLanguage } from 'i18next';
 import { setDarkMode, changeLang } from './app/slices/setting.slice';
-
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
