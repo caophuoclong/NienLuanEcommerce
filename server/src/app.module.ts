@@ -9,11 +9,15 @@ import { ShopModule } from './shop/shop.module';
 import { CartModule } from './cart/cart.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [DatabaseModule, ConfigsModule, ProductsModule, AuthModule, CustomerModule, ShopModule, CartModule, ProductModule, CategoryModule],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule{
  

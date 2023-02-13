@@ -18,12 +18,12 @@ export default function LogIn() {
 
             <div className="flex flex-row space-x-9">
               <a
-                href="#"
+                href="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaFacebookF className="text-sm" />
               </a>
               <a
-                href="#"
+                href="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaGoogle className="text-sm" />
               </a>
@@ -40,12 +40,12 @@ export default function LogIn() {
 
             <div className="flex justify-between w-64 mb-5">
               <label className="flex items-center text-xs"><input type="checkbox" name="remember" className="mr-1" />Remember me</label>
-              <a href="#" className="text-xs">Forgot Password?</a>
+              <a href="/test" className="text-xs">Forgot Password?</a>
             </div>
 
             <div>
               <a
-                href="#"
+                href="/test"
                 className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white">
                 SIGN IN
               </a>

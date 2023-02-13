@@ -21,7 +21,7 @@ export default function Register() {
 
           <div>
             <a
-              href="./sigin"
+              href="/signin"
               className="border-2 text-white border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-green-500">
               SIGN IN
             </a>
@@ -37,12 +37,12 @@ export default function Register() {
 
             <div className="flex flex-row space-x-9">
               <a
-                href="#"
+                href="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaFacebookF className="text-sm" />
               </a>
               <a
-                href="#"
+                href="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaGoogle className="text-sm" />
               </a>
@@ -60,7 +60,7 @@ export default function Register() {
 
             <div>
               <a
-                href="#"
+                href="/test"
                 className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white">
                 SIGN UP
               </a>
