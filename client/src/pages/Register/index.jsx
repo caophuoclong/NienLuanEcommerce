@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
+import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 
 export default function Register() {
   return (
@@ -34,12 +34,12 @@ export default function Register() {
 
             <div className="flex flex-row space-x-9">
               <a
-                href="#"
+                href="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaFacebookF className="text-sm" />
               </a>
               <a
-                href="#"
+                href="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaGoogle className="text-sm" />
               </a>
@@ -57,7 +57,7 @@ export default function Register() {
 
             <div>
               <a
-                href="#"
+                href="/test"
                 className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white">
                 SIGN UP
               </a>

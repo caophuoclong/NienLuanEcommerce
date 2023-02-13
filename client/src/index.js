@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
 import Product from './pages/Product';
@@ -15,6 +16,7 @@ import { changeLanguage } from 'i18next';
 import { setDarkMode, changeLang } from './app/slices/setting.slice';
 import LogIn from './pages/LogIn';
 import Register from './pages/Register';
+import Cart from './pages/Cart';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -26,7 +28,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/product/:id',
-    element: <Product />,
+    element: <DefaultLayout children={<Product/>}/>,
+    errorElement: <NotFound/>
+  },
+  {
+    path: "cart",
+    element: <Cart/>,
     errorElement: <NotFound/>
   },
   {
