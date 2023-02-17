@@ -2,7 +2,8 @@ export enum itemId {
   HOME = "HOME",
   SALES = "SALES",
   REPORTS = "REPORTS",
-  RATING = "RATING"
+  RATING = "RATING",
+  PROFILE = "PROFILE"
 }
 export enum SalesSubItemId {
   PRODUCTS = "PRODUCTS",
@@ -14,4 +15,4 @@ export enum RatingSubItemId{
     RATINGS = "RATINGS"
 }
 export type subItemId = SalesSubItemId  | RatingSubItemId;
-export type selectedPage = "home" | "products" | "categories" | "invoices" | "reviews" | "ratings";
+export type selectedPage = "home" | "products" | "categories" | "invoices" | "reviews" | "ratings" | "profile";

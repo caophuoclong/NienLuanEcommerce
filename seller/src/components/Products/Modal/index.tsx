@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  FormControl,
+  FormLabel,
   IconButton,
   Input,
   Modal,
@@ -11,96 +13,28 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Spinner,
   Text,
 } from "@chakra-ui/react"
-import React, { useEffect } from "react"
-import { FaCheck, FaTimes } from "react-icons/fa"
+import React, { useEffect, useState } from "react"
+import { FaCheck, FaTimes, FaWindowMinimize } from "react-icons/fa"
 import { categories } from "../../../sampleData"
 import { ICategory } from "../../../types/category"
-import { IProduct } from "../type"
+import { IProduct } from "../../../types/product"
+import AddNewDetailButton from "./AddNewDetailButton"
+import { useAppSelector, useDebounce } from "../../../app/hooks"
+import { CategoryService } from "../../../service/api/category"
+import RenderCategoryResult from "./RenderCategoryResult"
+import { RiSubtractFill } from "react-icons/ri"
+import Detail from "./Detail"
+import Meta from "./Meta"
 type Props = {
   name: string
   isOpen: boolean
   onClose: () => void
   product?: IProduct
   onSubmit: (product: IProduct) => void
-}
-
-function AddNewDetailButton({
-  onAddDetail,
-}: {
-  onAddDetail: ({ name, value }: { name: string; value: string }) => void
-}) {
-  const [detailName, setDetailName] = React.useState<string>("")
-  const [detailValue, setDetailValue] = React.useState<string>("")
-  const handleAddDetail = () => {
-    onAddDetail({ name: detailName, value: detailValue })
-    setDetailName("")
-    setDetailValue("")
-  }
-  return (
-    <Box flex="1">
-      <Input
-        fontSize={"sm"}
-        size="sm"
-        fontWeight="semibold"
-        placeholder="Detail name"
-        id="detail-name"
-        variant={"unstyled"}
-        value={detailName.charAt(0).toUpperCase() + detailName.slice(1)}
-        onChange={(e) => setDetailName(e.target.value)}
-        // on enter next input
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            document.getElementById("detail-value")?.focus()
-          }
-        }}
-      />
-      <Box
-        minHeight={"40px"}
-        boxSizing="border-box"
-        display={"flex"}
-        rounded="lg"
-        alignItems={"center"}
-        border="1px dotted #eaeaee"
-        pr=".2rem"
-        _focusWithin={{
-          boxShadow: "0 0 1px 1px #3182ce",
-          borderColor: "#3182ce",
-          borderStyle: "solid",
-          zIndex: 1,
-        }}
-      >
-        <Input
-          flex="4"
-          placeholder="Detail value"
-          variant={"unstyled"}
-          px="1rem"
-          id="detail-value"
-          value={detailValue}
-          onChange={(e) => setDetailValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              if (detailName.length > 0) handleAddDetail()
-              else {
-                alert("You must enter detail name first")
-                document.getElementById("detail-name")?.focus()
-              }
-            }
-          }}
-        />
-        {detailValue.length > 0 && detailName.length > 0 && (
-          <IconButton
-            flex="1"
-            size="sm"
-            aria-label="add new detail"
-            icon={<FaCheck />}
-            onClick={handleAddDetail}
-          />
-        )}
-      </Box>
-    </Box>
-  )
+  unSelectProduct: () => void
 }
 
 export default function ModalProduct({
@@ -109,57 +43,130 @@ export default function ModalProduct({
   onClose,
   onSubmit,
   product,
+  unSelectProduct,
 }: Props) {
-  const [productName, setProductName] = React.useState<string>(
-    product?.name || ""
+  const [productName, setProductName] = React.useState<string>("")
+  const keys = [
+    {
+      key: "price",
+      default: true,
+    },
+    {
+      key: "stock",
+      default: true,
+    },
+    {
+      key: "images",
+      default: true,
+    },
+  ]
+  const [meta, setMeta] = useState<
+    Array<{
+      [key: string]: string
+    }>
+  >(
+    (() => {
+      const newObj: {
+        [key: string]: string
+      } = {}
+      keys.map((key, value) => {
+        newObj[key.key] = ""
+      })
+      return [newObj]
+    })()
   )
-  const [productPrice, setProductPrice] = React.useState<number>(
-    product?.price || 0
-  )
-  const [productCategory, setProductCategory] = React.useState<ICategory>(
-    {} as ICategory
-  )
-  const [productDetail, setProductDetail] = React.useState<any>(
+  // console.log(product?.meta)
+  console.log(meta)
+
+  useEffect(() => {
+    if (product) {
+      setProductName(product.name)
+      setSelectedCategory(product.category)
+      setProductDetail(product.detail)
+      setMeta(product.meta)
+    }
+  }, [product])
+  const [productDetail, setProductDetail] = React.useState<{
+    [key: string]: string
+  }>(
     {} as {
       [key: string]: string
     }
   )
-  const [productStock, setProductStock] = React.useState<number>(
-    product?.stock || 0
+  const [category, setCategory] = useState<string>("")
+  const [isSearching, setIsSearching] = useState<boolean>(false)
+  const [categoriesResult, setCategoriesResult] = useState<Array<ICategory>>([])
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>(
+    {} as ICategory
   )
-  const [productDescription, setProductDescription] = React.useState<string>(
-    product?.description || ""
-  )
-  const [requireDetail, setRequireDetail] = React.useState<string[]>([])
+  const lang = useAppSelector((state) => state.homeSLice.lang)
+  const debounceSearchCategory = useDebounce(category, 500)
   useEffect(() => {
-    const category = categories.find((c) => c._id === productCategory._id)
-    setRequireDetail(category?.requireDetail || [])
-  }, [productCategory])
-  const [chunks, setChunks] = React.useState<Array<Array<string>>>([[]])
-  useEffect(() => {
-    setChunks(
-      requireDetail.reduce<string[][]>((resultArray, item, index) => {
-        const chunkIndex = Math.floor(index / 2)
-        if (!resultArray[chunkIndex]) {
-          resultArray[chunkIndex] = [] as Array<string> // start a new chunk
-        }
-        resultArray[chunkIndex].push(item)
-        return resultArray
-      }, [])
-    )
-  }, [requireDetail])
-  const handleAddDetail = ({
-    name,
-    value,
-  }: {
-    name: string
-    value: string
-  }) => {
-    setProductDetail({ ...productDetail, [name]: value })
-    setRequireDetail((prev) => [...prev, name])
+    ;(async () => {
+      if (debounceSearchCategory) {
+        setIsSearching(true)
+        setTimeout(async () => {
+          const response = await CategoryService.findCategoryByName(
+            category,
+            lang
+          )
+          setCategoriesResult(response)
+          setIsSearching(false)
+        }, 300)
+      } else {
+        setCategoriesResult([])
+        setIsSearching(false)
+      }
+    })()
+  }, [debounceSearchCategory])
+
+  // split requireDetail to array with every 2 element
+  // then map to render 2 element in 1 row
+  // shoutout to https://stackoverflow.com/questions/8495687/split-array-into-chunks
+  const onAddProductDetail = (name: string, value: string) => {
+    setProductDetail((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      }
+    })
   }
+  const onSelectCategory = (category: ICategory) => {
+    setSelectedCategory(category)
+    setCategory("")
+  }
+
+  const handleSubmit = () => {
+    onSubmit({
+      ...product,
+      name: productName,
+      category: selectedCategory,
+      detail: productDetail,
+      meta: meta,
+    })
+    setProductName("")
+    setProductDetail({} as { [key: string]: string })
+    setCategory("")
+    setSelectedCategory({} as ICategory)
+    setMeta([{}])
+  }
+  useEffect(() => {
+    console.log(meta)
+  }, [meta])
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        setProductName("")
+        setProductDetail({} as { [key: string]: string })
+        setCategory("")
+        setSelectedCategory({} as ICategory)
+        setMeta([{}])
+        unSelectProduct()
+        onClose()
+      }}
+      size="4xl"
+    >
       <ModalOverlay />
       <ModalContent padding="1rem">
         <ModalHeader borderBottom={"1px solid #eaeaee"}>{name}</ModalHeader>
@@ -167,108 +174,119 @@ export default function ModalProduct({
         <ModalBody display={"flex"} flexDirection={"column"} gap="1rem">
           {/* row1 */}
           <Box display={"flex"} gap="1rem">
-            <Box flex="1">
-              <label htmlFor="productName">
-                <Text fontSize={"sm"} fontWeight="bold">
-                  Product Name
-                </Text>
-              </label>
+            <FormControl flex="1" isRequired>
+              <FormLabel
+                htmlFor="productName"
+                fontSize={"sm"}
+                fontWeight="bold"
+              >
+                Product Name
+              </FormLabel>
               <Input
                 id="productName"
                 onChange={(e) => setProductName(e.target.value)}
                 value={productName}
               />
-            </Box>
-            <Box flex="1">
-              <label htmlFor="category">
-                <Text fontSize={"sm"} fontWeight="bold">
-                  Category
-                </Text>
-              </label>
-              <Select
+            </FormControl>
+            <FormControl flex="1" position={"relative"} isRequired>
+              <FormLabel htmlFor="category" fontSize={"sm"} fontWeight="bold">
+                Category
+              </FormLabel>
+              <Input
+                value={
+                  Object.keys(selectedCategory).length === 0
+                    ? category
+                    : selectedCategory[`name_${lang}`]
+                }
                 onChange={(e) => {
-                  const category = categories.find(
-                    (c) => c._id === +e.target.value
-                  )
-                  setProductCategory(category || ({} as ICategory))
+                  if (Object.keys(selectedCategory).length !== 0)
+                    setSelectedCategory({} as ICategory)
+                  setCategory(e.target.value)
                 }}
-              >
-                <option value="0">Select category</option>
-                {categories.map((c) => (
-                  <option key={c._id} value={c._id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
-            </Box>
+              />
+              {Object.keys(selectedCategory).length === 0 &&
+                debounceSearchCategory && (
+                  <Box
+                    position={"absolute"}
+                    minW="300px"
+                    minH={"100px"}
+                    shadow="2xl"
+                    bg="#aaaeee"
+                    transform={"translateY(5%)"}
+                    zIndex={"popover"}
+                    rounded="lg"
+                  >
+                    {isSearching && (
+                      <Box
+                        position={"absolute"}
+                        top="50%"
+                        left="50%"
+                        transform={"translate(-50%, -50%)"}
+                        display="flex"
+                        flexDirection="column"
+                        gap="1rem"
+                        alignItems="center"
+                        justifyContent={"center"}
+                      >
+                        <Spinner
+                          thickness="4px"
+                          speed="0.65s"
+                          emptyColor="gray.200"
+                          color="blue.500"
+                          size="xl"
+                        />
+                        <Text>Loading...</Text>
+                      </Box>
+                    )}
+                    {categoriesResult.length > 0 ? (
+                      <Box
+                        h="200px"
+                        overflowY={"auto"}
+                        display="flex"
+                        flexDirection={"column"}
+                        p="1rem"
+                      >
+                        <RenderCategoryResult
+                          categories={categoriesResult}
+                          onSelectCategory={onSelectCategory}
+                        />
+                      </Box>
+                    ) : isSearching ? null : (
+                      <Text
+                        position={"absolute"}
+                        top="50%"
+                        left="50%"
+                        transform={"translate(-50%, -50%)"}
+                      >
+                        No result
+                      </Text>
+                    )}
+                  </Box>
+                )}
+            </FormControl>
           </Box>
           {/* row2 */}
-          <Box maxHeight="250px" overflowY={"auto"} position="relative">
-            <Text
-              borderBottom={"1px solid black"}
-              position="sticky"
-              top="0"
-              bg="white"
-              zIndex="docked"
-              fontWeight={"bold"}
-              marginBottom="1rem"
-            >
-              Details
-            </Text>
-            <Box>
-              {
-                // split requireDetail to array with every 2 element
-                // then map to render 2 element in 1 row
-                //   shoutout to https://stackoverflow.com/questions/8495687/split-array-into-chunks
-                chunks.map((row, index) => (
-                  <>
-                    <Box display="flex" gap="1rem">
-                      {row.map((detail, jndex) => (
-                        <>
-                          <Box flex="1">
-                            <label htmlFor={detail}>
-                              <Text fontSize={"sm"} fontWeight="semibold">
-                                {
-                                  // capitalize first letter
-                                  // shoutout to https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-                                  detail.charAt(0).toUpperCase() +
-                                    detail.slice(1)
-                                }
-                              </Text>
-                            </label>
-                            <Input
-                              id={detail}
-                              onChange={(e) => {
-                                setProductDetail({
-                                  ...productDetail,
-                                  [detail]: e.target.value,
-                                })
-                              }}
-                              value={productDetail[detail]}
-                            />
-                          </Box>
-                          {jndex === 0 &&
-                            detail ===
-                              requireDetail[requireDetail.length - 1] && (
-                              <AddNewDetailButton
-                                onAddDetail={handleAddDetail}
-                              />
-                            )}
-                        </>
-                      ))}
-                    </Box>
-                    {row.length >= 2 && index === chunks.length - 1 && (
-                      <AddNewDetailButton onAddDetail={handleAddDetail} />
-                    )}
-                  </>
-                ))
+          <Detail
+            selectedCategory={selectedCategory}
+            onAddProductDetail={onAddProductDetail}
+            productDetail={productDetail}
+          />
+          {/* Row 3 */}
+          <Meta
+            meta={meta}
+            setMeta={(me: Array<{ [key: string]: string }>) => {
+              console.log(Object.values(me[0]).every((m) => m === ""))
+              if (product && Object.values(me[0]).every((m) => m === "")) {
+                return
+              } else {
+                setMeta(me)
               }
-            </Box>
-          </Box>
+            }}
+          />
         </ModalBody>
 
         <ModalFooter justifyContent={"flex-start"}>
-          <Button colorScheme="facebook" mr={3} onClick={onClose}>
+          <Button colorScheme="facebook" mr={3} onClick={handleSubmit}>
             {name.toLocaleLowerCase().includes("add") ? "Add" : "Save"}
           </Button>
           {!name.toLocaleLowerCase().includes("add") && (

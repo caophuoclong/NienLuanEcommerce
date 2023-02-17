@@ -1,26 +1,19 @@
 import { Button, Td, Text, Tr } from "@chakra-ui/react"
 import React from "react"
 import { BiEdit } from "react-icons/bi"
-import { IProduct } from "./type"
+import { IProduct } from "../../types/product"
 
 type Props = IProduct & {
   onEditProduct: () => void
 }
 
-export default function Product({
-  category,
-  id,
-  name,
-  price,
-  stock,
-  onEditProduct,
-}: Props) {
+export default function Product({ category, id, name, onEditProduct }: Props) {
   return (
     <Tr>
       <Td>{name}</Td>
-      <Td>{price}</Td>
-      <Td>{category}</Td>
-      <Td>{stock}</Td>
+      <Td>{9000}</Td>
+      <Td>{category.name_en}</Td>
+      <Td>{12}</Td>
       <Td>
         <Button
           onClick={onEditProduct}

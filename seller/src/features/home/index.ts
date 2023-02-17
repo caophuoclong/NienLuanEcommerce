@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AuthService } from "../../service/api/auth";
 import { itemId, RatingSubItemId, SalesSubItemId, selectedPage, subItemId } from '../../types/home';
+import { IUser } from "../../types/user";
 interface HomeSlice{
     showNavBar: boolean,
     page: itemId,
@@ -7,6 +9,8 @@ interface HomeSlice{
         [key in itemId]?: subItemId
     },
     selectedPage: selectedPage,
+    user: IUser,
+    lang: "en" | "vi"
 }
 const initialState: HomeSlice = {
     showNavBar: true,
@@ -15,9 +19,13 @@ const initialState: HomeSlice = {
         [itemId.SALES]: SalesSubItemId.PRODUCTS,
         [itemId.RATING]: RatingSubItemId.REVIEWS
     },
-    selectedPage: "home"
+    selectedPage: "home",
+    user: {} as IUser,
+    lang: "vi"
 }
-
+export const getMe = createAsyncThunk("Get me", async ()=>{
+    return (await AuthService.getMe()).data;
+})
 export const homeSlice = createSlice({
     name: "Home page",
     initialState,
@@ -48,14 +56,28 @@ export const homeSlice = createSlice({
             }
                 
         },
-    changeSelectedPage(state, action: PayloadAction<selectedPage>){
+        changeSelectedPage(state, action: PayloadAction<selectedPage>){
         return {
             ...state,
             selectedPage: action.payload
         }
-    }
+        },
+        changeLanguage(state, action: PayloadAction<"en" | "vi">){
+            return {
+                ...state,
+                lang: action.payload
+            }
+        }
+    },
+    extraReducers: (builder)=>{
+        builder.addCase(getMe.fulfilled, (state, action: PayloadAction<IUser>)=>{
+            return {
+                ...state,
+                user: action.payload
+            }
+        })
     }
 })
 
-export const {toggleNavBar, changePage, changeSubItemPage, changeSelectedPage} = homeSlice.actions;
+export const {toggleNavBar, changePage, changeSubItemPage, changeSelectedPage, changeLanguage} = homeSlice.actions;
 export default homeSlice.reducer;

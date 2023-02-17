@@ -4,6 +4,7 @@ import {
   RiPieChartFill,
   RiArrowDownSLine,
   RiArrowUpSLine,
+  RiAccountCircleFill,
 } from "react-icons/ri"
 import { useAppSelector, useAppDispatch } from "../../app/hooks"
 import { GiShoppingBag } from "react-icons/gi"
@@ -22,6 +23,7 @@ import {
   changeSubItemPage,
 } from "../../features/home"
 import { BiLogOut } from "react-icons/bi"
+import { useNavigate } from "react-router-dom"
 
 interface item {
   name: string
@@ -54,7 +56,6 @@ const Item = ({
   pageName,
 }: ItemProps & item) => {
   const dispatch = useAppDispatch()
-  console.log("🚀 ~ file: index.tsx:48 ~ subItemId", subItemId)
   return (
     <Box width="full">
       <Box
@@ -182,11 +183,23 @@ export default function NavBar() {
       ],
     },
     {
+      id: itemId.PROFILE,
+      name: "Profile",
+      pageName: "profile",
+      icon: <RiAccountCircleFill size="24px" />,
+    },
+    {
       id: itemId.REPORTS,
       name: "Reports",
       icon: <MdReport size="24px" />,
     },
   ]
+  const navigate = useNavigate()
+  const onLogout = () => {
+    window.localStorage.removeItem("access_token")
+    alert("Logout success!")
+    navigate("/signin")
+  }
   return (
     <Box
       shadow={"xl"}
@@ -217,7 +230,13 @@ export default function NavBar() {
           />
         ))}
       </Box>
-      <Box marginTop={"auto"} cursor="pointer" display={"flex"} gap="1rem">
+      <Box
+        marginTop={"auto"}
+        cursor="pointer"
+        display={"flex"}
+        gap="1rem"
+        onClick={onLogout}
+      >
         <BiLogOut size="24px" />
         {showNavBar && <Text fontWeight={"semibold"}>Log out</Text>}
       </Box>

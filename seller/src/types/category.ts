@@ -1,5 +1,7 @@
 export interface ICategory{
     _id: number;
-    name: string;
-    requireDetail: string[]
+    name_vi: string;
+    name_en: string;
+    requireDetail: string;
+    cratedAt: number;
 }

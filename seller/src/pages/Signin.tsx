@@ -1,15 +1,40 @@
 import { Box, Button, Checkbox, Image, Input, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { AuthService } from "../service/api/auth"
 
 type Props = {}
 
 export default function Signin({}: Props) {
   const [rememberMe, setRememberMe] = React.useState(false)
-  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    document.title = "Signin"
+    const access_token = window.localStorage.getItem("access_token")
+    if (access_token) {
+      navigate("/")
+    }
+  }, [])
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const email = e.currentTarget.email.value
+    const username = e.currentTarget.username.value
     const password = e.currentTarget.password.value
-    console.log(email, password, rememberMe)
+    try {
+      const response = await AuthService.login({
+        username,
+        password,
+        rememberMe,
+      })
+      if (response) {
+        window.localStorage.setItem("access_token", response.data)
+        navigate("/")
+      }
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        alert(error.response.data.message)
+      }
+    }
   }
   return (
     <Box position={"relative"} width={"100vw"} height={"100vh"}>
@@ -48,14 +73,14 @@ export default function Signin({}: Props) {
           <form onSubmit={onFormSubmit}>
             <Box display="flex" flexDirection="column" gap={2}>
               <Box>
-                <label htmlFor="emails">
-                  <Text fontWeight={"semibold"}>Your email</Text>
+                <label htmlFor="username">
+                  <Text fontWeight={"semibold"}>Username</Text>
                 </label>
                 <Input
                   rounded="lg"
-                  id="emails"
-                  placeholder="abc123@gmail.com"
-                  name="email"
+                  id="username"
+                  placeholder="abc123"
+                  name="username"
                 />
               </Box>
               <Box>

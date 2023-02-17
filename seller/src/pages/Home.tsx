@@ -1,12 +1,14 @@
 import { Box } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect } from "react"
 import Header from "../components/header"
 import NavBar from "../components/navbar"
 import Products from "../components/Products"
 import { selectedPage } from "../types/home"
-import { useAppSelector } from "../app/hooks"
+import { useAppSelector, useAppDispatch } from "../app/hooks"
 import Reviews from "../components/Previews"
 import Main from "../components/Main"
+import { getMe } from "../features/home"
+import Profile from "../components/Profile"
 
 type Props = {}
 function r(page: selectedPage) {
@@ -17,11 +19,23 @@ function r(page: selectedPage) {
       return <Products />
     case "reviews":
       return <Reviews />
+    case "profile":
+      return <Profile />
     default:
       return <></>
   }
 }
 export default function Home({}: Props) {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    document.title = "Home"
+    const access_token = localStorage.getItem("access_token")
+    if (!access_token) {
+      window.location.href = "/signin"
+    } else {
+      const result = dispatch(getMe())
+    }
+  }, [])
   const selectedPage = useAppSelector((state) => state.homeSLice.selectedPage)
   return (
     <Box h="100vh">
