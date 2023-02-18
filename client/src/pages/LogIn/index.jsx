@@ -35,9 +35,9 @@ export default function LogIn() {
               <input type="password" placeholder="Password" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-full" />
             </div>
 
-            <div className="flex justify-between w-64 mb-5">
-              <label className="flex items-center text-xs"><input type="checkbox" name="remember" className="mr-1" />Remember me</label>
-              <a href="/test" className="text-xs">Forgot Password?</a>
+            <div className="flex justify-between w-64 mb-5 mx-5">
+              <label className="flex items-center text-sm"><input type="checkbox" name="remember" className="mr-1" />Remember me</label>
+              <Link to={"/forgotpassword"} className="text-sm">Forgot Password?</Link>
             </div>
 
             <div>

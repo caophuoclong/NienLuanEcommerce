@@ -16,7 +16,8 @@ import { changeLanguage } from 'i18next';
 import { setDarkMode, changeLang } from './app/slices/setting.slice';
 import LogIn from './pages/LogIn';
 import Register from './pages/Register';
-import Cart from './pages/Cart';
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -44,6 +45,16 @@ const router = createBrowserRouter([
   {
     path: 'register',
     element: <Register />,
+    errorElement: <NotFound/>
+  },
+  {
+    path: 'forgotpassword',
+    element: <ForgotPassword />,
+    errorElement: <NotFound/>
+  },
+  {
+    path: 'resetpassword',
+    element: <ResetPassword />,
     errorElement: <NotFound/>
   },
 ]);
