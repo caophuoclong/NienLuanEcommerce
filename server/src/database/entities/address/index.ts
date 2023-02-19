@@ -6,7 +6,7 @@ import { Ward } from "./ward";
 @Entity()
 export default class Address{
     @PrimaryGeneratedColumn()
-    id: number;
+    _id: number;
     @ManyToOne(() => Customer, customer => customer.address,{
         cascade: true
     })

@@ -6,6 +6,7 @@ export const axiosCLient = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
+    withCredentials: true
 });
 
 axiosCLient.interceptors.request.use(({ headers, ...config }) => ({

@@ -1,16 +1,16 @@
 import { ICategory } from "./category";
 
 export interface IProduct{
-    id?: number,
+    _id?: string,
     name: string,
     // price: number,
     category: ICategory,
     // stock: number,
     detail: {
-        [key: string]: string
+        [key: string]: any
     }
-    // description: string;
+    description?: string;
     meta: Array<{
-        [key: string]: string
+        [key: string]: any
     }>
 }

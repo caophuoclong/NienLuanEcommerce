@@ -11,64 +11,64 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import ProductHeader from "./ProductHeader"
 import { IProduct } from "../../types/product"
 import Product from "./Product"
 import ModalProduct from "./Modal"
+import { ProductService } from "../../service/api/product"
 
 type Props = {}
 
 export default function Products({}: Props) {
   const [modalName, setModalName] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [products, setProducts] = useState<Array<IProduct>>([
-    {
-      id: 2,
-      name: "cai gi do",
-      detail: {
-        brand: "nike",
-        long: "extra long",
-      },
-      category: {
-        _id: 15,
-        cratedAt: Date.now(),
-        name_en: "T-shirt",
-        name_vi: "ao thun",
-        requireDetail: "brand/size/color",
-      },
-      meta: [
-        {
-          price: "1000",
-          stock: "10",
-          images: "img1",
-        },
-      ],
-    },
-    {
-      id: 1,
-      name: "Ao thun",
-      detail: {
-        brand: "nike",
-        long: "extra long",
-      },
-      category: {
-        _id: 15,
-        cratedAt: Date.now(),
-        name_en: "T-shirt",
-        name_vi: "ao thun",
-        requireDetail: "brand/size/color",
-      },
-      meta: [
-        {
-          price: "1000",
-          stock: "10",
-          images: "img1",
-        },
-      ],
-    },
-  ])
+  const handleClose = () => {}
+  // pare product meta
+  const [products, setProducts] = useState<Array<IProduct>>([])
+  useEffect(() => {
+    ;(async () => {
+      const newProdcuts = await ProductService.getMyProducts()
+      const xxx = newProdcuts.map((p, i) => {
+        const newMeta: Array<{
+          [key: string]: any
+        }> = p.meta.map((m) => {
+          const key1 = m["attribute_1"]
+          const key2 = m["attribute_2"]
+          const value1 = m["value_1"]
+          const value2 = m["value_2"]
+          delete m["attribute_1"]
+          delete m["attribute_2"]
+          delete m["value_1"]
+          delete m["value_2"]
+          delete m["_id"]
+          delete m["sold"]
+          return {
+            ...m,
+            [key1]: value1,
+            [key2]: value2,
+          }
+        })
+        const newDetail: Array<{ [key: string]: string }> = p.detail.map(
+          (d) => {
+            console.log(d)
+          }
+        )
+        return {
+          ...p,
+          meta: newMeta.map((m) => {
+            delete m["default"]
+            return {
+              ...m,
+            }
+          }),
+        }
+      })
+      console.log(xxx)
+      setProducts(xxx)
+    })()
+  }, [])
   // const products = Array<IProduct>(20).fill(product)
   const [productSelected, setProductSelected] = useState<IProduct>()
 
@@ -77,9 +77,9 @@ export default function Products({}: Props) {
     onOpen()
     setProductSelected(product)
   }
-  const onSubmit = (product: IProduct) => {
+  const onSubmit = async (product: IProduct) => {
     const valid: { [key: string]: boolean } = {}
-    const { id, name, detail, category, meta } = product
+    const { _id, name, detail, category, meta } = product
     if (!name) {
       valid["name"] = false
     }
@@ -96,14 +96,18 @@ export default function Products({}: Props) {
       return
     } else {
       console.log("Valid product")
-      console.log(product)
-      if (product.id) {
-        const index = products.findIndex((x) => x.id === product.id)
-        const newProducts = [...products]
-        newProducts[index] = product
-        setProducts(newProducts)
-      }
-      onClose()
+
+      console.log("🚀 ~ file: index.tsx:102 ~ onSubmit ~ product", product)
+      const response = await ProductService.addProduct(product)
+      console.log("🚀 ~ file: index.tsx:103 ~ onSubmit ~ response", response)
+
+      // if (product.id) {
+      //   const index = products.findIndex((x) => x.id === product.id)
+      //   const newProducts = [...products]
+      //   newProducts[index] = product
+      //   setProducts(newProducts)
+      // }
+      // onClose()
     }
   }
   return (

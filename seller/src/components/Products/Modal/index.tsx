@@ -36,7 +36,20 @@ type Props = {
   onSubmit: (product: IProduct) => void
   unSelectProduct: () => void
 }
-
+export const defaulKeysHeader = [
+  {
+    key: "price",
+    default: true,
+  },
+  {
+    key: "stock",
+    default: true,
+  },
+  {
+    key: "images",
+    default: true,
+  },
+]
 export default function ModalProduct({
   name,
   isOpen,
@@ -45,39 +58,25 @@ export default function ModalProduct({
   product,
   unSelectProduct,
 }: Props) {
+  /**/
   const [productName, setProductName] = React.useState<string>("")
-  const keys = [
-    {
-      key: "price",
-      default: true,
-    },
-    {
-      key: "stock",
-      default: true,
-    },
-    {
-      key: "images",
-      default: true,
-    },
-  ]
+  const setDefaultMeta = () => {
+    const newObj: {
+      [key: string]: string
+    } = {}
+    defaulKeysHeader.map((key, value) => {
+      newObj[key.key] = ""
+    })
+    setMeta([newObj])
+  }
   const [meta, setMeta] = useState<
     Array<{
       [key: string]: string
     }>
-  >(
-    (() => {
-      const newObj: {
-        [key: string]: string
-      } = {}
-      keys.map((key, value) => {
-        newObj[key.key] = ""
-      })
-      return [newObj]
-    })()
-  )
-  // console.log(product?.meta)
-  console.log(meta)
-
+  >([{}])
+  useEffect(() => {
+    setDefaultMeta()
+  }, [])
   useEffect(() => {
     if (product) {
       setProductName(product.name)
@@ -148,11 +147,8 @@ export default function ModalProduct({
     setProductDetail({} as { [key: string]: string })
     setCategory("")
     setSelectedCategory({} as ICategory)
-    setMeta([{}])
+    setDefaultMeta()
   }
-  useEffect(() => {
-    console.log(meta)
-  }, [meta])
   return (
     <Modal
       isOpen={isOpen}
@@ -161,7 +157,7 @@ export default function ModalProduct({
         setProductDetail({} as { [key: string]: string })
         setCategory("")
         setSelectedCategory({} as ICategory)
-        setMeta([{}])
+        setDefaultMeta()
         unSelectProduct()
         onClose()
       }}
@@ -275,12 +271,12 @@ export default function ModalProduct({
           <Meta
             meta={meta}
             setMeta={(me: Array<{ [key: string]: string }>) => {
-              console.log(Object.values(me[0]).every((m) => m === ""))
-              if (product && Object.values(me[0]).every((m) => m === "")) {
-                return
-              } else {
-                setMeta(me)
-              }
+              // if (product && Object.values(me[0]).every((m) => m === "")) {
+              //   return
+              // } else {
+              //   setMeta(me)
+              // }
+              setMeta(me)
             }}
           />
         </ModalBody>

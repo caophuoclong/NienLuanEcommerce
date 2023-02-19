@@ -7,12 +7,12 @@ import {
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Category } from './category.entity';
+import { Category } from '.';
 
 @Entity('category_category')
 export class TreeCategory {
   @PrimaryColumn()
   parent: number;
-    @PrimaryColumn()
+  @PrimaryColumn()
   child: number;
 }

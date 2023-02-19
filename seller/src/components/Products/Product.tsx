@@ -7,12 +7,12 @@ type Props = IProduct & {
   onEditProduct: () => void
 }
 
-export default function Product({ category, id, name, onEditProduct }: Props) {
+export default function Product({ category, _id, name, onEditProduct }: Props) {
   return (
     <Tr>
       <Td>{name}</Td>
       <Td>{9000}</Td>
-      <Td>{category.name_en}</Td>
+      <Td>{category.name_vi}</Td>
       <Td>{12}</Td>
       <Td>
         <Button
