@@ -16,11 +16,11 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useReducer, useState } from "react"
 import { FaCheck, FaTimes, FaWindowMinimize } from "react-icons/fa"
 import { categories } from "../../../sampleData"
 import { ICategory } from "../../../types/category"
-import { IProduct } from "../../../types/product"
+import { IProduct, IProductMeta, IProductDetail } from "../../../types/product"
 import AddNewDetailButton from "./AddNewDetailButton"
 import { useAppSelector, useDebounce } from "../../../app/hooks"
 import { CategoryService } from "../../../service/api/category"
@@ -28,11 +28,22 @@ import RenderCategoryResult from "./RenderCategoryResult"
 import { RiSubtractFill } from "react-icons/ri"
 import Detail from "./Detail"
 import Meta from "./Meta"
+import ProductContext from "../Context"
+import {
+  initial,
+  reducer,
+  setProductName,
+  setProductDescription,
+  setProductId,
+  setProductMeta,
+  setProductDetail,
+  setProductCategory,
+} from "../Reducer"
 type Props = {
   name: string
   isOpen: boolean
   onClose: () => void
-  product?: IProduct
+  product: IProduct
   onSubmit: (product: IProduct) => void
   unSelectProduct: () => void
 }
@@ -58,46 +69,36 @@ export default function ModalProduct({
   product,
   unSelectProduct,
 }: Props) {
+  const [state, dispatch] = useContext(ProductContext)
   /**/
-  const [productName, setProductName] = React.useState<string>("")
-  const setDefaultMeta = () => {
-    const newObj: {
-      [key: string]: string
-    } = {}
-    defaulKeysHeader.map((key, value) => {
-      newObj[key.key] = ""
-    })
-    setMeta([newObj])
-  }
-  const [meta, setMeta] = useState<
-    Array<{
-      [key: string]: string
-    }>
-  >([{}])
   useEffect(() => {
-    setDefaultMeta()
-  }, [])
-  useEffect(() => {
-    if (product) {
-      setProductName(product.name)
-      setSelectedCategory(product.category)
-      setProductDetail(product.detail)
-      setMeta(product.meta)
+    if (Object.keys(product).length > 0) {
+      dispatch(setProductName(product.name))
+      dispatch(setProductDescription(product.description))
+      dispatch(setProductId(product._id))
+      dispatch(setProductMeta(product.meta))
+      dispatch(setProductDetail(product.detail))
+      dispatch(setProductCategory(product.category))
+    } else {
+      setDefaultMeta()
     }
   }, [product])
-  const [productDetail, setProductDetail] = React.useState<{
-    [key: string]: string
-  }>(
-    {} as {
-      [key: string]: string
+  useEffect(() => {
+    console.log(state)
+  }, [state])
+  const setDefaultMeta = () => {
+    const news: IProductMeta = {
+      images: "",
+      price: 0,
+      sold: 0,
+      stock: 0,
+      attribute: [],
     }
-  )
+    dispatch(setProductMeta([news]))
+  }
   const [category, setCategory] = useState<string>("")
   const [isSearching, setIsSearching] = useState<boolean>(false)
   const [categoriesResult, setCategoriesResult] = useState<Array<ICategory>>([])
-  const [selectedCategory, setSelectedCategory] = useState<ICategory>(
-    {} as ICategory
-  )
   const lang = useAppSelector((state) => state.homeSLice.lang)
   const debounceSearchCategory = useDebounce(category, 500)
   useEffect(() => {
@@ -122,42 +123,33 @@ export default function ModalProduct({
   // split requireDetail to array with every 2 element
   // then map to render 2 element in 1 row
   // shoutout to https://stackoverflow.com/questions/8495687/split-array-into-chunks
-  const onAddProductDetail = (name: string, value: string) => {
-    setProductDetail((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      }
-    })
-  }
+  // const onAddProductDetail = (name: string, value: string) => {
+  //   setProductDetail((prev) => {
+  //     return {
+  //       ...prev,
+  //       [name]: value,
+  //     }
+  //   })
+  // }
   const onSelectCategory = (category: ICategory) => {
-    setSelectedCategory(category)
+    dispatch(setProductCategory(category))
     setCategory("")
   }
 
   const handleSubmit = () => {
-    onSubmit({
-      ...product,
-      name: productName,
-      category: selectedCategory,
-      detail: productDetail,
-      meta: meta,
-    })
-    setProductName("")
-    setProductDetail({} as { [key: string]: string })
-    setCategory("")
-    setSelectedCategory({} as ICategory)
-    setDefaultMeta()
+    onSubmit(state)
+    // setProductName("")
+    // setProductDetail({} as { [key: string]: string })
+    // setCategory("")
+    // setSelectedCategory({} as ICategory)
+    // setDefaultMeta()
   }
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        setProductName("")
-        setProductDetail({} as { [key: string]: string })
         setCategory("")
-        setSelectedCategory({} as ICategory)
-        setDefaultMeta()
+
         unSelectProduct()
         onClose()
       }}
@@ -180,8 +172,8 @@ export default function ModalProduct({
               </FormLabel>
               <Input
                 id="productName"
-                onChange={(e) => setProductName(e.target.value)}
-                value={productName}
+                onChange={(e) => dispatch(setProductName(e.target.value))}
+                value={state.name}
               />
             </FormControl>
             <FormControl flex="1" position={"relative"} isRequired>
@@ -190,17 +182,17 @@ export default function ModalProduct({
               </FormLabel>
               <Input
                 value={
-                  Object.keys(selectedCategory).length === 0
+                  Object.keys(state.category).length === 0
                     ? category
-                    : selectedCategory[`name_${lang}`]
+                    : state.category[`name_${lang}`]
                 }
                 onChange={(e) => {
-                  if (Object.keys(selectedCategory).length !== 0)
-                    setSelectedCategory({} as ICategory)
+                  if (Object.keys(state.category).length !== 0)
+                    dispatch(setProductCategory({} as ICategory))
                   setCategory(e.target.value)
                 }}
               />
-              {Object.keys(selectedCategory).length === 0 &&
+              {Object.keys(state.category).length === 0 &&
                 debounceSearchCategory && (
                   <Box
                     position={"absolute"}
@@ -262,21 +254,12 @@ export default function ModalProduct({
             </FormControl>
           </Box>
           {/* row2 */}
-          <Detail
-            selectedCategory={selectedCategory}
-            onAddProductDetail={onAddProductDetail}
-            productDetail={productDetail}
-          />
+          <Detail />
           {/* Row 3 */}
           <Meta
-            meta={meta}
-            setMeta={(me: Array<{ [key: string]: string }>) => {
-              // if (product && Object.values(me[0]).every((m) => m === "")) {
-              //   return
-              // } else {
-              //   setMeta(me)
-              // }
-              setMeta(me)
+            meta={state.meta}
+            setMeta={(me: Array<IProductMeta>) => {
+              // setMeta(me)
             }}
           />
         </ModalBody>

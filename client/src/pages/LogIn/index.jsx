@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 
 export default function LogIn() {
   return (
@@ -19,11 +20,11 @@ export default function LogIn() {
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaFacebookF className="text-sm" />
               </a>
-              <a
-                href="/test"
+              <Link
+                to="/test"
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaGoogle className="text-sm" />
-              </a>
+              </Link>
             </div>
 
             <div className="text-slate-400">

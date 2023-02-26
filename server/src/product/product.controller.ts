@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { RolesEnum } from '../enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -22,6 +22,12 @@ export class ProductController {
         const {_id} = request.user;
         return this.productService.createProduct(createProductDTO, _id);
     }
+    @Roles(RolesEnum.SHOP)
+    @Put("/")
+    updateProduct(){
+
+    }
+
     @Public()
     @Get("/")
     getProduct(@Query() query: ProductGetDTO){

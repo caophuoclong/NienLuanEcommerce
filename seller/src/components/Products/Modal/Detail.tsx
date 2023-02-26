@@ -1,46 +1,55 @@
 import { Box, IconButton, Input, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { RiSubtractFill } from "react-icons/ri"
 import { ICategory } from "../../../types/category"
 import AddNewDetailButton from "./AddNewDetailButton"
+import { IProductDetail } from "../../../types/product"
+import product from "../../../features/product"
+import ProductContext from "../Context"
+import { setDeletedDetail, undeoDeletedDetail } from "../Reducer"
+import { CiUndo } from "react-icons/ci"
+import {
+  addNewDetail,
+  updateDetail,
+  setProductDetail,
+  setProductCategory,
+} from "../Reducer"
 
-type Props = {
-  selectedCategory: ICategory
-  productDetail: {
-    [key: string]: string
-  }
-  onAddProductDetail: (name: string, value: string) => void
-}
+type Props = {}
 
-export default function Detail({
-  selectedCategory,
-  productDetail,
-  onAddProductDetail,
-}: Props) {
-  const [requireDetail, setRequireDetail] = React.useState<string[]>([])
-  const [chunks, setChunks] = useState<Array<Array<string>>>([[]])
+export default function Detail({}: Props) {
+  const [chunks, setChunks] = useState<Array<Array<IProductDetail>>>([[]])
+  const [{ detail, category }, dispatch] = useContext(ProductContext)
   useEffect(() => {
-    if (Object.keys(selectedCategory).length > 0) {
-      const requireDetail = selectedCategory.requireDetail
-      if (!requireDetail) return
-      const requireDetailArray = requireDetail.split("/")
-      setRequireDetail(requireDetailArray)
-    } else {
-      setRequireDetail([])
+    if (detail.length === 0) {
+      if (Object.keys(category).length > 0) {
+        const requireDetail = category.requireDetail
+        if (!requireDetail) return
+        const requireDetailArray = requireDetail.split("/")
+        dispatch(
+          setProductDetail(
+            requireDetailArray.map((x) => ({
+              key: x,
+              value: "",
+            }))
+          )
+        )
+      } else {
+      }
     }
-  }, [selectedCategory])
+  }, [category])
   useEffect(() => {
     setChunks(
-      requireDetail.reduce<string[][]>((resultArray, item, index) => {
+      detail.reduce<IProductDetail[][]>((resultArray, item, index) => {
         const chunkIndex = Math.floor(index / 2)
         if (!resultArray[chunkIndex]) {
-          resultArray[chunkIndex] = [] as Array<string> // start a new chunk
+          resultArray[chunkIndex] = [] as Array<IProductDetail> // start a new chunk
         }
         resultArray[chunkIndex].push(item)
         return resultArray
       }, [])
     )
-  }, [requireDetail])
+  }, [detail])
   const handleAddDetail = ({
     name,
     value,
@@ -48,20 +57,15 @@ export default function Detail({
     name: string
     value: string
   }) => {
-    if (selectedCategory._id === undefined) {
+    if (category._id === undefined) {
       alert("Please select category first")
     } else {
-      if (
-        requireDetail
-          .map((value) => value.toLocaleLowerCase())
-          .includes(name.toLocaleLowerCase())
-      ) {
-        alert("This detail already exist")
-        document.getElementById(name.toLocaleLowerCase())?.focus()
-      } else {
-        onAddProductDetail(name, value)
-        setRequireDetail((prev) => [...prev, name])
-      }
+      dispatch(
+        addNewDetail({
+          key: name,
+          value: value,
+        })
+      )
     }
   }
   return (
@@ -84,60 +88,69 @@ export default function Detail({
         {chunks.map((row, index) => (
           <React.Fragment key={index}>
             <Box display="flex" gap="1rem" alignItems={"center"}>
-              {row.map((detail, jndex) => (
+              {row.map((d, jndex) => (
                 <React.Fragment key={jndex}>
-                  <Box flex="1" role="group">
+                  <Box
+                    flex="1"
+                    role="group"
+                    textColor={d.deleted ? "gray.300" : ""}
+                  >
                     <Box display={"flex"} alignItems="center">
-                      <label htmlFor={detail.toLocaleLowerCase()}>
+                      <label htmlFor={d.key.toLocaleLowerCase()}>
                         <Text fontSize={"sm"} fontWeight="semibold">
                           {
                             // capitalize first letter
                             // shoutout to https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-                            detail.charAt(0).toUpperCase() + detail.slice(1)
+                            d.key.charAt(0).toUpperCase() + d.key.slice(1)
                           }
                         </Text>
                       </label>
-                      <IconButton
-                        onClick={() => {
-                          if (
-                            productDetail[detail] !== undefined &&
-                            productDetail[detail] !== ""
-                          ) {
-                            const conf = window.confirm(
-                              "Are you sure delelte this detail?"
-                            )
-
-                            conf &&
-                              setRequireDetail((prev) =>
-                                prev.filter((value) => value !== detail)
-                              )
-                          } else {
-                            setRequireDetail((prev) =>
-                              prev.filter((value) => value !== detail)
-                            )
-                          }
-                        }}
-                        _groupHover={{ visibility: "visible" }}
-                        visibility={"hidden"}
-                        ml="auto"
-                        size="sm"
-                        variant={"ghost"}
-                        aria-label="remove detail"
-                        icon={<RiSubtractFill size="24px" />}
-                      />
+                      {d.deleted ? (
+                        <IconButton
+                          onClick={() => dispatch(undeoDeletedDetail(d.key))}
+                          aria-label="undo"
+                          ml="auto"
+                          size="sm"
+                          variant={"ghost"}
+                          icon={<CiUndo color="black" size="24px" />}
+                        />
+                      ) : (
+                        <IconButton
+                          onClick={() => {
+                            dispatch(setDeletedDetail(d.key))
+                          }}
+                          _groupHover={{ visibility: "visible" }}
+                          visibility={"hidden"}
+                          ml="auto"
+                          size="sm"
+                          variant={"ghost"}
+                          aria-label="remove detail"
+                          icon={<RiSubtractFill size="24px" />}
+                        />
+                      )}
                     </Box>
                     <Input
-                      id={detail.toLocaleLowerCase()}
-                      value={productDetail[detail] || ""}
+                      disabled={d.deleted}
+                      id={d.key.toLocaleLowerCase()}
+                      value={
+                        detail.find((x) => x.key === d.key)
+                          ? detail.find((x) => x.key === d.key)!.value
+                          : ""
+                      }
                       onChange={(e) => {
-                        onAddProductDetail(detail, e.target.value)
+                        dispatch(
+                          updateDetail({
+                            _id: d._id,
+                            key: d.key,
+                            value: e.target.value,
+                          })
+                        )
                       }}
                     />
                   </Box>
-                  {jndex === 0 &&
-                    detail === requireDetail[requireDetail.length - 1] && (
-                      <AddNewDetailButton onAddDetail={handleAddDetail} />
-                    )}
+                  {jndex === 0 && row.length < 2 && (
+                    <AddNewDetailButton onAddDetail={handleAddDetail} />
+                  )}
                 </React.Fragment>
               ))}
             </Box>

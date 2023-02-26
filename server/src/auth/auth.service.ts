@@ -230,12 +230,12 @@ export class AuthService {
       );
       const keys = await this.cacheService.keys(`*-${refreshToken}`);
       const data = await this.cacheService.hGetAll(keys[0]);
-      console.log(
-        '🚀 ~ file: auth.service.ts:227 ~ AuthService ~ refreshToken ~ keys',
-        keys,
-      );
-      console.log(data);
+      console.log("🚀 ~ file: auth.service.ts:233 ~ AuthService ~ refreshToken ~ data:", data)
+      console.log("🚀 ~ file: auth.service.ts:233 ~ AuthService ~ refreshToken ~ keys:", keys)
+
       if (Object.keys(data).length === 0) {
+        console.log('Your refresh token is not valid');
+        
         throw new ForbiddenException('Your refresh token is not valid');
       }
       const accessToken = this.generateToken(
