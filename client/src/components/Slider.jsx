@@ -4,27 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function Slider({
   height = 300,
   width = '100%',
+  carousel = []
 }) {
-  console.log(width);
   const navigate = useNavigate();
-  const carousel = [
-    {
-      to: '/khuyen-mai/3-2',
-      src: 'https://picsum.photos/300',
-    },
-    {
-      to: '/khuyen-mai/3-3',
-      src: 'https://picsum.photos/300',
-    },
-    {
-      to: '/khuyen-mai/3-4',
-      src: 'https://picsum.photos/300',
-    },
-    {
-      to: '/khuyen-mai/3-5',
-      src: 'https://picsum.photos/300',
-    },
-  ];
+
   const onClickItem = (index, item) => {
     const {
       props: { to },
@@ -33,7 +16,6 @@ export default function Slider({
   };
 
   return (
-      <div className={`w-[${width}]`}>
         <Carousel
         showArrows={true}
         onClickItem={onClickItem}
@@ -46,10 +28,9 @@ export default function Slider({
       >
         {carousel.map((item, index) => (
           <Link to={item.to}>
-            <img src={item.src} className={`h-[320px] rounded-lg w-[${width}]`} />
+            <img src={item.src} className={`h-[320px] rounded-lg`} />
           </Link>
         ))}
       </Carousel>
-      </div>
   );
 }

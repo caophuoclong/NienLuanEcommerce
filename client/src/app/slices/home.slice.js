@@ -3,6 +3,7 @@ import { HomeService } from '../../services/';
 
 const initialState = {
   products: [],
+  loggedIn: false,
 };
 const getHome = createAsyncThunk('get home', () => {
   return HomeService.getProducts();
