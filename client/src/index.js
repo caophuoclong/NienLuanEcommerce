@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Cart from "./pages/Cart"
 import Home from './pages/Home';
 import Product from './pages/Product';
 import NotFound from './pages/NotFound';
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound/>
   },
   {
-    path: 'signin',
+    path: '/signin',
     element: <LogIn />,
     errorElement: <NotFound/>
   },

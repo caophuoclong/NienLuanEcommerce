@@ -1,12 +1,15 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { Product } from "./product";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "../product";
+import { ProductDetail } from "../product/detail";
 
 @Entity()
 export class Category{
     @PrimaryGeneratedColumn("increment")
     _id: number;
     @Column()
-    name: string;
+    name_vi: string;
+    @Column()
+    name_en: string;
     @ManyToMany(()=> Category)
     @JoinTable({name: "category_category",
         joinColumn: {
@@ -25,5 +28,8 @@ export class Category{
         default: Date.now()
     })
     createdAt: number;
+    @Column()
+    requireDetail: string;
+
 
 }

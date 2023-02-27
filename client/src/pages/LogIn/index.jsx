@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Link } from 'react-router-dom';
 import Register from "../Register";
 import { FaFacebookF, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
@@ -20,6 +21,7 @@ export default function LogIn() {
               <Link to={"#"}
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaFacebookF className="text-sm" />
+
               </Link>
               <Link to={"#"}
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
@@ -35,6 +37,7 @@ export default function LogIn() {
               <input type="text" placeholder="Username" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-lg" />
               <input type="password" placeholder="Password" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-lg" />
             </div>
+
             <div className="flex justify-between w-64 mb-5 mx-5">
               <label className="flex items-center text-sm"><input type="checkbox" name="remember" className="mr-1" />Remember me</label>
               <Link to={"/forgotpassword"} className="text-sm">Forgot Password?</Link>

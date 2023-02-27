@@ -14,12 +14,20 @@ export class CustomerService implements ICustomer {
   ) {}
   async create(
     auth: AuthEntity,
-    data: Partial<{ firstName: string; lastName: string; middleName: string; name: string }>,
+    data: Partial<{
+      firstName: string;
+      lastName: string;
+      middleName: string;
+      name: string;
+    }>,
   ) {
     try {
-      const user = this.customerEntity.create({ auth: {
-        username: auth.username
-      }, ...data });
+      const user = this.customerEntity.create({
+        auth: {
+          username: auth.username,
+        },
+        ...data,
+      });
       return await this.customerEntity.save(user);
     } catch (error) {
       const message = error.message;
@@ -31,12 +39,66 @@ export class CustomerService implements ICustomer {
     }
   }
   async getMe(username: string) {
-    return await this.customerEntity.findOne({
+    const user = await this.customerEntity.findOne({
       where: {
         auth: {
           username,
         },
       },
+      select: {
+        auth: {
+          email: true,
+          phone: true,
+        },
+        address: {
+          _id: true,
+          ward: {
+            code: true,
+            name: true,
+            name_en: true,
+            administrativeUnit: {
+              id: true,
+              short_name: true,
+              short_name_en: true,
+            },
+            district: {
+              code: true,
+              name: true,
+              name_en: true,
+              administrativeUnit: {
+                id: true,
+                short_name: true,
+                short_name_en: true,
+              },
+              province: {
+                code: true,
+                name: true,
+                name_en: true,
+                administrativeUnit: {
+                  id: true,
+                  short_name: true,
+                  short_name_en: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      relations: {
+        auth: true,
+        address: {
+          ward: {
+            administrativeUnit: true,
+            district: {
+              administrativeUnit: true,
+              province: {
+                administrativeUnit: true,
+              },
+            },
+          },
+        },
+      },
     });
+    return user;
   }
 }

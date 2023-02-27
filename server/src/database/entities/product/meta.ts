@@ -4,21 +4,27 @@ import { Product } from './index';
 export class ProductMeta{
     @PrimaryGeneratedColumn()
     _id: string;
-    @Column()
-    key: string;
-    @Column()
-    value: string;
-    @Column()
-    type: string;
+    @ManyToOne(()=> Product, product=> product.meta)
+    @JoinColumn()
+    product: Product;
     @Column()
     price: number;
+    @Column()
+    stock: number;
     @Column(
         {
             default: 0
         }
     )
     sold: number;
-    @ManyToOne(()=> Product, product=> product.meta)
-    @JoinColumn()
-    product: Product;
+    @Column()
+    attribute_1: string;
+    @Column()
+    value_1: string;
+    @Column()
+    attribute_2: string;
+    @Column()
+    value_2: string;
+    @Column()
+    images: string;
 }
