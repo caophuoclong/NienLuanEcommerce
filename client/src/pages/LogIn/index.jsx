@@ -1,6 +1,9 @@
 import React from "react";
-import { FaFacebookF, FaGoogle } from 'react-icons/fa';
-import { Link } from "react-router-dom";
+
+import { Link } from 'react-router-dom';
+import Register from "../Register";
+import { FaFacebookF, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
+import { MdLockOutline } from 'react-icons/md';
 
 export default function LogIn() {
   return (
@@ -10,18 +13,17 @@ export default function LogIn() {
         {/*left side*/}
         <div className="bg-white w-full h-full z-50  shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
           <div className="flex space-y-5 flex-col h-full justify-center items-center">
-            <div className="text-3xl font-sans font-bold ">
-              <p>Sign In AccountTe</p>
+            <div className="text-3xl font-sans font-bold text-green-500">
+              <p>Sign In Account</p>
             </div>
 
             <div className="flex flex-row space-x-9">
-              <a
-                href="/test"
+              <Link to={"#"}
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaFacebookF className="text-sm" />
-              </a>
-              <Link
-                to="/test"
+
+              </Link>
+              <Link to={"#"}
                 className="text-zinc-500 outline outline-zinc-500 rounded-full outline-offset-4">
                 <FaGoogle className="text-sm" />
               </Link>
@@ -31,9 +33,9 @@ export default function LogIn() {
               <p>For use your email account</p>
             </div>
 
-            <div className="flex flex-col space-y-5 ">
-              <input type="text" placeholder="Email" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-full" />
-              <input type="password" placeholder="Password" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-full" />
+            <div className="flex flex-col space-y-5 w-[70%]">
+              <input type="text" placeholder="Username" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-lg" />
+              <input type="password" placeholder="Password" className="outline-none bg-transparent border border-zinc-500 px-5 h-10 rounded-lg" />
             </div>
 
             <div className="flex justify-between w-64 mb-5 mx-5">
@@ -42,11 +44,10 @@ export default function LogIn() {
             </div>
 
             <div>
-              <a
-                href="/test"
+              <Link to={"#"}
                 className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white">
                 SIGN IN
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -62,11 +63,10 @@ export default function LogIn() {
           </div>
 
           <div>
-            <a
-              href="./register"
+            <Link to={"/register"}
               className="border-2 text-white border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-green-500">
               SIGN UP
-            </a>
+            </Link>
           </div>
         </div>
 
