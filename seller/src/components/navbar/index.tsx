@@ -124,7 +124,7 @@ const Item = ({
             cursor={"pointer"}
             color={subItemId && subItemId[id] === i.id ? "#1b64f2" : "#000"}
           >
-            <Text>{i.name}</Text>
+            <Text>{i ? i.name : null}</Text>
           </Box>
         ))}
     </Box>
@@ -237,8 +237,10 @@ export default function NavBar() {
         gap="1rem"
         onClick={onLogout}
       >
-        <BiLogOut size="24px" />
-        {showNavBar && <Text fontWeight={"semibold"}>Log out</Text>}
+        <Box marginTop={"auto"} cursor="pointer" display={"flex"} gap="1rem">
+          <BiLogOut size="24px" />
+          {showNavBar && <Text fontWeight={"semibold"}>Log out</Text>}
+        </Box>
       </Box>
     </Box>
   )
