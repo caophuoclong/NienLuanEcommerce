@@ -8,6 +8,8 @@ const initial: IProduct = {
   meta: [],
   _id: undefined,
   description: undefined,
+  updatedAt: "",
+  createdAt: "",
 }
 enum ActionEnum {
   SET_NAME = "SET_NAME",
@@ -19,7 +21,8 @@ enum ActionEnum {
   ADD_NEW_DEATIL = "ADD_NEW_DETAIL",
   SET_CATEGORY = "SET_CATEGORY",
   SET_DELETED_DETAIL = "SET_DELETED_DETAIL",
-  UNDO_DELETED_DETAIL = "UNDO_DELETED_DETAIL"
+  UNDO_DELETED_DETAIL = "UNDO_DELETED_DETAIL",
+  MAKE_DEFAULT = "MAKE_DEFAULT",
 }
 interface ActionReturn {
   type: ActionEnum
@@ -112,7 +115,17 @@ const reducer: (state: IProduct, actinon: ActionReturn) => IProduct = (
           return d
         }),
       }
-      
+    case ActionEnum.MAKE_DEFAULT:
+      return {
+        _id: undefined,
+        name: "",
+        category: {},
+        detail: [],
+        meta: [],
+        description: undefined,
+        createdAt: "",
+        updatedAt: "",
+      }
     default:
       return state
   }
@@ -121,7 +134,7 @@ export const setProductName: ActionType<string> = (name: string) => ({
   type: ActionEnum.SET_NAME,
   payload: name,
 })
-export const setProductId: ActionType<number | undefined> = (_id?: number) => ({
+export const setProductId: ActionType<string | undefined> = (_id?: string) => ({
   type: ActionEnum.SET_ID,
   payload: _id,
 })
@@ -157,9 +170,12 @@ export const setDeletedDetail: ActionType<string> = (key) => ({
   type: ActionEnum.SET_DELETED_DETAIL,
   payload: key,
 })
-export const undeoDeletedDetail: ActionType<string> = (key)=>({
+export const undeoDeletedDetail: ActionType<string> = (key) => ({
   type: ActionEnum.UNDO_DELETED_DETAIL,
-  payload: key
+  payload: key,
+})
+export const makeDefault: ActionType<undefined> = () => ({
+  type: ActionEnum.MAKE_DEFAULT,
 })
 export const updateDetail: ActionType<{
   _id?: number

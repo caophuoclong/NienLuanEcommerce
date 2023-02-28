@@ -21,69 +21,202 @@ import { ProductService } from "../../service/api/product"
 import ProductContext from "./Context"
 import { useReducer } from "react"
 import { initial, reducer } from "./Reducer"
+import { useAppSelector, useAppDispatch } from "../../app/hooks"
+import {
+  FaSortAlphaDownAlt,
+  FaSortAlphaUp,
+  FaSortNumericDownAlt,
+  FaSortNumericUp,
+} from "react-icons/fa"
+import home, {
+  toggleSortCategory,
+  toggleSortCrated,
+  toggleSortName,
+  toggleSortPrice,
+  toggleSortSold,
+  toggleSortStock,
+  toggleSortUpdated,
+} from "../../features/home"
 
 type Props = {}
 
 export default function Products({}: Props) {
   const [modalName, setModalName] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const homeState = useAppSelector((state) => state.homeSLice)
+  const appDispatch = useAppDispatch()
   const [state, dispatch] = useReducer(reducer, initial)
+  const [productSelected, setProductSelected] = useState<IProduct>(
+    {} as IProduct
+  )
+  const [productAction, setProductAction] = useState<
+    "create" | "edit" | "none"
+  >("none")
   // pare product meta
   const [products, setProducts] = useState<Array<IProduct>>([])
   useEffect(() => {
     ;(async () => {
       const newProdcuts = await ProductService.getMyProducts()
-      console.log("🚀 ~ file: index.tsx:33 ~ ; ~ newProdcuts:", newProdcuts)
-
       setProducts(newProdcuts)
     })()
   }, [])
-  // const products = Array<IProduct>(20).fill(product)
-  const [productSelected, setProductSelected] = useState<IProduct>(
-    {} as IProduct
-  )
-  const onEditProduct = (product: IProduct) => {
+  const onEditProduct = async (product: IProduct) => {
     setModalName("Edit Product")
+    setProductAction("edit")
+    const { product: newProduct } = await ProductService.getProduct(product._id)
     onOpen()
-    setProductSelected(product)
+    setProductSelected(newProduct)
+    setProducts([
+      ...products.filter((p) => p._id !== newProduct._id),
+      newProduct,
+    ])
+  }
+  const handleClose = () => {
+    setModalName("")
+    setProductAction("none")
+    onClose()
   }
   const onSubmit = async (product: IProduct) => {
-    // const valid: { [key: string]: boolean } = {}
-    // const { _id, name, detail, category, meta } = product
-    // if (!name) {
-    //   valid["name"] = false
-    // }
-    // meta.forEach((m) => {
-    //   Object.keys(m).forEach((x) => {
-    //     if (!m[x]) {
-    //       valid["meta"] = false
-    //     }
-    //   })
-    // })
-    // if (Object.keys(valid).length > 0) {
-    //   console.log("Invalid product")
-    //   alert("Please fill all required fields")
-    //   return
-    // } else {
-    //   console.log("Valid product")
-    //   console.log("🚀 ~ file: index.tsx:102 ~ onSubmit ~ product", product)
-    const response = await ProductService.addProduct(product)
-    console.log(response)
-    //   console.log("🚀 ~ file: index.tsx:103 ~ onSubmit ~ response", response)
-    //   // if (product.id) {
-    //   //   const index = products.findIndex((x) => x.id === product.id)
-    //   //   const newProducts = [...products]
-    //   //   newProducts[index] = product
-    //   //   setProducts(newProducts)
-    //   // }
-    //   // onClose()
-    // }
+    switch (productAction) {
+      case "create":
+        const response = await ProductService.addProduct(product)
+        setProducts([...products, response])
+        alert("Add success!")
+        break
+      case "edit":
+        const res = await ProductService.editProduct(product)
+        setProducts([...products.filter((p) => p._id !== product._id), res])
+        alert("Update success!")
+        break
+      default:
+        return
+    }
   }
+  useEffect(() => {
+    const sortType = homeState.sort.name
+    const newProducts = [...products]
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        if (a.name.charAt(0) < b.name.charAt(0)) {
+          return -1
+        } else {
+          return 1
+        }
+      } else {
+        if (a.name.charAt(0) < b.name.charAt(0)) {
+          return 1
+        } else {
+          return -1
+        }
+      }
+    })
+
+    setProducts(newProducts)
+  }, [homeState.sort.name])
+  useEffect(() => {
+    const sortType = homeState.sort.category
+    const newProducts = [...products]
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        if (homeState.lang === "en") {
+          if (a.category.name_en.charAt(0) < b.category.name_en.charAt(0)) {
+            return -1
+          } else {
+            return 1
+          }
+        } else {
+          if (a.category.name_vi.charAt(0) < b.category.name_vi.charAt(0)) {
+            return -1
+          } else {
+            return 1
+          }
+        }
+      } else {
+        if (homeState.lang === "en") {
+          if (a.category.name_en.charAt(0) < b.category.name_en.charAt(0)) {
+            return 1
+          } else {
+            return -1
+          }
+        } else {
+          if (a.category.name_vi.charAt(0) < b.category.name_vi.charAt(0)) {
+            return 1
+          } else {
+            return -1
+          }
+        }
+      }
+    })
+
+    setProducts(newProducts)
+  }, [homeState.sort.category])
+  useEffect(() => {
+    const sortType = homeState.sort.price
+    const newProducts = [...products]
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        return -1
+      } else {
+        return 1
+      }
+    })
+
+    setProducts(newProducts)
+  }, [homeState.sort.price])
+  useEffect(() => {
+    const sortType = homeState.sort.sold
+    const newProducts = [...products]
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        return -1
+      } else {
+        return 1
+      }
+    })
+
+    setProducts(newProducts)
+  }, [homeState.sort.sold])
+  useEffect(() => {
+    const sortType = homeState.sort.stock
+    const newProducts = [...products]
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        return -1
+      } else {
+        return 1
+      }
+    })
+
+    setProducts(newProducts)
+  }, [homeState.sort.stock])
+
+  // useEffect(() => {
+  //   const s_o_r_t = homeState.sort
+  //   let newProducts = [...products]
+  //   newProducts.sort((a, b) => {
+  //     if (s_o_r_t.name === "down") {
+  //       if (a.name.charAt(0) < b.name.charAt(0)) {
+  //         return 1
+  //       } else {
+  //         return -1
+  //       }
+  //     } else {
+  //       if (a.name.charAt(0) < b.name.charAt(0)) {
+  //         return -1
+  //       } else {
+  //         return 1
+  //       }
+  //     }
+  //   })
+  //   setProducts(newProducts)
+  // }, [homeState.sort])
+
   return (
     <Box h="100%">
       <ProductHeader
         onAddProduct={() => {
           setModalName("Add Product")
+          setProductAction("create")
           onOpen()
         }}
       />
@@ -91,11 +224,114 @@ export default function Products({}: Props) {
         <Table>
           <Thead bgColor={"#f3f4f6"} position="sticky" top={0} zIndex="docked">
             <Tr>
-              <Th width={"30%"}>Name</Th>
-              <Th w="5%">Price</Th>
-              <Th w="10%">Category</Th>
-              <Th w="5%">Stock</Th>
-              <Th w="20%"></Th>
+              <Th width={"30%"}>
+                Name
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort name"
+                  onClick={() => appDispatch(toggleSortName())}
+                  icon={
+                    homeState.sort.name === "down" ? (
+                      <FaSortAlphaDownAlt size="24px" />
+                    ) : (
+                      <FaSortAlphaUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+              <Th w="5%">
+                Price{" "}
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort price"
+                  onClick={() => appDispatch(toggleSortPrice())}
+                  icon={
+                    homeState.sort.price === "down" ? (
+                      <FaSortNumericDownAlt size="24px" />
+                    ) : (
+                      <FaSortNumericUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+              <Th w="10%">
+                Category{" "}
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort category"
+                  onClick={() => appDispatch(toggleSortCategory())}
+                  icon={
+                    homeState.sort.category === "down" ? (
+                      <FaSortAlphaDownAlt size="24px" />
+                    ) : (
+                      <FaSortAlphaUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+              <Th w="5%">
+                Stock{" "}
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort stock"
+                  onClick={() => appDispatch(toggleSortStock())}
+                  icon={
+                    homeState.sort.stock === "down" ? (
+                      <FaSortNumericDownAlt size="24px" />
+                    ) : (
+                      <FaSortNumericUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+              <Th w="5%">
+                Sold
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort sold"
+                  onClick={() => appDispatch(toggleSortSold())}
+                  icon={
+                    homeState.sort.sold === "down" ? (
+                      <FaSortNumericDownAlt size="24px" />
+                    ) : (
+                      <FaSortNumericUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+
+              <Th w="5%">
+                Crated
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort sold"
+                  onClick={() => appDispatch(toggleSortCrated())}
+                  icon={
+                    homeState.sort.created === "down" ? (
+                      <FaSortNumericDownAlt size="24px" />
+                    ) : (
+                      <FaSortNumericUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+              <Th w="5%">
+                Updated
+                <IconButton
+                  variant="ghost"
+                  aria-label="sort sold"
+                  onClick={() => appDispatch(toggleSortUpdated())}
+                  icon={
+                    homeState.sort.updated === "down" ? (
+                      <FaSortNumericDownAlt size="24px" />
+                    ) : (
+                      <FaSortNumericUp size="24px" />
+                    )
+                  }
+                />
+              </Th>
+
+              <Th w="15%"></Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -103,7 +339,9 @@ export default function Products({}: Props) {
               <Product
                 {...product}
                 key={index}
-                onEditProduct={() => onEditProduct(product)}
+                onEditProduct={async () => {
+                  onEditProduct(product)
+                }}
               />
             ))}
           </Tbody>
@@ -113,7 +351,7 @@ export default function Products({}: Props) {
         <ModalProduct
           name={modalName}
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={handleClose}
           onSubmit={onSubmit}
           product={productSelected}
           unSelectProduct={() => setProductSelected({} as IProduct)}

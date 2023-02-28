@@ -1,8 +1,10 @@
 import { Box, IconButton, Input, Text, useDisclosure } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { AiOutlinePlus } from "react-icons/ai"
+import { FaFilter } from "react-icons/fa"
 import { HiSearch } from "react-icons/hi"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import { RiFilterFill, RiFilterOffFill } from "react-icons/ri"
 import ModalProduct from "./Modal"
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
 }
 
 export default function ProductHeader({ onAddProduct }: Props) {
+  const [isFilter, setIsFilter] = useState(false)
   return (
     <Box display={"flex"} p="1rem" h="8%">
       <Box>
@@ -30,7 +33,7 @@ export default function ProductHeader({ onAddProduct }: Props) {
       </Box>
 
       {/* Last */}
-      <Box ml="auto" display={"flex"} alignItems="center">
+      <Box ml="auto" display={"flex"} alignItems="center" gap="1rem">
         <Box
           onClick={onAddProduct}
           bg="#1f1e13"
@@ -45,6 +48,22 @@ export default function ProductHeader({ onAddProduct }: Props) {
           <AiOutlinePlus size="24px" />
           <Text>Add Product</Text>
         </Box>
+        <Box position="relative">
+          <IconButton
+            disabled
+            title="Feature is under development!"
+            aria-label="filter products"
+            variant={"unstyled"}
+            icon={
+              isFilter ? (
+                <RiFilterFill size="24px" />
+              ) : (
+                <RiFilterOffFill size="24px" />
+              )
+            }
+          />
+        </Box>
+
         <Box display={"flex"} alignItems="center">
           <IconButton
             size={"sm"}
