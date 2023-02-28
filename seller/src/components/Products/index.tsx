@@ -147,30 +147,43 @@ export default function Products({}: Props) {
         }
       }
     })
-
     setProducts(newProducts)
   }, [homeState.sort.category])
-  useEffect(() => {
-    const sortType = homeState.sort.price
-    const newProducts = [...products]
-    newProducts.sort((a, b) => {
-      if (sortType === "down") {
-        return -1
-      } else {
-        return 1
-      }
-    })
+  // useEffect(() => {
+  //   const sortType = homeState.sort.price
+  //   const newProducts = [...products]
+  //   newProducts.sort((a, b) => {
+  //     if (sortType === "down") {
+  //       return -1
+  //     } else {
+  //       return 1
+  //     }
+  //   })
 
-    setProducts(newProducts)
-  }, [homeState.sort.price])
+  //   setProducts(newProducts)
+  // }, [homeState.sort.price])
   useEffect(() => {
     const sortType = homeState.sort.sold
     const newProducts = [...products]
     newProducts.sort((a, b) => {
       if (sortType === "down") {
-        return -1
+        return (
+          a.meta.reduce((prev, current, i) => {
+            return current.sold + prev
+          }, 0) -
+          b.meta.reduce((prev, current, i) => {
+            return current.sold + prev
+          }, 0)
+        )
       } else {
-        return 1
+        return (
+          b.meta.reduce((prev, current, i) => {
+            return current.sold + prev
+          }, 0) -
+          a.meta.reduce((prev, current, i) => {
+            return current.sold + prev
+          }, 0)
+        )
       }
     })
 
@@ -181,15 +194,53 @@ export default function Products({}: Props) {
     const newProducts = [...products]
     newProducts.sort((a, b) => {
       if (sortType === "down") {
-        return -1
+        return (
+          a.meta.reduce((prev, current, i) => {
+            return current.stock + prev
+          }, 0) -
+          b.meta.reduce((prev, current, i) => {
+            return current.stock + prev
+          }, 0)
+        )
       } else {
-        return 1
+        return (
+          b.meta.reduce((prev, current, i) => {
+            return current.stock + prev
+          }, 0) -
+          a.meta.reduce((prev, current, i) => {
+            return current.stock + prev
+          }, 0)
+        )
       }
     })
 
     setProducts(newProducts)
   }, [homeState.sort.stock])
-
+  useEffect(() => {
+    const sortType = homeState.sort.created
+    const newProducts = [...products]
+    console.log(9999)
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        return +a.createdAt - +b.createdAt
+      } else {
+        return +b.createdAt - +a.createdAt
+      }
+    })
+    setProducts(newProducts)
+  }, [homeState.sort.created])
+  useEffect(() => {
+    const sortType = homeState.sort.updated
+    const newProducts = [...products]
+    newProducts.sort((a, b) => {
+      if (sortType === "down") {
+        return +a.updatedAt - +b.updatedAt
+      } else {
+        return +b.updatedAt - +a.updatedAt
+      }
+    })
+    setProducts(newProducts)
+  }, [homeState.sort.updated])
   // useEffect(() => {
   //   const s_o_r_t = homeState.sort
   //   let newProducts = [...products]

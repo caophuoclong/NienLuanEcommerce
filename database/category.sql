@@ -11,7 +11,7 @@ insert into category (name_en, name_vi) values('Men Clothes', 'Quần áo nam');
 insert into category (name_en, name_vi) values('Men Clothes', 'Women Clothes');
 insert into category (name_en, name_vi) values('Electronics', 'Điện tử');
 insert into category (name_en, name_vi) values('Food', 'Thực phẩm');
-insert into category (name_en, name_vi) values('Shoes', 'Giày dép', 'brand');
+insert into category (name_en, name_vi, requireDetail) values('Shoes', 'Giày dép', 'brand');
 insert into category (name_en, name_vi) values('Men Shoes', 'Giày dép nam');
 insert into category (name_en, name_vi) values('Women Shoes', 'Giày dép nữ');
 insert into category (name_en, name_vi) values('Sports', 'Thể thao');
