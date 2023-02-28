@@ -38,6 +38,7 @@ import {
   setProductMeta,
   setProductDetail,
   setProductCategory,
+  makeDefault,
 } from "../Reducer"
 type Props = {
   name: string
@@ -76,16 +77,13 @@ export default function ModalProduct({
       dispatch(setProductName(product.name))
       dispatch(setProductDescription(product.description))
       dispatch(setProductId(product._id))
-      dispatch(setProductMeta(product.meta))
-      dispatch(setProductDetail(product.detail))
-      dispatch(setProductCategory(product.category))
+      dispatch(setProductMeta(JSON.parse(JSON.stringify(product.meta))))
+      dispatch(setProductDetail(JSON.parse(JSON.stringify(product.detail))))
+      dispatch(setProductCategory(JSON.parse(JSON.stringify(product.category))))
     } else {
       setDefaultMeta()
     }
   }, [product])
-  useEffect(() => {
-    console.log(state)
-  }, [state])
   const setDefaultMeta = () => {
     const news: IProductMeta = {
       images: "",
@@ -149,7 +147,7 @@ export default function ModalProduct({
       isOpen={isOpen}
       onClose={() => {
         setCategory("")
-
+        dispatch(makeDefault(undefined))
         unSelectProduct()
         onClose()
       }}
@@ -259,7 +257,7 @@ export default function ModalProduct({
           <Meta
             meta={state.meta}
             setMeta={(me: Array<IProductMeta>) => {
-              // setMeta(me)
+              dispatch(setProductMeta(me))
             }}
           />
         </ModalBody>

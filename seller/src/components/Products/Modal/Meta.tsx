@@ -33,15 +33,15 @@ const generateObject = (obj: IProductMeta) => {
     let xxx = newMeta[key]
     switch (typeof xxx) {
       case "number":
-        xxx = 0
-        break
+        newMeta[key] = 0
+        return
       case "object":
         if (Array.isArray(xxx)) {
           xxx.forEach((x) => (x.value = ""))
         }
         break
       default:
-        xxx = ""
+        newMeta[key] = ""
         return
     }
   })
@@ -62,6 +62,7 @@ export default function Meta({ meta, setMeta }: Props) {
         },
       ],
     }))
+    console.log(newMeta)
     setMeta(newMeta)
     setAddField(false)
     setNewField("")
@@ -76,6 +77,7 @@ export default function Meta({ meta, setMeta }: Props) {
   }
   const onAddNewRow = () => {
     const newRow = generateObject(meta[0])
+    console.log("🚀 ~ file: Meta.tsx:80 ~ onAddNewRow ~ newRow:", newRow)
     setMeta([...meta, newRow])
   }
   const onRemoveRow = (index: number) => {
