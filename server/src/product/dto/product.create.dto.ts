@@ -1,22 +1,21 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Category } from '../../database/entities/category/index';
-import { ProductMeta } from '../../database/entities/product/meta';
-
-export class ProductCreateDto {
+import {
+  IProduct,
+  IProductDetail,
+  IProductMeta,
+} from '../../interface/product';
+export class ProductCreateDto implements IProduct {
+  @ApiPropertyOptional()
+  _id?: string;
   @ApiProperty()
   name: string;
   @ApiProperty()
   category: Category;
   @ApiProperty()
-  meta: {
-    images: string;
-    price: number;
-    stock: number;
-    detail: { [key: string]: any };
-    attribute: Array<{ key: string; value: any }>;
-  }[];
-  @ApiProperty( {default: 0})
-  sold: number ;
+  meta: Array<IProductMeta>;
   @ApiProperty()
-  detail: { [key: string]: string };
+  detail: Array<IProductDetail>;
+  @ApiPropertyOptional()
+  description?: string;
 }
