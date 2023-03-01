@@ -8,6 +8,15 @@ export class ProductService {
   static async getMyProducts() {
     return (await axiosClient.get<Array<IProduct>>("/product/shop")).data
   }
+  static async getProducts(name: string) {
+    return (
+      await axiosClient.get<Array<IProduct>>("/product/q/shop", {
+        params: {
+          name: name,
+        },
+      })
+    ).data
+  }
   static async getProduct(_id?: string) {
     return (
       await axiosClient.get<{
