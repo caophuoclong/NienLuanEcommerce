@@ -1,4 +1,5 @@
 import React from 'react'
+import Footer from './Footer'
 import Header from './Header'
 
 export default function Default({children}) {
@@ -8,6 +9,7 @@ export default function Default({children}) {
         <main className={`px-[20rem] mt-32`}>
           {children}
         </main>
+        <Footer/>
     </div>
   )
 }

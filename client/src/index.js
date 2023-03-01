@@ -8,7 +8,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Cart from "./pages/Cart"
 import Home from './pages/Home';
-import Product from './pages/Product';
 import NotFound from './pages/NotFound';
 import { DefaultLayout } from './Layouts';
 import "./i18n";
@@ -19,6 +18,7 @@ import LogIn from './pages/LogIn';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword';
+import ProductView from './pages/ProductView';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/product/:id',
-    element: <DefaultLayout children={<Product/>}/>,
+    element: <DefaultLayout children={<ProductView/>}/>,
     errorElement: <NotFound/>
   },
   {

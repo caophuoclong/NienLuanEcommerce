@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { HomeService } from '../../services/';
+import { ProductService } from '../../services/';
 
 const initialState = {
   products: [],
   loggedIn: false,
 };
-const getHome = createAsyncThunk('get home', () => {
-  return HomeService.getProducts();
+export const getHome = createAsyncThunk('get home', () => {
+  return ProductService.getProducts();
 });
 
 export const HomeSlice = createSlice({
@@ -19,7 +19,7 @@ export const HomeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getHome.fulfilled, (state, action) => {
-      state.products = action.payload.data;
+      state.products = action.payload;
     });
   },
 });
