@@ -36,7 +36,7 @@ export default function Product({
           return prev + current.sold
         }, 0)}
       </Td>
-      {/* <Td
+      <Td
         title={
           new Date(+createdAt).toLocaleDateString("vi-VN") +
           " " +
@@ -57,7 +57,7 @@ export default function Product({
         {+updatedAt === 0
           ? "-"
           : new Date(+updatedAt).toLocaleDateString("vi-VN")}
-      </Td> */}
+      </Td>
       <Td>
         <Button
           onClick={onEditProduct}

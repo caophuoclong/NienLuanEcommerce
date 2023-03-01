@@ -219,7 +219,6 @@ export default function Products({}: Props) {
   useEffect(() => {
     const sortType = homeState.sort.created
     const newProducts = [...products]
-    console.log(9999)
     newProducts.sort((a, b) => {
       if (sortType === "down") {
         return +a.createdAt - +b.createdAt
