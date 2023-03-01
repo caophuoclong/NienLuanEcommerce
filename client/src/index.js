@@ -19,7 +19,6 @@ import LogIn from './pages/LogIn';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword';
-import Cart from './pages/Cart';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([

@@ -38,8 +38,21 @@ export class ProductController {
   }
   @Public()
   @Get('/')
-  getProducts(@Query() query: ProductGetDTO) {
+  getProducts(@Query() query: ProductGetDTO, @Req() req: Request) {
     return this.productService.getProducts(query);
+  }
+  @Roles(RolesEnum.SHOP)
+  @Get('/q/shop')
+  queryProduct(@Query() query: { name: string }, @Req() req: Request) {
+    const { _id, role } = req.user;
+    return this.productService.queryProducts(
+      {
+        name: query.name,
+        shop: _id,
+        page: 0,
+      },
+      10000,
+    );
   }
   @Public()
   @Get('/get/:_id')

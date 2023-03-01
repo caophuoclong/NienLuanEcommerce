@@ -137,9 +137,8 @@ export class ProductService {
       category,
     };
   }
-  async getProducts(dto: ProductGetDTO) {
+  async getProducts(dto: Partial<ProductGetDTO>, perPage?: number) {
     const { category, maxPrice, minPrice, name, shop, page = 0 } = dto;
-    const perPage = 10;
     // return this.categoryService.getParentCategory(category);
     const products = await this.productRepository.find({
       where: [
@@ -149,37 +148,103 @@ export class ProductService {
           },
         },
         {
-          category: {
-            _id: category,
-          },
-        },
-        {
           name: Like(`%${name}%`),
         },
       ],
       relations: {
         category: true,
-        shop: true,
+        meta: true,
+        detail: true,
       },
-      skip: page * perPage,
-      take: perPage,
+      skip: page * (perPage | 10),
+      take: perPage | 10,
     });
-    const productsWithCate = products.map(async (product) => {
-      const cate = await this.categoryService.getParentCategory(
-        product.category._id,
-      );
+    // console.log(products);
+    // const productsWithCate = products.map(async (product) => {
+    //   const cate = await this.categoryService.getParentCategory(
+    //     product.category._id,
+    //   );
+    //   return {
+    //     ...product,
+    //     category: cate,
+    //   };
+    // });
+    return products.map((re) => {
       return {
-        ...product,
-        category: cate,
+        ...re,
+        meta: re.meta.map(
+          ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
+            return {
+              ...m,
+              attribute: [
+                {
+                  key: attribute_1,
+                  value: value_1,
+                },
+                {
+                  key: attribute_2,
+                  value: value_2,
+                },
+              ],
+            };
+          },
+        ),
       };
     });
-    return await Promise.all(productsWithCate);
+  }
+  async queryProducts(dto: Partial<ProductGetDTO>, perPage?: number) {
+    const { category, maxPrice, minPrice, name, shop, page = 0 } = dto;
+    // return this.categoryService.getParentCategory(category);
+    const products = await this.productRepository.find({
+      where: {
+        shop: {
+          _id: shop,
+        },
+        name: Like(`%${name}%`),
+      },
+
+      relations: {
+        category: true,
+        meta: true,
+        detail: true,
+      },
+      skip: page * (perPage | 10),
+      take: perPage | 10,
+    });
+    // console.log(products);
+    // const productsWithCate = products.map(async (product) => {
+    //   const cate = await this.categoryService.getParentCategory(
+    //     product.category._id,
+    //   );
+    //   return {
+    //     ...product,
+    //     category: cate,
+    //   };
+    // });
+    return products.map((re) => {
+      return {
+        ...re,
+        meta: re.meta.map(
+          ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
+            return {
+              ...m,
+              attribute: [
+                {
+                  key: attribute_1,
+                  value: value_1,
+                },
+                {
+                  key: attribute_2,
+                  value: value_2,
+                },
+              ],
+            };
+          },
+        ),
+      };
+    });
   }
   async getShopProducts(shop_id: string, page: number, skip: number) {
-    console.log(
-      '🚀 ~ file: product.service.ts:160 ~ ProductService ~ getShopProducts ~ shop_id',
-      shop_id,
-    );
     const response = await this.productRepository.find({
       where: {
         shop: {
