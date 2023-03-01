@@ -55,6 +55,30 @@ export class ProductService {
       }),
     };
   }
+  async _parserProductOnQuery(products: Product[]) {
+    return products.map((re) => {
+      return {
+        ...re,
+        meta: re.meta.map(
+          ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
+            return {
+              ...m,
+              attribute: [
+                {
+                  key: attribute_1,
+                  value: value_1,
+                },
+                {
+                  key: attribute_2,
+                  value: value_2,
+                },
+              ],
+            };
+          },
+        ),
+      };
+    });
+  }
   async createProduct(dto: ProductCreateDto, shop_id: string) {
     try {
       const { name, category, meta, detail, _id } = dto;
@@ -112,6 +136,8 @@ export class ProductService {
       },
       relations: {
         category: true,
+        meta: true,
+        detail: true,
         shop: true,
       },
     });
@@ -159,38 +185,8 @@ export class ProductService {
       skip: page * (perPage | 10),
       take: perPage | 10,
     });
-    // console.log(products);
-    // const productsWithCate = products.map(async (product) => {
-    //   const cate = await this.categoryService.getParentCategory(
-    //     product.category._id,
-    //   );
-    //   return {
-    //     ...product,
-    //     category: cate,
-    //   };
-    // });
-    return products.map((re) => {
-      return {
-        ...re,
-        meta: re.meta.map(
-          ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
-            return {
-              ...m,
-              attribute: [
-                {
-                  key: attribute_1,
-                  value: value_1,
-                },
-                {
-                  key: attribute_2,
-                  value: value_2,
-                },
-              ],
-            };
-          },
-        ),
-      };
-    });
+
+    return this._parserProductOnQuery(products);
   }
   async queryProducts(dto: Partial<ProductGetDTO>, perPage?: number) {
     const { category, maxPrice, minPrice, name, shop, page = 0 } = dto;
@@ -257,28 +253,7 @@ export class ProductService {
         detail: true,
       },
     });
-    return response.map((re) => {
-      return {
-        ...re,
-        meta: re.meta.map(
-          ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
-            return {
-              ...m,
-              attribute: [
-                {
-                  key: attribute_1,
-                  value: value_1,
-                },
-                {
-                  key: attribute_2,
-                  value: value_2,
-                },
-              ],
-            };
-          },
-        ),
-      };
-    });
+    return this._parserProductOnQuery(response);
   }
   async editProduct(product: ProductCreateDto) {
     const { _id, category, description, detail, meta, name } = product;
@@ -339,5 +314,25 @@ export class ProductService {
       await Promise.all(promiseMeta),
     ]);
     return this._parserProduct(response[0], response[2], response[1]);
+  }
+  async getProductsHome({
+    perPage = 10,
+    page = 0,
+  }: {
+    perPage: number;
+    page: number;
+  }) {
+    const response = await this.productRepository.find({
+      skip: page * perPage,
+      take: perPage,
+      relations: {
+        detail: true,
+        meta: true,
+        shop: true,
+      },
+    });
+    const re = this._parserProductOnQuery(response);
+    // console.log('🚀 ~ file: product.service.ts:333 ~ ProductService ~ re:', re);
+    return re;
   }
 }

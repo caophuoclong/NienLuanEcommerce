@@ -34,19 +34,23 @@ export class CategoryService {
     });
     return response;
   }
-  async findCategoryByName(data: SearchCategories){
-    const {name, lang} = data;
-    const x = await this.categoryRepository.createQueryBuilder()
-    .where(`
+  async findCategoryByName(data: SearchCategories) {
+    const { name, lang } = data;
+    const x = await this.categoryRepository
+      .createQueryBuilder()
+      .where(
+        `
     name_${lang} like :name
-    `, {name: `%${name}%`})
-    .execute();
-    return x.map(i => ({
-      _id: i["Category__id"],
+    `,
+        { name: `%${name}%` },
+      )
+      .execute();
+    return x.map((i) => ({
+      _id: i['Category__id'],
       name_en: i[`Category_name_en`],
       name_vi: i[`Category_name_vi`],
       requireDetail: i[`Category_requireDetail`],
-      createdAt: i[`Category_createdAt`]
+      createdAt: i[`Category_createdAt`],
     }));
   }
   async createCategory(data: CreateCategory) {
@@ -88,14 +92,22 @@ export class CategoryService {
     const response = await this.treeCategoryRepository.query(
       queryTreeCategories(child),
     );
+    console.log(
+      '🚀 ~ file: category.service.ts:95 ~ CategoryService ~ getParentCategory ~ response:',
+      response,
+    );
     // get tree from response
     const s = new Set();
+
     for (const x of response) {
       const { parent, child } = x;
-      // console.log(child, parent)
       s.add(child);
       s.add(parent);
     }
+    console.log(
+      '🚀 ~ file: category.service.ts:97 ~ CategoryService ~ getParentCategory ~ s:',
+      s,
+    );
     const categories = await this.categoryRepository.find({
       where: {
         _id: In(Array.from(s)),

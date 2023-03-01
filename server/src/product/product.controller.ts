@@ -37,6 +37,14 @@ export class ProductController {
     return this.productService.editProduct(product);
   }
   @Public()
+  @Get('/home')
+  getHomeProduct(@Query() query: { perPage?: number; page?: number }) {
+    return this.productService.getProductsHome({
+      perPage: query.perPage,
+      page: query.page,
+    });
+  }
+  @Public()
   @Get('/')
   getProducts(@Query() query: ProductGetDTO, @Req() req: Request) {
     return this.productService.getProducts(query);

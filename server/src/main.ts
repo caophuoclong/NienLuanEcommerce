@@ -9,7 +9,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, );
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Ecommerce Application')
     .setVersion('1.0')
@@ -21,14 +21,14 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()));
   SwaggerModule.setup('api', app, documet);
   app.use(cookieParser());
+
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:3005'],
+    credentials: true,
+    methods: 'GET, POST, PUT, DELETE, OPTION',
+  });
   app.useStaticAssets(path.join(__dirname, '..', 'public', 'home'), {
     prefix: '/home/',
-  });
-  app.enableCors({
-    origin: ['http://localhost:3000', "http://localhost:3001"],
-    credentials: true,
-    methods: "GET, POST, PUT, DELETE, OPTION"
-    
   });
   // app.use((req, res: Restponse, next)=>{
   //   res.
