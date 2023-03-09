@@ -8,6 +8,7 @@ import { ProductGetDTO } from './dto/product.get.dto';
 import { CategoryService } from 'src/category/category.service';
 import { ProductMeta } from '../database/entities/product/meta';
 import { ProductDetail } from '../database/entities/product/detail';
+import { SearchProductDTO } from './dto/searchProduct.dto';
 
 @Injectable()
 export class ProductService {
@@ -104,8 +105,12 @@ export class ProductService {
             sold: 0,
           };
           attribute.forEach((att, i) => {
-            newMeta[`attribute_${i + 1}`] = att.key;
-            newMeta[`value_${i + 1}`] = att.value;
+            newMeta[`attribute_${i + 1}`] = att.key
+              .toString()
+              .toLocaleLowerCase();
+            newMeta[`value_${i + 1}`] = att.value
+              .toString()
+              .toLocaleLowerCase();
           });
           return this.productMetaRepository.save(newMeta);
         });
@@ -281,8 +286,8 @@ export class ProductService {
         value_2: null,
       };
       attribute.forEach((att, i) => {
-        newMeta[`attribute_${i + 1}`] = att.key;
-        newMeta[`value_${i + 1}`] = att.value;
+        newMeta[`attribute_${i + 1}`] = att.key.toString().toLowerCase();
+        newMeta[`value_${i + 1}`] = att.value.toString().toLowerCase();
       });
       if (!newMeta._id) {
         const createMeta = this.productMetaRepository.create({
@@ -334,5 +339,72 @@ export class ProductService {
     const re = this._parserProductOnQuery(response);
     // console.log('🚀 ~ file: product.service.ts:333 ~ ProductService ~ re:', re);
     return re;
+  }
+  async searchProduct({ lang, name }: SearchProductDTO) {
+    let products: Array<Product> = [];
+    const productByName = await this.productRepository.find({
+      where: {
+        name: Like(`%${name}%`),
+      },
+      relations: {
+        detail: true,
+        meta: true,
+      },
+    });
+    products = [...products, ...productByName];
+    const productByCategory = await this.categoryService.repository.find({
+      where: {
+        [`name_${lang}`]: Like(`%${name}%`),
+      },
+      relations: {
+        products: {
+          detail: true,
+          meta: true,
+        },
+      },
+    });
+    productByCategory.forEach((c) => {
+      products = [...products, ...c.products];
+    });
+
+    const productByMeta = await this.productMetaRepository.find({
+      where: [
+        {
+          value_1: Like(`%${name}%`),
+        },
+        {
+          value_2: Like(`%${name}%`),
+        },
+      ],
+      relations: {
+        product: {
+          meta: true,
+          detail: true,
+        },
+      },
+    });
+    productByMeta.forEach((p) => {
+      products = [...products, p.product];
+    });
+    return this._parserProductOnQuery(this.removeDuplicateItems(products));
+  }
+  private removeDuplicateItems<
+    T extends {
+      [key: string]: any;
+      _id: string;
+    }[],
+  >(array: T) {
+    const obj: {
+      [key: string]: boolean;
+    } = {};
+    const resultArray: any = [];
+    for (let i = 0; i < array.length; i++) {
+      const currentItem = array[i];
+      if (!obj[currentItem._id]) {
+        resultArray.push(array[i]);
+        obj[currentItem._id] = true;
+      }
+    }
+    return resultArray as T;
   }
 }

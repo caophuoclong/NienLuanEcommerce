@@ -26,6 +26,10 @@ export class CategoryService {
     private readonly treeCategoryRepository: Repository<TreeCategory>,
   ) {}
 
+  public get repository(): Repository<Category> {
+    return this.categoryRepository;
+  }
+
   async getCategoryById(_id: number) {
     const response = await this.categoryRepository.findOne({
       where: {
@@ -92,10 +96,7 @@ export class CategoryService {
     const response = await this.treeCategoryRepository.query(
       queryTreeCategories(child),
     );
-    console.log(
-      '🚀 ~ file: category.service.ts:95 ~ CategoryService ~ getParentCategory ~ response:',
-      response,
-    );
+
     // get tree from response
     const s = new Set();
 
@@ -104,10 +105,7 @@ export class CategoryService {
       s.add(child);
       s.add(parent);
     }
-    console.log(
-      '🚀 ~ file: category.service.ts:97 ~ CategoryService ~ getParentCategory ~ s:',
-      s,
-    );
+
     const categories = await this.categoryRepository.find({
       where: {
         _id: In(Array.from(s)),

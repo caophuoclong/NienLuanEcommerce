@@ -20,6 +20,7 @@ import { ProductCreateDto } from './dto/product.create.dto';
 import { Request } from 'express';
 import { ProductGetDTO } from './dto/product.get.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { SearchProductDTO } from './dto/searchProduct.dto';
 @Controller('product')
 @UseGuards(RolesGuard)
 @ApiTags('Product')
@@ -49,6 +50,11 @@ export class ProductController {
   getProducts(@Query() query: ProductGetDTO, @Req() req: Request) {
     return this.productService.getProducts(query);
   }
+  @Public()
+  @Get('/search')
+  searchProducts(@Query() query: SearchProductDTO) {
+    return this.productService.searchProduct(query);
+  }
   @Roles(RolesEnum.SHOP)
   @Get('/q/shop')
   queryProduct(@Query() query: { name: string }, @Req() req: Request) {
@@ -64,7 +70,7 @@ export class ProductController {
   }
   @Public()
   @Get('/get/:_id')
-  getProduct(@Param('_id') _id, @Req() req) {
+  getProduct(@Param('_id') _id) {
     return this.productService.getProduct(_id);
   }
   @Get('/shop')
