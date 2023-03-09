@@ -9,6 +9,14 @@ const ProductService = {
     getProduct: async (id)=>{
         const response = (await axiosCLient.get(`/product/get/${id}`));
         return response;
+    },
+    searchProduct: async(name, lang)=>{
+        return (await axiosCLient.get("/product/search",{
+            params: {
+                name,
+                lang
+            }
+        }))
     }
 }
 export default ProductService;

@@ -88,7 +88,7 @@ export default function Product(props) {
         infiniteLoop
         width={'100%'}
       >
-        {props.meta
+        {[props.meta[0]]
           .map((i) => i.images)
           .map((imgg, i) => (
             <img

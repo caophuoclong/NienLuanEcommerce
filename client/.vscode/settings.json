@@ -1,0 +1,7 @@
+{
+    "editor.suggest.showStatusBar": true,
+    "workbench.activityBar.iconClickBehavior": "toggle",
+    "workbench.activityBar.visible": true,
+    "workbench.statusBar.visible": false,
+    "java.autobuild.enabled": false,
+}

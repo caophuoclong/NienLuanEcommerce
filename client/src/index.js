@@ -19,6 +19,7 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword';
 import ProductView from './pages/ProductView';
+import SearchProduct from './pages/SearchProduct';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -68,6 +69,11 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
     errorElement: <NotFound/>
   },
+  {
+    path: "search",
+    element: <DefaultLayout children={<SearchProduct/>}/>,
+    errorElement: <NotFound/>
+  }
 ]);
 const App = ()=>{
   const dispatch = useAppDispatch();
