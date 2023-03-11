@@ -9,6 +9,7 @@ import Reviews from "../components/Previews"
 import Main from "../components/Main"
 import { getMe } from "../features/home"
 import Profile from "../components/Profile"
+import Coupon from "../components/Coupon"
 
 type Props = {}
 function r(page: selectedPage) {
@@ -21,6 +22,8 @@ function r(page: selectedPage) {
       return <Reviews />
     case "profile":
       return <Profile />
+    case "coupon":
+      return <Coupon />
     default:
       return <></>
   }

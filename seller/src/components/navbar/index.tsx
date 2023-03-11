@@ -153,6 +153,11 @@ export default function NavBar() {
           pageName: "products",
         },
         {
+          name: "Coupon",
+          id: SalesSubItemId.COUPON,
+          pageName: "coupon",
+        },
+        {
           name: "Categories",
           id: SalesSubItemId.CATEGORIES,
           pageName: "categories",
