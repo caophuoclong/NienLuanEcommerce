@@ -148,7 +148,7 @@ export default function Meta({ meta, setMeta }: Props) {
                 ))}
               <Th>
                 {meta[0] &&
-                  meta[0].attribute.length < 2 &&
+                  meta[0].attribute.length < 1 &&
                   (addField ? (
                     <Input
                       onKeyDown={(e) => {
