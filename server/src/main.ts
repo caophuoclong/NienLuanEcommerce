@@ -23,7 +23,11 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3005'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3005',
+      'https://sellerpage.pages.dev',
+    ],
     credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTION',
   });

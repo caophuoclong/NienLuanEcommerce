@@ -74,6 +74,9 @@ export class AuthService {
         email: true,
       },
     });
+    if (!auth) {
+      throw new ForbiddenException('Your username or password is incorrect!');
+    }
     if (auth.role !== RolesEnum.SHOP) {
       throw new ForbiddenException('You are not permission');
     }
@@ -83,7 +86,7 @@ export class AuthService {
     const checkPassword = await this.validateUser(auth.password, password);
 
     if (!checkPassword) {
-      throw new ForbiddenException('Your password is incorrect');
+      throw new ForbiddenException('Your username or password is incorrect!');
     }
     if (!auth.active) {
       throw new ForbiddenException('Your account is not active');
@@ -102,6 +105,7 @@ export class AuthService {
     if (keys.length > 0) {
       await this.cacheService.del(keys);
     }
+
     const accessToken = this.generateToken(
       this.configService.get<string>('jwt.accessTokenExpire'),
       data,

@@ -62,7 +62,6 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
-    console.log('adsajksdhkjashdjksaj');
     res.json(accessToken);
   }
   @Public()
