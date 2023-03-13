@@ -30,7 +30,7 @@ export class AuthService {
   ) {}
   async registration(dto: RegistrationDTO) {
     try {
-      const { firstName, lastName, middleName, name, ...authDTO } = dto;
+      const { firstName, lastName, middleName, shop_name, ...authDTO } = dto;
       const auth = await this.authRepository.save({
         ...authDTO,
         password: await hashPassword(authDTO.password),
@@ -42,12 +42,12 @@ export class AuthService {
             lastName,
             middleName,
           });
-          break;
+          return this.createConfirmation(auth);
         case RolesEnum.SHOP:
           await this.customerService.create(auth, {
-            name,
+            shop_name,
           });
-          break;
+          return this.createConfirmation(auth);
         case RolesEnum.ADMIN:
           throw new BadRequestException('Admin is not supported');
         default:
@@ -230,12 +230,18 @@ export class AuthService {
       );
       const keys = await this.cacheService.keys(`*-${refreshToken}`);
       const data = await this.cacheService.hGetAll(keys[0]);
-      console.log("🚀 ~ file: auth.service.ts:233 ~ AuthService ~ refreshToken ~ data:", data)
-      console.log("🚀 ~ file: auth.service.ts:233 ~ AuthService ~ refreshToken ~ keys:", keys)
+      console.log(
+        '🚀 ~ file: auth.service.ts:233 ~ AuthService ~ refreshToken ~ data:',
+        data,
+      );
+      console.log(
+        '🚀 ~ file: auth.service.ts:233 ~ AuthService ~ refreshToken ~ keys:',
+        keys,
+      );
 
       if (Object.keys(data).length === 0) {
         console.log('Your refresh token is not valid');
-        
+
         throw new ForbiddenException('Your refresh token is not valid');
       }
       const accessToken = this.generateToken(
@@ -246,5 +252,42 @@ export class AuthService {
     } catch (error) {
       throw new ForbiddenException('Your refresh token is not valid');
     }
+  }
+  async createConfirmation(auth: AuthEntity) {
+    const characters =
+      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let token = '';
+    const x = Date.now() % 25;
+    const min = 2;
+    const max = 4;
+    let temp = '';
+    for (let i = 0; i < Math.floor(Math.random() * (max - min) + min); i++) {
+      temp += characters[Math.floor(Math.random() * characters.length)];
+    }
+    for (let i = 0; i < 25; i++) {
+      token += characters[Math.floor(Math.random() * characters.length)];
+      if (i === x) token += temp;
+    }
+    this.cacheService.set(token, auth.username);
+    this.cacheService.expire(token, 10800);
+    return token;
+  }
+  async confirm(token: string) {
+    const username = await this.cacheService.get(token);
+    if (!username) {
+      throw new BadRequestException('Token invalid');
+    }
+    const auth = await this.authRepository.findOne({
+      where: {
+        username,
+      },
+    });
+    if (!auth) {
+      throw new BadRequestException('Token invalid! Could not find username');
+    }
+    auth.active = true;
+    this.authRepository.save(auth);
+    this.cacheService.del(token);
+    return 'Active account successful!';
   }
 }

@@ -32,7 +32,7 @@ import { ProductDetail } from './entities/product/detail';
           username: string;
           password: string;
           name: string;
-          type: "mysql";
+          type: 'mysql';
         }>('database');
         return {
           type: config.type,
@@ -41,11 +41,30 @@ import { ProductDetail } from './entities/product/detail';
           username: config.username,
           password: config.password,
           database: config.name,
-          entities: [AuthEntity, Customer, Address, AdministrativeRegion, AdministrativeUnit, Province, District, Ward, Category, Product, ProductMeta, Cart, CartItem, CreditCart, Payment, Coupon, TreeCategory, ProductDetail],
+          entities: [
+            AuthEntity,
+            Customer,
+            Address,
+            AdministrativeRegion,
+            AdministrativeUnit,
+            Province,
+            District,
+            Ward,
+            Category,
+            Product,
+            ProductMeta,
+            Cart,
+            CartItem,
+            CreditCart,
+            Payment,
+            Coupon,
+
+            ProductDetail,
+          ],
           synchronize: true,
         };
       },
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
   ],
 })

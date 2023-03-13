@@ -18,7 +18,7 @@ export class CustomerService implements ICustomer {
       firstName: string;
       lastName: string;
       middleName: string;
-      name: string;
+      shop_name: string;
     }>,
   ) {
     try {
