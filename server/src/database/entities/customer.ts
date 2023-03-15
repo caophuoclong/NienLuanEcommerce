@@ -79,6 +79,10 @@ export class Customer {
   payments: Payment[];
   @ManyToMany(() => Coupon, (coupon) => coupon.user)
   storedCoupon: Coupon[];
+  @Column({
+    default: 'https://picsum.photos/40',
+  })
+  avatar: string;
 
   @AfterUpdate()
   afterUpdate() {

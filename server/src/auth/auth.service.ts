@@ -224,7 +224,8 @@ export class AuthService {
     });
   }
   async logout(refreshToken: string) {
-    await this.cacheService.del(refreshToken);
+    const keys = await this.cacheService.keys(`*-${refreshToken}`);
+    await this.cacheService.del(keys);
   }
   async refreshToken(refreshToken: string) {
     try {

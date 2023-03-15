@@ -23,9 +23,9 @@ export class Product {
   @Column()
   name: string;
   @Column({
-    default: '',
+    type: 'longtext',
   })
-  description: string;
+  description?: string;
   @ManyToOne(() => Category, (category) => category.products, {
     onDelete: 'CASCADE',
   })

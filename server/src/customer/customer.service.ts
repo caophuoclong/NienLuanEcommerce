@@ -49,6 +49,7 @@ export class CustomerService implements ICustomer {
         auth: {
           email: true,
           phone: true,
+          username: true,
         },
         address: {
           _id: true,

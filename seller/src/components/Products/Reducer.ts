@@ -7,7 +7,7 @@ const initial: IProduct = {
   detail: [],
   meta: [],
   _id: undefined,
-  description: undefined,
+  description: "",
   updatedAt: "",
   createdAt: "",
 }
@@ -122,9 +122,14 @@ const reducer: (state: IProduct, actinon: ActionReturn) => IProduct = (
         category: {},
         detail: [],
         meta: [],
-        description: undefined,
+        description: "",
         createdAt: "",
         updatedAt: "",
+      }
+    case ActionEnum.SET_DESCRIPTION:
+      return {
+        ...state,
+        description: action.payload,
       }
     default:
       return state
@@ -137,6 +142,10 @@ export const setProductName: ActionType<string> = (name: string) => ({
 export const setProductId: ActionType<string | undefined> = (_id?: string) => ({
   type: ActionEnum.SET_ID,
   payload: _id,
+})
+export const setDescription: ActionType<string> = (description: string) => ({
+  type: ActionEnum.SET_DESCRIPTION,
+  payload: description,
 })
 export const setProductMeta: ActionType<Array<IProductMeta>> = (
   meta: Array<IProductMeta>
