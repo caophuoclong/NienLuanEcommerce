@@ -100,7 +100,7 @@ export default function Meta({ meta, setMeta }: Props) {
       >
         Meta
       </Text>
-      <TableContainer overflowY={"auto"} h="300px">
+      <TableContainer overflowY={"auto"} h="200px">
         <Table>
           <Thead position={"sticky"} top="0" zIndex={"docked"} bg="white">
             <Tr>

@@ -39,7 +39,9 @@ import {
   setProductDetail,
   setProductCategory,
   makeDefault,
+  setDescription,
 } from "../Reducer"
+import Description from "./Description"
 type Props = {
   name: string
   isOpen: boolean
@@ -253,6 +255,11 @@ export default function ModalProduct({
           </Box>
           {/* row2 */}
           <Detail />
+          <Description
+            description={state.description}
+            onChange={(str) => dispatch(setDescription(str))}
+          />
+
           {/* Row 3 */}
           <Meta
             meta={state.meta}
@@ -261,7 +268,6 @@ export default function ModalProduct({
             }}
           />
         </ModalBody>
-
         <ModalFooter justifyContent={"flex-start"}>
           <Button colorScheme="facebook" mr={3} onClick={handleSubmit}>
             {name.toLocaleLowerCase().includes("add") ? "Add" : "Save"}
