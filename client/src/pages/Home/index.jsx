@@ -9,6 +9,7 @@ import { BASE_URL } from '../../configs';
 import axios from 'axios';
 import { getHome } from '../../app/slices/home.slice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const {t} = useTranslation();
@@ -41,16 +42,8 @@ export default function Home() {
   // generate categories with 24 categories
 
   const categories = Array(15).fill(category);
-  const product = {
-    name: "Con heo ngu ngoc",
-    cate: "1",
-    price: "30k",
-    sold: 30,
-    thumbnail: "https://cf.shopee.vn/file/sg-11134201-22100-aqap5ggz59iv59_tn",
-    link: "/product/con-heo-ngu-ngoc.12"
-  }
+
   const products = useAppSelector(state => state.home.products);
-  console.log("🚀 ~ file: index.jsx:53 ~ Home ~ products:", products)
   useEffect(()=>{
     dispatch(getHome())
   },[])

@@ -7,68 +7,10 @@ import { ProductService } from '../../services';
 import { useAppSelector } from '../../app/hooks';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
+import ShopInfo from '../../components/shop/info';
+import ProductDetail from './ProductDetail';
+import ProductDescription from './ProductDescription';
 
-function DropDownCategories() {
-  const categories = [
-    { id: 1, name: 'S' },
-    { id: 2, name: 'M' },
-    { id: 3, name: 'L' },
-    { id: 4, name: 'XL' },
-    { id: 5, name: '2XL' },
-  ];
-  const { t } = useTranslation();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  const ref = useRef(null);
-  window.addEventListener('click', (e) => {
-    const target = e.target;
-    if (ref.current !== null && !ref.current.contains(target)) {
-      setShowDropdown(false);
-    }
-  });
-  return (
-    <div ref={ref} className="relative z-[1000]">
-      <div className="flex items-center ">
-        <p
-          onClick={() => setShowDropdown((prev) => !prev)}
-          className="w-[40px] cursor-pointer select-none truncate"
-        >
-          {selectedCategory.name}
-        </p>
-        <IoIosArrowForward
-          className={`transition duration-300 ease-in-out ${
-            showDropdown ? 'rotate-90' : 'rotate-0'
-          }`}
-        />
-      </div>
-      {
-        <div
-          style={{
-            opacity: showDropdown ? 1 : 0,
-            backgroundColor: 'rgb(74, 222, 128)',
-          }}
-          className={`${
-            showDropdown ? 'z-[1000]' : 'z-[-999]'
-          } absolute -left-2 my-4 flex max-w-[600px] flex-wrap  gap-y-2 rounded-lg p-4 opacity-0 shadow-lg shadow-indigo-300 transition duration-300 ease-in-out`}
-        >
-          {categories.map((category, index) => (
-            <div
-              onClick={() => {
-                setSelectedCategory(category);
-              }}
-              key={index}
-              className={`w-200px cursor-pointer truncate rounded-md px-1 ${
-                category.id === selectedCategory.id && 'bg-gray-300'
-              } hover:bg-gray-300`}
-            >
-              {category.name}
-            </div>
-          ))}
-        </div>
-      }
-    </div>
-  );
-}
 const max = 1500;
 const min = 1000;
 export default function ProductView() {
@@ -143,65 +85,45 @@ export default function ProductView() {
   }, [tmpMeta]);
   return (
     <div className="px-[2rem]">
-      <div className="mb-4">
-        <Link to="/" className="text-blue-500">
-        Trang chủ
-      </Link>
-      {' > '}
-      <Link
-        to={`/category/${
-          product ? (product.category ? product.category._id : '') : ''
-        }`}
-        className="text-blue-500"
-      >
-        {product
-          ? product.category
-            ? product.category[`name_${lang}`]
-            : ''
-          : ''}
-      </Link>
-      </div>
-      <div className="flex gap-4 bg-white h-[400px]">
-        <div className="flex-[0.5] ">
-          <div className="h-[250px]">
-            {Object.keys(tmpMeta).length > 0 ? <div
-                      style={{ backgroundImage: `url(${tmpMeta.images})` }}
-                      className={`h-[300px] w-full bg-center bg-no-repeat`}
-                    ></div>: <Carousel
-              showArrows={false}
-              showThumbs={false}
-              showStatus={false}
-              showIndicators={false}
-              autoPlay
-              duration={Math.floor(Math.random() * (max - min + 1)) + min}
-              infiniteLoop
-            >
-              {meta &&
-                meta.length > 0 &&
-                meta
-                  .map((i) => i.images)
-                  .map((imgg, i) => (
-                    <div
-                      style={{ backgroundImage: `url(${imgg})` }}
-                      className={`h-[300px] w-full bg-center bg-no-repeat`}
-                    ></div>
-                  ))}
-            </Carousel>}
-          </div>
+      <div className="flex h-[400px] gap-4 rounded-md bg-white p-4">
+        <div className="w-[350px] ">
+          <React.Fragment>
+            {Object.keys(tmpMeta).length > 0 ? (
+              <div
+                style={{ backgroundImage: `url(${tmpMeta.images})` }}
+                className={`h-[350px] w-full bg-contain bg-no-repeat`}
+              ></div>
+            ) : (
+              <Carousel
+                showArrows={false}
+                showThumbs={false}
+                showStatus={false}
+                showIndicators={false}
+                autoPlay
+                duration={Math.floor(Math.random() * (max - min + 1)) + min}
+                infiniteLoop
+              >
+                {meta &&
+                  meta.length > 0 &&
+                  meta
+                    .map((i) => i.images)
+                    .map((imgg, i) => (
+                      <div
+                        key={i}
+                        style={{ backgroundImage: `url(${imgg})` }}
+                        className={`h-[350px] w-full bg-contain bg-no-repeat`}
+                      ></div>
+                    ))}
+              </Carousel>
+            )}
+          </React.Fragment>
           <div className="h-auto bg-white"></div>
         </div>
         <div className="flex-1 ">
           <div className="mt-5 block w-full text-2xl font-bold">
             {product.name}
           </div>
-          {/* <div className="mt-3 block text-base">
-            {Object.keys(product).length > 0 &&
-              product.detail.map((d, i) => (
-                <div key={i}>
-                  {d.key}: {d.value}
-                </div>
-              ))}
-          </div> */}
+
           <div className="flex items-center gap-1">
             <div className="my-7 text-4xl font-bold text-green-400">
               {Object.keys(tmpMeta).length > 0
@@ -331,65 +253,11 @@ export default function ProductView() {
           </button>
         </div>
       </div>
-      {/* <div className="">
-        <div className="mt-10 rounded-lg bg-white p-3 text-center text-3xl font-bold ">
-          Sản Phẩm Nổi Bật
-        </div>
-        <div className="mt-5 flex grid">
-          <div className="flex">
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="mt-7 flex">
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-            <div className="w-4/5 border-4 bg-gray-600">
-              <img
-                src="https://cf.shopee.vn/file/sg-11134201-22110-d8kpbe0d2hkve0"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
+      <ShopInfo color="bg-white" />
+      <div className="my-2 bg-white p-4">
+        <ProductDetail category={product.category} detail={product.detail}/>
+        <ProductDescription description={product.description} />
+      </div>
     </div>
   );
 }
