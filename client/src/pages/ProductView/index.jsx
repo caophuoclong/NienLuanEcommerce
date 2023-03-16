@@ -83,6 +83,9 @@ export default function ProductView() {
       setQuantity(tmpMeta.stock);
     }
   }, [tmpMeta]);
+  const addToCart = async ()=>{
+
+  }
   return (
     <div className="px-[2rem]">
       <div className="flex h-[400px] gap-4 rounded-md bg-white p-4">
@@ -247,7 +250,11 @@ export default function ProductView() {
                 : 0}
             </span>
           </div>
-          <button className="group ml-3 mt-6 flex h-10 flex-1 items-center justify-center gap-x-2 rounded-lg bg-green-400 text-white hover:bg-blue-500">
+          <button onClick={()=>{
+            // if()
+            console.log(product.meta);
+            console.log(tmpMeta);
+          }} className="group ml-3 mt-6 flex h-10 flex-1 items-center justify-center gap-x-2 rounded-lg bg-green-400 text-white hover:bg-blue-500">
             <MdOutlineAddShoppingCart className="ml-2" />
             <p className="mr-3 font-bold">Thêm vào giỏ hàng</p>
           </button>

@@ -40,7 +40,7 @@ const NavBar = () => {
               ></div>
               <span className="italic text-gray-400">@{user.auth.username}</span>
             </Link>
-            <div className="w-full bg-white absolute  z-[100] rounded-md shadow-lg invisible group-hover:visible flex flex-col items-start py-2">
+            <div className="w-32 bg-white absolute  z-[100] rounded-md shadow-lg invisible group-hover:visible flex flex-col items-start py-2 right-0">
                 <Link to="/user/profile" className="text-black hover:text-blue-500 hover:bg-gray-100 w-full py-2 px-2">My account</Link>
                 <Link to="/user/purchase" className="text-black hover:text-blue-500 hover:bg-gray-100 w-full py-2 px-2">Purchase</Link>
                 <button className="text-black hover:text-blue-500 hover:bg-gray-100 w-full py-2 px-2 text-start" onClick={onLogout}>Logout</button>

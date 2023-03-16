@@ -55,7 +55,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'cart',
-    element: <Cart />,
+    element: <DefaultLayout children={<Cart />}/>,
     errorElement: <NotFound />,
   },
   {

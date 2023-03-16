@@ -121,7 +121,7 @@ export default function Product(props) {
           </div>
         </div>
       </div>
-      <div
+      {/* <div
         ref={refFeatures}
         className="invisible absolute bottom-0 z-10 flex h-10 w-full translate-y-full scale-[1.01] rounded-b-md border border-red-500 bg-white"
       >
@@ -141,7 +141,7 @@ export default function Product(props) {
           <MdOutlineAddShoppingCart size={24} color={'white'} />
           <p className="hidden font-bold group-hover:block">Add to cart</p>
         </button>
-      </div>
+      </div> */}
     </Link>
   );
 }
