@@ -6,7 +6,7 @@ import { Product } from 'src/database/entities/product';
 import { Between, Like, Repository } from 'typeorm';
 import { ProductGetDTO } from './dto/product.get.dto';
 import { CategoryService } from 'src/category/category.service';
-import { ProductMeta } from '../database/entities/product/meta';
+import { ProductVariant } from '../database/entities/product/variant';
 import { ProductDetail } from '../database/entities/product/detail';
 import { SearchProductDTO } from './dto/searchProduct.dto';
 
@@ -15,20 +15,20 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-    @InjectRepository(ProductMeta)
-    private readonly productMetaRepository: Repository<ProductMeta>,
+    @InjectRepository(ProductVariant)
+    private readonly productvariantRepository: Repository<ProductVariant>,
     @InjectRepository(ProductDetail)
     private readonly productDetailRepository: Repository<ProductDetail>,
     private readonly categoryService: CategoryService,
   ) {}
   async _parserProduct(
     product: Product,
-    meta: ProductMeta[],
+    variant: ProductVariant[],
     detail: ProductDetail[],
   ) {
     return {
       ...product,
-      meta: meta.map((m) => {
+      variant: variant.map((m) => {
         const x = JSON.parse(JSON.stringify(m));
         x.attribute = [];
         delete x.product;
@@ -60,7 +60,7 @@ export class ProductService {
     return products.map((re) => {
       return {
         ...re,
-        meta: re.meta.map(
+        variant: re.variant.map(
           ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
             return {
               ...m,
@@ -82,7 +82,7 @@ export class ProductService {
   }
   async createProduct(dto: ProductCreateDto, shop_id: string) {
     try {
-      const { name, category, meta, detail, _id } = dto;
+      const { name, category, variant, detail, _id } = dto;
       if (_id === undefined) {
         const newProduct = await this.productRepository.save({
           name: name,
@@ -91,9 +91,9 @@ export class ProductService {
             _id: shop_id,
           },
         });
-        const listMetaPromise = meta.map((m) => {
+        const listvariantPromise = variant.map((m) => {
           const { price, stock, images, attribute } = m;
-          const newMeta = {
+          const newvariant = {
             product: newProduct,
             price: price,
             stock: stock,
@@ -105,14 +105,14 @@ export class ProductService {
             sold: 0,
           };
           attribute.forEach((att, i) => {
-            newMeta[`attribute_${i + 1}`] = att.key
+            newvariant[`attribute_${i + 1}`] = att.key
               .toString()
               .toLocaleLowerCase();
-            newMeta[`value_${i + 1}`] = att.value
+            newvariant[`value_${i + 1}`] = att.value
               .toString()
               .toLocaleLowerCase();
           });
-          return this.productMetaRepository.save(newMeta);
+          return this.productvariantRepository.save(newvariant);
         });
         const listDetailPromise = detail.map((detail) => {
           return this.productDetailRepository.save({
@@ -121,9 +121,9 @@ export class ProductService {
             value: detail.value,
           });
         });
-        const metaResponse = await Promise.all(listMetaPromise);
+        const variantResponse = await Promise.all(listvariantPromise);
         const detailResponse = await Promise.all(listDetailPromise);
-        return this._parserProduct(newProduct, metaResponse, detailResponse);
+        return this._parserProduct(newProduct, variantResponse, detailResponse);
       }
     } catch (error) {
       console.log(error);
@@ -141,12 +141,12 @@ export class ProductService {
       },
       relations: {
         category: true,
-        meta: true,
+        variant: true,
         detail: true,
         shop: true,
       },
     });
-    const meta = await this.productMetaRepository.find({
+    const variant = await this.productvariantRepository.find({
       where: {
         product: {
           _id: product._id,
@@ -162,7 +162,7 @@ export class ProductService {
       product.category._id,
     );
 
-    const newProduct = this._parserProduct(product, meta, detail);
+    const newProduct = this._parserProduct(product, variant, detail);
     return {
       product: await newProduct,
       category,
@@ -184,7 +184,7 @@ export class ProductService {
       ],
       relations: {
         category: true,
-        meta: true,
+        variant: true,
         detail: true,
       },
       skip: page * (perPage | 10),
@@ -206,7 +206,7 @@ export class ProductService {
 
       relations: {
         category: true,
-        meta: true,
+        variant: true,
         detail: true,
       },
       skip: page * (perPage | 10),
@@ -225,7 +225,7 @@ export class ProductService {
     return products.map((re) => {
       return {
         ...re,
-        meta: re.meta.map(
+        variant: re.variant.map(
           ({ attribute_1, attribute_2, value_1, value_2, ...m }) => {
             return {
               ...m,
@@ -254,14 +254,14 @@ export class ProductService {
       },
       relations: {
         category: true,
-        meta: true,
+        variant: true,
         detail: true,
       },
     });
     return this._parserProductOnQuery(response);
   }
   async editProduct(product: ProductCreateDto) {
-    const { _id, category, description, detail, meta, name } = product;
+    const { _id, category, description, detail, variant, name } = product;
     const promiseProduct = this.productRepository
       .findOneBy({
         _id,
@@ -276,9 +276,9 @@ export class ProductService {
         };
         return this.productRepository.save(tmp);
       });
-    const promiseMeta = meta.map((meta) => {
-      const { attribute, ...x } = meta;
-      const newMeta: Partial<ProductMeta> = {
+    const promisevariant = variant.map((variant) => {
+      const { attribute, ...x } = variant;
+      const newvariant: Partial<ProductVariant> = {
         ...x,
         attribute_1: null,
         value_1: null,
@@ -286,19 +286,19 @@ export class ProductService {
         value_2: null,
       };
       attribute.forEach((att, i) => {
-        newMeta[`attribute_${i + 1}`] = att.key.toString().toLowerCase();
-        newMeta[`value_${i + 1}`] = att.value.toString().toLowerCase();
+        newvariant[`attribute_${i + 1}`] = att.key.toString().toLowerCase();
+        newvariant[`value_${i + 1}`] = att.value.toString().toLowerCase();
       });
-      if (!newMeta._id) {
-        const createMeta = this.productMetaRepository.create({
-          ...newMeta,
+      if (!newvariant._id) {
+        const createvariant = this.productvariantRepository.create({
+          ...newvariant,
           product: {
             _id: _id,
           },
         });
-        return this.productMetaRepository.save(createMeta);
+        return this.productvariantRepository.save(createvariant);
       }
-      return this.productMetaRepository.save(newMeta);
+      return this.productvariantRepository.save(newvariant);
     });
     const promiseDetail = detail.map(async (detail) => {
       if (!detail._id) {
@@ -316,7 +316,7 @@ export class ProductService {
     const response = await Promise.all([
       await promiseProduct,
       await Promise.all(promiseDetail),
-      await Promise.all(promiseMeta),
+      await Promise.all(promisevariant),
     ]);
     return this._parserProduct(response[0], response[2], response[1]);
   }
@@ -332,7 +332,7 @@ export class ProductService {
       take: perPage,
       relations: {
         detail: true,
-        meta: true,
+        variant: true,
         shop: true,
       },
     });
@@ -348,7 +348,7 @@ export class ProductService {
       },
       relations: {
         detail: true,
-        meta: true,
+        variant: true,
       },
     });
     products = [...products, ...productByName];
@@ -359,7 +359,7 @@ export class ProductService {
       relations: {
         products: {
           detail: true,
-          meta: true,
+          variant: true,
         },
       },
     });
@@ -367,7 +367,7 @@ export class ProductService {
       products = [...products, ...c.products];
     });
 
-    const productByMeta = await this.productMetaRepository.find({
+    const productByvariant = await this.productvariantRepository.find({
       where: [
         {
           value_1: Like(`%${name}%`),
@@ -378,12 +378,12 @@ export class ProductService {
       ],
       relations: {
         product: {
-          meta: true,
+          variant: true,
           detail: true,
         },
       },
     });
-    productByMeta.forEach((p) => {
+    productByvariant.forEach((p) => {
       products = [...products, p.product];
     });
     return this._parserProductOnQuery(this.removeDuplicateItems(products));

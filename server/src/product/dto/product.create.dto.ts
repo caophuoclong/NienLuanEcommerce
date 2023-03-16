@@ -3,7 +3,7 @@ import { Category } from '../../database/entities/category/index';
 import {
   IProduct,
   IProductDetail,
-  IProductMeta,
+  IProductVariant,
 } from '../../interface/product';
 export class ProductCreateDto implements IProduct {
   @ApiPropertyOptional()
@@ -13,7 +13,7 @@ export class ProductCreateDto implements IProduct {
   @ApiProperty()
   category: Category;
   @ApiProperty()
-  meta: Array<IProductMeta>;
+  variant: Array<IProductVariant>;
   @ApiProperty()
   detail: Array<IProductDetail>;
   @ApiPropertyOptional()

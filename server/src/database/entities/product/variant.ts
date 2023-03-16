@@ -2,18 +2,23 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from './index';
+import { CartItem } from '../cart/cartItem';
+import { JoinTable } from 'typeorm';
 @Entity()
-export class ProductMeta {
+export class ProductVariant {
   @PrimaryGeneratedColumn()
   _id: string;
-  @ManyToOne(() => Product, (product) => product.meta)
+  @ManyToOne(() => Product, (product) => product.variant)
   @JoinColumn()
   product: Product;
+  @ManyToMany(() => CartItem, (cartItem) => cartItem.products)
+  cartItems: CartItem[];
   @Column()
   price: number;
   @Column()

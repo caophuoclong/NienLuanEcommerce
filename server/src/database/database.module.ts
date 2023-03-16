@@ -12,7 +12,7 @@ import { District } from './entities/address/district';
 import { Ward } from './entities/address/ward';
 import { Category } from './entities/category';
 import { Product } from './entities/product';
-import { ProductMeta } from './entities/product/meta';
+import { ProductVariant } from './entities/product/variant';
 import { Cart } from './entities/cart';
 import { CartItem } from './entities/cart/cartItem';
 import { CreditCart } from './entities/creditCart';
@@ -52,7 +52,7 @@ import { ProductDetail } from './entities/product/detail';
             Ward,
             Category,
             Product,
-            ProductMeta,
+            ProductVariant,
             Cart,
             CartItem,
             CreditCart,

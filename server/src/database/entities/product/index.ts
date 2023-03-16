@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from '../category';
-import { ProductMeta } from './meta';
+import { ProductVariant } from './variant';
 import { Customer } from '../customer';
 import { CartItem } from '../cart/cartItem';
 import { ProductDetail } from './detail';
@@ -31,16 +31,14 @@ export class Product {
   })
   @JoinTable({ name: 'category_product' })
   category: Category;
-  @OneToMany(() => ProductMeta, (meta) => meta.product, {
+  @OneToMany(() => ProductVariant, (variant) => variant.product, {
     onDelete: 'CASCADE',
   })
-  meta: ProductMeta[];
+  variant: ProductVariant[];
   @ManyToOne(() => Customer, (customer) => customer.products, {
     onDelete: 'CASCADE',
   })
   shop: Customer;
-  @OneToMany(() => CartItem, (cartItem) => cartItem.product)
-  cartItems: CartItem[];
   @OneToMany(() => ProductDetail, (detail) => detail.product, {
     onDelete: 'CASCADE',
   })
@@ -52,4 +50,20 @@ export class Product {
     type: 'bigint',
   })
   updatedAt: number;
+  @Column({
+    default: false,
+  })
+  hasVariant: boolean;
+  @Column({
+    default: null,
+  })
+  price: number;
+  @Column({
+    default: null,
+  })
+  stock: number;
+  @Column({
+    default: null,
+  })
+  sold: number;
 }

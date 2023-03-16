@@ -1,15 +1,26 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Cart } from ".";
-import { Product } from "../product";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Cart } from '.';
+import { Product } from '../product';
+import { ProductVariant } from '../product/variant';
 
 @Entity()
-export class CartItem{
-    @PrimaryGeneratedColumn()
-    _id: string;
-    @ManyToOne(()=> Product, product=> product.cartItems)
-    product: Product;
-    @ManyToOne(()=> Cart, cart=> cart.cartItems)
-    cart: Cart
-    @Column()
-    quantity: number
+export class CartItem {
+  @PrimaryGeneratedColumn()
+  _id: string;
+  @ManyToMany(() => ProductVariant, (product) => product.cartItems)
+  @JoinTable()
+  products: ProductVariant[];
+  @ManyToOne(() => Cart, (cart) => cart.cartItems)
+  cart: Cart;
+  @Column()
+  quantity: number;
 }
