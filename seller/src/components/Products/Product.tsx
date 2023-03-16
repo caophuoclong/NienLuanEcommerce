@@ -2,6 +2,7 @@ import { Button, Td, Text, Tr } from "@chakra-ui/react"
 import React from "react"
 import { BiEdit } from "react-icons/bi"
 import { IProduct } from "../../types/product"
+import { useAppSelector } from "../../app/hooks"
 
 type Props = IProduct & {
   onEditProduct: () => void
@@ -14,27 +15,40 @@ export default function Product({
   onEditProduct,
   createdAt,
   updatedAt,
-  meta,
+  variant,
+  hasVariant,
+  price,
+  stock,
+  sold,
 }: Props) {
-  console.log()
+  const lang = useAppSelector((state) => state.homeSlice.lang)
+  console.log(variant)
   return (
     <Tr>
       <Td>{name}</Td>
-      <Td>{`
-        ${Math.min(...meta.map((m) => m.price))}
-        -
-        ${Math.max(...meta.map((m) => m.price))}
-        `}</Td>
-      <Td>{category.name_vi}</Td>
       <Td>
-        {meta.reduce((prev, current, i) => {
-          return prev + current.stock
-        }, 0)}
+        {hasVariant
+          ? `
+        ${Math.min(...variant.map((v) => v.price))}
+        -
+        ${Math.max(...variant.map((v) => v.price))}
+        `
+          : price}
+      </Td>
+      <Td>{category[`name_${lang}`]}</Td>
+      <Td>
+        {hasVariant
+          ? variant.reduce((prev, current, i) => {
+              return prev + current.stock
+            }, 0)
+          : stock}
       </Td>
       <Td>
-        {meta.reduce((prev, current, i) => {
-          return prev + current.sold
-        }, 0)}
+        {hasVariant
+          ? variant.reduce((prev, current, i) => {
+              return prev + current.sold
+            }, 0)
+          : sold}
       </Td>
       <Td
         title={

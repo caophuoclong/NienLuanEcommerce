@@ -108,7 +108,7 @@ export default function LineChart({}: Props) {
     }[]
   >([])
   const [searchBy, setSearchBy] = useState<"product" | "category">("product")
-  const lang = useAppSelector((state) => state.homeSLice.lang)
+  const lang = useAppSelector((state) => state.homeSlice.lang)
   const onDone = () => {
     setLine({} as ILine)
     setLineArray([...lineArray, line])

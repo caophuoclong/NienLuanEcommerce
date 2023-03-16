@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
   IconButton,
@@ -12,43 +13,34 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
   Select,
   Spinner,
+  Stack,
   Text,
 } from "@chakra-ui/react"
-import React, { useContext, useEffect, useReducer, useState } from "react"
-import { FaCheck, FaTimes, FaWindowMinimize } from "react-icons/fa"
-import { categories } from "../../../sampleData"
+import React, { useEffect, useState } from "react"
+import { FaTimes } from "react-icons/fa"
 import { ICategory } from "../../../types/category"
-import { IProduct, IProductMeta, IProductDetail } from "../../../types/product"
-import AddNewDetailButton from "./AddNewDetailButton"
+import { IProduct } from "../../../types/product"
 import { useAppSelector, useDebounce } from "../../../app/hooks"
 import { CategoryService } from "../../../service/api/category"
 import RenderCategoryResult from "./RenderCategoryResult"
-import { RiSubtractFill } from "react-icons/ri"
 import Detail from "./Detail"
 import Meta from "./Meta"
-import ProductContext from "../Context"
-import {
-  initial,
-  reducer,
-  setProductName,
-  setProductDescription,
-  setProductId,
-  setProductMeta,
-  setProductDetail,
-  setProductCategory,
-  makeDefault,
-  setDescription,
-} from "../Reducer"
+
 import Description from "./Description"
+import WithoutVariant from "./Variant/WithoutVariant"
+import WithVariant from "./Variant/WithVariant"
+import { useAppDispatch } from "../../../app/hooks"
+import { setEmptyNewProduct, updateProduct } from "../../../features/product"
+import { emptyCategory } from "../../../types/category"
 type Props = {
   name: string
   isOpen: boolean
   onClose: () => void
-  product: IProduct
   onSubmit: (product: IProduct) => void
-  unSelectProduct: () => void
 }
 export const defaulKeysHeader = [
   {
@@ -64,42 +56,22 @@ export const defaulKeysHeader = [
     default: true,
   },
 ]
+enum Variant {
+  WITH_VARIANT = "WITH_VARIANT",
+  DEFAULT = "DEFAULT",
+}
 export default function ModalProduct({
   name,
   isOpen,
   onClose,
   onSubmit,
-  product,
-  unSelectProduct,
 }: Props) {
-  const [state, dispatch] = useContext(ProductContext)
-  /**/
-  useEffect(() => {
-    if (Object.keys(product).length > 0) {
-      dispatch(setProductName(product.name))
-      dispatch(setProductDescription(product.description))
-      dispatch(setProductId(product._id))
-      dispatch(setProductMeta(JSON.parse(JSON.stringify(product.meta))))
-      dispatch(setProductDetail(JSON.parse(JSON.stringify(product.detail))))
-      dispatch(setProductCategory(JSON.parse(JSON.stringify(product.category))))
-    } else {
-      setDefaultMeta()
-    }
-  }, [product])
-  const setDefaultMeta = () => {
-    const news: IProductMeta = {
-      images: "",
-      price: 0,
-      sold: 0,
-      stock: 0,
-      attribute: [],
-    }
-    dispatch(setProductMeta([news]))
-  }
+  const dispatch = useAppDispatch()
+  const product = useAppSelector((state) => state.productSlice.product)
   const [category, setCategory] = useState<string>("")
   const [isSearching, setIsSearching] = useState<boolean>(false)
   const [categoriesResult, setCategoriesResult] = useState<Array<ICategory>>([])
-  const lang = useAppSelector((state) => state.homeSLice.lang)
+  const lang = useAppSelector((state) => state.homeSlice.lang)
   const debounceSearchCategory = useDebounce(category, 500)
   useEffect(() => {
     ;(async () => {
@@ -120,40 +92,27 @@ export default function ModalProduct({
     })()
   }, [debounceSearchCategory])
 
-  // split requireDetail to array with every 2 element
-  // then map to render 2 element in 1 row
-  // shoutout to https://stackoverflow.com/questions/8495687/split-array-into-chunks
-  // const onAddProductDetail = (name: string, value: string) => {
-  //   setProductDetail((prev) => {
-  //     return {
-  //       ...prev,
-  //       [name]: value,
-  //     }
-  //   })
-  // }
   const onSelectCategory = (category: ICategory) => {
-    dispatch(setProductCategory(category))
+    dispatch(
+      updateProduct({
+        category,
+      })
+    )
     setCategory("")
   }
 
   const handleSubmit = () => {
-    onSubmit(state)
-    // setProductName("")
-    // setProductDetail({} as { [key: string]: string })
-    // setCategory("")
-    // setSelectedCategory({} as ICategory)
-    // setDefaultMeta()
+    onSubmit(product)
   }
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
         setCategory("")
-        dispatch(makeDefault(undefined))
-        unSelectProduct()
+        dispatch(setEmptyNewProduct())
         onClose()
       }}
-      size="4xl"
+      size="2xl"
     >
       <ModalOverlay />
       <ModalContent padding="1rem">
@@ -172,8 +131,14 @@ export default function ModalProduct({
               </FormLabel>
               <Input
                 id="productName"
-                onChange={(e) => dispatch(setProductName(e.target.value))}
-                value={state.name}
+                onChange={(e) =>
+                  dispatch(
+                    updateProduct({
+                      name: e.target.value,
+                    })
+                  )
+                }
+                value={product.name}
               />
             </FormControl>
             <FormControl flex="1" position={"relative"} isRequired>
@@ -182,91 +147,119 @@ export default function ModalProduct({
               </FormLabel>
               <Input
                 value={
-                  Object.keys(state.category).length === 0
+                  product.category._id === -9999
                     ? category
-                    : state.category[`name_${lang}`]
+                    : product.category[`name_${lang}`]
                 }
                 onChange={(e) => {
-                  if (Object.keys(state.category).length !== 0)
-                    dispatch(setProductCategory({} as ICategory))
+                  if (Object.keys(product.category).length !== 0)
+                    dispatch(
+                      updateProduct({
+                        category: emptyCategory,
+                      })
+                    )
                   setCategory(e.target.value)
                 }}
               />
-              {Object.keys(state.category).length === 0 &&
-                debounceSearchCategory && (
-                  <Box
-                    position={"absolute"}
-                    minW="300px"
-                    minH={"100px"}
-                    shadow="2xl"
-                    bg="#aaaeee"
-                    transform={"translateY(5%)"}
-                    zIndex={"popover"}
-                    rounded="lg"
-                  >
-                    {isSearching && (
-                      <Box
-                        position={"absolute"}
-                        top="50%"
-                        left="50%"
-                        transform={"translate(-50%, -50%)"}
-                        display="flex"
-                        flexDirection="column"
-                        gap="1rem"
-                        alignItems="center"
-                        justifyContent={"center"}
-                      >
-                        <Spinner
-                          thickness="4px"
-                          speed="0.65s"
-                          emptyColor="gray.200"
-                          color="blue.500"
-                          size="xl"
-                        />
-                        <Text>Loading...</Text>
-                      </Box>
-                    )}
-                    {categoriesResult.length > 0 ? (
-                      <Box
-                        h="200px"
-                        overflowY={"auto"}
-                        display="flex"
-                        flexDirection={"column"}
-                        p="1rem"
-                      >
-                        <RenderCategoryResult
-                          categories={categoriesResult}
-                          onSelectCategory={onSelectCategory}
-                        />
-                      </Box>
-                    ) : isSearching ? null : (
-                      <Text
-                        position={"absolute"}
-                        top="50%"
-                        left="50%"
-                        transform={"translate(-50%, -50%)"}
-                      >
-                        No result
-                      </Text>
-                    )}
-                  </Box>
-                )}
+              {product.category._id === -9999 && debounceSearchCategory && (
+                <Box
+                  position={"absolute"}
+                  minW="300px"
+                  minH={"100px"}
+                  shadow="2xl"
+                  bg="#aaaeee"
+                  transform={"translateY(5%)"}
+                  zIndex={"popover"}
+                  rounded="lg"
+                >
+                  {isSearching && (
+                    <Box
+                      position={"absolute"}
+                      top="50%"
+                      left="50%"
+                      transform={"translate(-50%, -50%)"}
+                      display="flex"
+                      flexDirection="column"
+                      gap="1rem"
+                      alignItems="center"
+                      justifyContent={"center"}
+                    >
+                      <Spinner
+                        thickness="4px"
+                        speed="0.65s"
+                        emptyColor="gray.200"
+                        color="blue.500"
+                        size="xl"
+                      />
+                      <Text>Loading...</Text>
+                    </Box>
+                  )}
+                  {categoriesResult.length > 0 ? (
+                    <Box
+                      h="200px"
+                      overflowY={"auto"}
+                      display="flex"
+                      flexDirection={"column"}
+                      p="1rem"
+                    >
+                      <RenderCategoryResult
+                        categories={categoriesResult}
+                        onSelectCategory={onSelectCategory}
+                      />
+                    </Box>
+                  ) : isSearching ? null : (
+                    <Text
+                      position={"absolute"}
+                      top="50%"
+                      left="50%"
+                      transform={"translate(-50%, -50%)"}
+                    >
+                      No result
+                    </Text>
+                  )}
+                </Box>
+              )}
             </FormControl>
           </Box>
           {/* row2 */}
           <Detail />
           <Description
-            description={state.description}
-            onChange={(str) => dispatch(setDescription(str))}
+            description={product.description}
+            onChange={(str) =>
+              dispatch(
+                updateProduct({
+                  description: str,
+                })
+              )
+            }
           />
 
           {/* Row 3 */}
-          <Meta
+
+          <RadioGroup
+            value={product.hasVariant.toString()}
+            onChange={(e) => {
+              dispatch(
+                updateProduct({
+                  hasVariant: e === "true",
+                })
+              )
+            }}
+          >
+            <Stack direction={"row"} spacing={"16px"}>
+              <Radio value={"false"}>Default</Radio>
+              <Radio value={"true"}>WithVariant</Radio>
+            </Stack>
+          </RadioGroup>
+          {/* <Meta
             meta={state.meta}
             setMeta={(me: Array<IProductMeta>) => {
               dispatch(setProductMeta(me))
             }}
-          />
+          /> */}
+          <Box maxHeight={"250px"} overflowY="auto">
+            {product.hasVariant ? <WithVariant /> : <WithoutVariant />}
+          </Box>
         </ModalBody>
         <ModalFooter justifyContent={"flex-start"}>
           <Button colorScheme="facebook" mr={3} onClick={handleSubmit}>

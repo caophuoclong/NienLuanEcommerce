@@ -39,7 +39,7 @@ export default function Home({}: Props) {
       const result = dispatch(getMe())
     }
   }, [])
-  const selectedPage = useAppSelector((state) => state.homeSLice.selectedPage)
+  const selectedPage = useAppSelector((state) => state.homeSlice.selectedPage)
   return (
     <Box h="100vh">
       <Header />

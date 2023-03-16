@@ -132,7 +132,7 @@ const Item = ({
 }
 export default function NavBar() {
   const { showNavBar, page, subItem } = useAppSelector(
-    (state) => state.homeSLice
+    (state) => state.homeSlice
   )
   const items: Array<item> = [
     {

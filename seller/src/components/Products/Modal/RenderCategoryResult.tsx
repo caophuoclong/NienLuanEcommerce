@@ -12,7 +12,7 @@ export default function RenderCategoryResult({
   categories,
   onSelectCategory,
 }: Props) {
-  const lang = useAppSelector((state) => state.homeSLice.lang)
+  const lang = useAppSelector((state) => state.homeSlice.lang)
   return (
     <>
       {categories.map((category) => (
