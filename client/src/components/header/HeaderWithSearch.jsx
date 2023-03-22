@@ -93,9 +93,9 @@ export default function HeaderWithSearch() {
       {/* Search bar */}
       <div className="mx-auto flex w-[60%]">
         {/* categories */}
-        <div className="flex items-center justify-center rounded-l-[3px] bg-gray-700 px-2 ">
+        {/* <div className="flex items-center justify-center rounded-l-[3px] bg-gray-700 px-2 ">
           <DropDownCategories />
-        </div>
+        </div> */}
         <input value={nameKeyword} onChange={(e)=> setNameKeyword(e.target.value)} className="h-10 w-8/12 px-2 text-black outline-none" />
         <button className="flex w-16 items-center justify-center rounded-r-[3px] bg-orange-400" onClick={()=>navigate(`/search?keyword=${nameKeyword}`, )
           

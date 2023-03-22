@@ -5,6 +5,7 @@ import { AiOutlineStar } from 'react-icons/ai';
 import { useRef } from 'react';
 import { useAppSelector } from '../app/hooks';
 import { Carousel } from 'react-responsive-carousel';
+import { parseUrl } from '../utils';
 export default function Product(props) {
   const refAddToCart = useRef(null);
   const refFavorite = useRef(null);
@@ -59,12 +60,22 @@ export default function Product(props) {
   };
   const min = 1000;
   const max = 1500;
+  const { variantDetails, hasVariant, price, stock, variants } = props;
+  const prices = variantDetails.map((v) => v.price);
+  const stocks = variantDetails.map((v) => v.stock);
+  const images = [];
+  variants.forEach((v) => {
+    v.options.forEach((opt) => {
+      if (opt.image) images.push(opt.image);
+    });
+  });
+  console.log(images);
   return (
     <Link
       to={`/product/${props.name}.${props._id}`}
       style={{
         width: `calc(100% / ${props.perRow} - 1rem)`,
-        height: "300px"
+        height: '300px',
       }}
       ref={refProduct}
       className="box-border rounded-md rounded-b-none border-red-500 bg-white pb-2  hover:scale-105 hover:border"
@@ -88,36 +99,33 @@ export default function Product(props) {
         infiniteLoop
         width={'100%'}
       >
-        {[props.meta[0]]
-          .map((i) => i.images)
-          .map((imgg, i) => (
-            <img
-              src={imgg}
-              key={i}
-              className="rounded-md"
-              alt=""
-              style={{
-                width: '100%',
-                height: '200px',
-              }}
-            />
-          ))}
+        {images.map((imgg, i) => (
+          <div
+            className="flex h-[200px] items-center justify-center bg-cover bg-no-repeat"
+            style={{
+              backgroundImage: `url(${parseUrl(imgg)})`,
+            }}
+          ></div>
+        ))}
       </Carousel>
       <div className="px-2">
         <div>{props.name}</div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1 text-red-500">
             <div className=" text-xs font-bold">₫</div>
-            {`
-              ${Math.min(...props.meta.map(m => m.price))}
-              -
-              ${Math.max(...props.meta.map(m => m.price))}
-
-              `}
+            {hasVariant
+              ? `
+        ${Math.min(...prices)}
+        `
+              : price}
           </div>
           <div className="flex gap-x-1 text-sm text-gray-500">
-            <span>Sold</span>
-            {props.meta.reduce((acc, cur) => acc + cur.sold, 0)}
+            <span>Stock</span>
+            {hasVariant
+              ? `
+        ${Math.max(...stocks)}
+        `
+              : stock}
           </div>
         </div>
       </div>

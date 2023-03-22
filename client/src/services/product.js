@@ -16,6 +16,20 @@ const ProductService = {
                 lang
             }
         }))
+    },
+    getCategoryProducts: async (_id)=>{
+        return (await axiosClient.get("/product/search/category",{
+            params: {
+                _id
+            }
+        }))
+    },
+    getShopProducts: async(name)=>{
+        return (await axiosClient.get("/product/search/shop",{
+            params: {
+                shop: name
+            }
+        }))
     }
 }
 export default ProductService;

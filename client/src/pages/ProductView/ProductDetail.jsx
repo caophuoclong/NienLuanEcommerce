@@ -17,7 +17,7 @@ export default function ProductDetail({ category, detail }) {
               </Link>
               {' > '}
               <Link
-                to={`/category/${category ? category._id : ''}`}
+                to={`/search?category=${category ? category._id : ''}`}
                 className="text-blue-500"
               >
                 {category ? category[`name_${lang}`] : ''}

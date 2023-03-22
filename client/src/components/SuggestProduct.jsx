@@ -5,6 +5,7 @@ import Product from './Product'
 export default function SuggestProduct({
     products =[],
 }) {
+  console.log(products);
   return (
     <div className="">
         <p className="text-center bg-white rounded-md p-2 mb-4">Suggest Product</p>

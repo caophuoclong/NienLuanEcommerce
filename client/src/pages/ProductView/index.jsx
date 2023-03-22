@@ -10,6 +10,7 @@ import { Carousel } from 'react-responsive-carousel';
 import ShopInfo from '../../components/shop/info';
 import ProductDetail from './ProductDetail';
 import ProductDescription from './ProductDescription';
+import { parseUrl } from '../../utils';
 
 const max = 1500;
 const min = 1000;
@@ -17,180 +18,163 @@ export default function ProductView() {
   const lang = useAppSelector((state) => state.settings.lang);
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const [tmp, setTmp] = useState({});
+  const [tmpVariant, setTmpVariant] = useState({});
+  const [variantDetail, setVariantDetail] = useState({});
+  const { variantDetails, hasVariant, price, stock, variants } = product;
+  const prices = variantDetails?.map((v) => v.price);
+  const stocks = variantDetails?.map((v) => v.stock);
+  const images = [];
+  variants?.forEach((v) => {
+    v.options.forEach((opt) => {
+      if (opt.image) images.push(opt.image);
+    });
+  });
   const params = useParams();
   useEffect(() => {
     (async () => {
       try {
         const id = params.id.split('.')[1];
-        // console.log(id);
         const response = await ProductService.getProduct(id);
-        setProduct(response.product);
+        setProduct(response);
       } catch (error) {
         console.log(error);
       }
     })();
   }, [params]);
-  const [meta, setMeta] = useState();
-  useEffect(() => {
-    if (Object.keys(product).length > 0 && Array.isArray(product.meta)) {
-      if (product.meta.length > 0) {
-        setMeta(product.meta);
-      }
-    }
-  }, [product]);
-  const [tmp, setTmp] = useState();
-  const [selected, setSelected] = useState({});
-  useEffect(() => {
-    const xyz = {};
-    if (meta && meta.length > 0) {
-      meta.forEach((m) => {
-        m.attribute.forEach((a) => {
-          if (xyz[a.key]) {
-            xyz[a.key].push(a.value);
-          } else {
-            xyz[a.key] = [a.value];
-          }
-        });
-      });
-    }
-    for (const key in xyz) {
-      if (Object.hasOwnProperty.call(xyz, key)) {
-        const element = xyz[key];
-        xyz[key] = [...new Set(element.map((e) => e.toLocaleLowerCase()))];
-      }
-    }
-    setTmp(xyz);
-  }, [meta]);
-  const [tmpMeta, setTmpMeta] = useState({});
-  useEffect(() => {
-    const xyz = [];
-    if (Object.keys(selected).length > 0) {
-      meta.forEach((m) => {
-        const x = m.attribute.filter((a) => selected[a.key] === a.value);
-        if (x.length === Object.keys(selected).length) {
-          xyz.push(m);
-        }
-      });
-    }
-    if (xyz.length === 1) {
-      setTmpMeta(xyz[0]);
-    } else {
-      setTmpMeta({});
-    }
-  }, [selected, meta]);
-  useEffect(() => {
-    if (quantity > tmpMeta.stock) {
-      setQuantity(tmpMeta.stock);
-    }
-  }, [tmpMeta]);
-  const addToCart = async ()=>{
 
-  }
+  useEffect(() => {
+    // console.log(tmpVariant);
+    if (Object.values(tmpVariant).length === 0) {
+      const temp = { ...tmp };
+      delete temp.image;
+      setTmp(temp);
+    }
+    for (const i in tmpVariant) {
+      const image = tmpVariant[i].image;
+      if (image)
+        setTmp({
+          image,
+        });
+    }
+
+    const values = Object.values(tmpVariant).map((x) => {
+      console.log(x);
+      return x._id;
+    });
+
+    const key = `${product._id}_${values.join('_')}`;
+    const vD = variantDetails?.find((vd) => vd.sku === key);
+    if (vD) setVariantDetail(vD);
+    else {
+      const key = `${product._id}_${values.reverse().join('_')}`;
+      const vD = variantDetails?.find((vd) => vd.sku === key);
+      if (vD) {
+        setVariantDetail(vD);
+      } else {
+        setVariantDetail({});
+      }
+    }
+  }, [tmpVariant]);
+  console.log(product.shop);
+  const onAddToCart = () => {
+    console.log(Object.keys(variantDetail).length);
+    if (Object.keys(variantDetail).length === 0) {
+      alert('Please select!!!');
+    }
+  };
+  console.log(
+    '🚀 ~ file: index.jsx:71 ~ onAddToCart ~ variantDetail:',
+    variantDetail,
+  );
   return (
     <div className="px-[2rem]">
       <div className="flex h-[400px] gap-4 rounded-md bg-white p-4">
         <div className="w-[350px] ">
           <React.Fragment>
-            {Object.keys(tmpMeta).length > 0 ? (
-              <div
-                style={{ backgroundImage: `url(${tmpMeta.images})` }}
-                className={`h-[350px] w-full bg-contain bg-no-repeat`}
-              ></div>
-            ) : (
-              <Carousel
-                showArrows={false}
-                showThumbs={false}
-                showStatus={false}
-                showIndicators={false}
-                autoPlay
-                duration={Math.floor(Math.random() * (max - min + 1)) + min}
-                infiniteLoop
-              >
-                {meta &&
-                  meta.length > 0 &&
-                  meta
-                    .map((i) => i.images)
-                    .map((imgg, i) => (
-                      <div
-                        key={i}
-                        style={{ backgroundImage: `url(${imgg})` }}
-                        className={`h-[350px] w-full bg-contain bg-no-repeat`}
-                      ></div>
-                    ))}
-              </Carousel>
-            )}
+            {
+              tmp['image'] ? (
+                <div
+                  style={{ backgroundImage: `url(${parseUrl(tmp['image'])})` }}
+                  className={`h-[350px] w-full bg-cover bg-no-repeat`}
+                ></div>
+              ) : (
+                <Carousel
+                  showArrows={false}
+                  showThumbs={false}
+                  showStatus={false}
+                  showIndicators={false}
+                  autoPlay
+                  duration={1000}
+                  infiniteLoop
+                >
+                  {images.map((imgg, i) => (
+                    <div
+                      key={i}
+                      style={{ backgroundImage: `url(${parseUrl(imgg)})` }}
+                      className={`h-[350px] w-full bg-cover bg-no-repeat`}
+                    ></div>
+                  ))}
+                </Carousel>
+              )
+              // )
+            }
           </React.Fragment>
           <div className="h-auto bg-white"></div>
         </div>
         <div className="flex-1 ">
           <div className="mt-5 block w-full text-2xl font-bold">
-            {product.name}
+            {product?.name}
           </div>
 
           <div className="flex items-center gap-1">
             <div className="my-7 text-4xl font-bold text-green-400">
-              {Object.keys(tmpMeta).length > 0
-                ? tmpMeta.price
-                : meta && meta.length > 0
-                ? `${Math.min(...meta.map((m) => m.price))} - ${Math.max(
-                    ...meta.map((m) => m.price),
-                  )}`
-                : ``}
+              {variantDetail && variantDetail['price']
+                ? variantDetail['price']
+                : hasVariant
+                ? `
+        ${Math.min(...prices)} - ${Math.max(...prices)}
+        `
+                : price}
             </div>
             <div className="mb-2 ml-2 text-base font-bold text-red-400 underline decoration-2">
               VNĐ
             </div>
           </div>
-          <div className="max-w-[300px] overflow-x-auto">
-            {tmp &&
-              Object.keys(tmp) &&
-              Object.keys(tmp).map((key, index) => {
-                return (
-                  <div className="my-1 flex ">
-                    <div className="flex-[0.5] text-lg font-bold">
-                      {key.charAt(0).toUpperCase() + key.slice(1)}:
-                    </div>
-                    <div className="flex flex-1 flex-wrap gap-2">
-                      {tmp[key].map((value, index) => {
-                        return (
-                          <button
-                            onClick={() => {
-                              if (!selected[key] || selected[key] !== value)
-                                setSelected({
-                                  ...selected,
-                                  [key.toLocaleLowerCase()]:
-                                    value.toLocaleLowerCase(),
-                                });
-                              else {
-                                const x = { ...selected };
-                                delete x[key];
-                                setSelected(x);
-                              }
-                            }}
-                            style={{
-                              backgroundColor:
-                                selected[key.toLocaleLowerCase()] ===
-                                value.toLocaleLowerCase()
-                                  ? 'gray'
-                                  : 'white',
-                              color:
-                                selected[key.toLocaleLowerCase()] ===
-                                value.toLocaleLowerCase()
-                                  ? 'white'
-                                  : 'black',
-                            }}
-                            className="box-border rounded-md border border-white p-1 px-2 hover:border-gray-500"
-                          >
-                            {key === 'size'
-                              ? value.toUpperCase()
-                              : value.charAt(0).toUpperCase() + value.slice(1)}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
+          <div className="flex max-w-[300px] flex-col gap-2 overflow-x-auto">
+            {variants?.map((v, i) => (
+              <div className="flex items-center">
+                <div className="min-w-[70px] text-xl font-bold">
+                  {v.type.charAt(0).toUpperCase() + v.type.slice(1)}:{' '}
+                </div>
+                <div>
+                  {v.options.map((opt, i) => (
+                    <button
+                      onClick={() => {
+                        if (tmpVariant[v.type]?._id === opt?._id) {
+                          setTmpVariant({
+                            ...tmpVariant,
+                            [v.type]: {},
+                          });
+                        } else {
+                          setTmpVariant({
+                            ...tmpVariant,
+                            [v.type]: opt,
+                          });
+                        }
+                      }}
+                      className={`min-w-[70px] rounded-lg p-2 hover:bg-blue-300 ${
+                        tmpVariant[v.type]?._id === opt?._id
+                          ? 'bg-blue-500'
+                          : ''
+                      }`}
+                    >
+                      {opt.value.charAt(0).toUpperCase() + opt.value.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="flex items-center gap-4">
@@ -211,22 +195,27 @@ export default function ProductView() {
                   className=" w-9 cursor-default text-center outline-none"
                   type="number"
                   value={quantity}
-                  onChange={(e) => {
-                    if (Object.keys(tmpMeta).length > 0) {
-                      if (e.target.value > tmpMeta.stock) {
-                        alert('You are not ...');
-                      } else {
-                        setQuantity(+e.target.value);
-                      }
-                    } else {
-                      setQuantity(+e.target.value);
-                    }
-                  }}
+                  // onChange={(e) => {
+                  //   if (Object.keys(tmpMeta).length > 0) {
+                  //     if (e.target.value > tmpMeta.stock) {
+                  //       alert('You are not ...');
+                  //     } else {
+                  //       setQuantity(+e.target.value);
+                  //     }
+                  //   } else {
+                  //     setQuantity(+e.target.value);
+                  //   }
+                  // }}
                 />
                 <button
                   onClick={() => {
-                    if (Object.keys(tmpMeta).length > 0) {
-                      if (+quantity + 1 > tmpMeta.stock) {
+                    // console.log(variantDetail);
+                    // console.log(Object.keys(variantDetail))
+                    if (
+                      variantDetail &&
+                      Object.keys(variantDetail).length > 0
+                    ) {
+                      if (+quantity + 1 > variantDetail.stock) {
                         alert('You are not');
                       } else {
                         setQuantity((prev) => +prev + 1);
@@ -243,27 +232,28 @@ export default function ProductView() {
             </div>
             <span className="text-md text-gray-500">
               Stock:{' '}
-              {Object.keys(tmpMeta).length > 0
-                ? tmpMeta.stock
-                : meta && meta.length > 0
-                ? meta.reduce((acc, curr) => acc + curr.stock, 0)
-                : 0}
+              {variantDetail && variantDetail['stock']
+                ? variantDetail['stock']
+                : hasVariant
+                ? `
+        ${Math.min(...stocks)} - ${Math.max(...stocks)}
+        `
+                : stock}
             </span>
           </div>
-          <button onClick={()=>{
-            // if()
-            console.log(product.meta);
-            console.log(tmpMeta);
-          }} className="group ml-3 mt-6 flex h-10 flex-1 items-center justify-center gap-x-2 rounded-lg bg-green-400 text-white hover:bg-blue-500">
+          <button
+            onClick={() => onAddToCart()}
+            className="group ml-3 mt-6 flex h-10 flex-1 items-center justify-center gap-x-2 rounded-lg bg-green-400 text-white hover:bg-blue-500"
+          >
             <MdOutlineAddShoppingCart className="ml-2" />
             <p className="mr-3 font-bold">Thêm vào giỏ hàng</p>
           </button>
         </div>
       </div>
-      <ShopInfo color="bg-white" />
+      <ShopInfo {...product.shop} color="bg-white" />
       <div className="my-2 bg-white p-4">
-        <ProductDetail category={product.category} detail={product.detail}/>
-        <ProductDescription description={product.description} />
+        <ProductDetail category={product?.category} detail={product?.detail} />
+        <ProductDescription description={product?.description} />
       </div>
     </div>
   );

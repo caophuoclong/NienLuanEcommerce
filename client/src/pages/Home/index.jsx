@@ -10,6 +10,7 @@ import axios from 'axios';
 import { getHome } from '../../app/slices/home.slice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function Home() {
   const {t} = useTranslation();
@@ -45,7 +46,12 @@ export default function Home() {
 
   const products = useAppSelector(state => state.home.products);
   useEffect(()=>{
-    dispatch(getHome())
+    (async()=>{
+      const unwrap = dispatch(getHome())
+    const result = await unwrapResult(unwrap);
+    console.log("🚀 ~ file: index.jsx:52 ~ result:", result)
+    
+    })()
   },[])
   return (
     <div className="flex flex-col gap-4 pb-8">

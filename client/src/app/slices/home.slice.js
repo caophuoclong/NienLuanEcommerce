@@ -47,6 +47,7 @@ export const HomeSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getHome.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.products = action.payload;
     });
     builder.addCase(getMe.fulfilled, (state, action)=>{
