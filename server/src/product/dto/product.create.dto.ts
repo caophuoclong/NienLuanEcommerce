@@ -5,7 +5,7 @@ import {
   IProductDetail,
   IProductVariant,
 } from '../../interface/product';
-export class ProductCreateDto implements IProduct {
+export class ProductCreateDto {
   @ApiPropertyOptional()
   _id?: string;
   @ApiProperty()
@@ -13,9 +13,33 @@ export class ProductCreateDto implements IProduct {
   @ApiProperty()
   category: Category;
   @ApiProperty()
-  variant: Array<IProductVariant>;
+  variants: Array<{
+    type: string;
+    options: {
+      _id: number;
+      value: string;
+      image?: string;
+    }[];
+  }>;
+  @ApiProperty()
+  hasVariant: boolean;
+  @ApiProperty()
+  variantDetails: {
+    key: string;
+    stock: number;
+    price: number;
+  }[];
   @ApiProperty()
   detail: Array<IProductDetail>;
+  @ApiPropertyOptional()
+  price: number;
+  @ApiPropertyOptional()
+  stock: number;
+  @ApiPropertyOptional()
+  images: {
+    type: string;
+    images: Array<string>;
+  };
   @ApiPropertyOptional()
   description?: string;
 }

@@ -11,15 +11,14 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from '../category';
-import { ProductVariant } from './variant';
 import { Customer } from '../customer';
-import { CartItem } from '../cart/cartItem';
 import { ProductDetail } from './detail';
+import { ProductVariantOption } from './variant/options';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn('uuid')
-  _id: string;
+  @PrimaryGeneratedColumn()
+  _id: number;
   @Column()
   name: string;
   @Column({
@@ -31,10 +30,10 @@ export class Product {
   })
   @JoinTable({ name: 'category_product' })
   category: Category;
-  @OneToMany(() => ProductVariant, (variant) => variant.product, {
+  @OneToMany(() => ProductVariantOption, (variant) => variant.product, {
     onDelete: 'CASCADE',
   })
-  variant: ProductVariant[];
+  variant: ProductVariantOption[];
   @ManyToOne(() => Customer, (customer) => customer.products, {
     onDelete: 'CASCADE',
   })
@@ -43,6 +42,8 @@ export class Product {
     onDelete: 'CASCADE',
   })
   detail: ProductDetail[];
+  @OneToMany(() => ProductVariantOption, (option) => option.product)
+  productVariantOptions: ProductVariantOption[];
   @Column({ default: new Date().getTime(), type: 'bigint' })
   createdAt: number;
   @Column({

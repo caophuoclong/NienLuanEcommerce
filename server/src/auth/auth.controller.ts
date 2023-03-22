@@ -68,8 +68,12 @@ export class AuthController {
   @Get('/refreshToken')
   async refreshToken(@Req() request: Request) {
     const refreshToken = request.cookies['refreshToken'];
-    // console.log("🚀 ~ file: auth.controller.ts:40 ~ AuthController ~ refreshToken ~ refreshToken", refreshToken)
+    console.log(
+      '🚀 ~ file: auth.controller.ts:40 ~ AuthController ~ refreshToken ~ refreshToken',
+      refreshToken,
+    );
     if (refreshToken === 'undefined' || !refreshToken) {
+      console.log('Not Privde refreshToken');
       throw new BadRequestException('Refresh token is not provided');
     }
     const accessToken = await this.authService.refreshToken(refreshToken);

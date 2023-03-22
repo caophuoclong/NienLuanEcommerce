@@ -16,7 +16,9 @@ import { ProductVariant } from '../product/variant';
 export class CartItem {
   @PrimaryGeneratedColumn()
   _id: string;
-  @ManyToMany(() => ProductVariant, (product) => product.cartItems)
+  @ManyToMany(() => ProductVariant, {
+    onDelete: 'CASCADE',
+  })
   @JoinTable()
   products: ProductVariant[];
   @ManyToOne(() => Cart, (cart) => cart.cartItems)
