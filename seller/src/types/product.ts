@@ -6,13 +6,26 @@ export interface IProduct {
   category: ICategory
   detail: Array<IProductDetail>
   description?: string
-  variant: Array<IProductVariant>
+  variants: Array<{
+    type: string
+    options: {
+      _id: number
+      value: string
+      image?: string
+    }[]
+  }>
   createdAt: string
   updatedAt: string
   hasVariant: boolean
   price: number
   stock: number
   sold: number
+  variantDetails: Array<{
+    sku: string
+    key: string
+    price: number
+    stock: number
+  }>
   images: {
     type: "link" | "file"
     images: {

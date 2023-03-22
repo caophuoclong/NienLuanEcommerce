@@ -29,8 +29,8 @@ export default function WithoutVariant({}: Props) {
       <Table>
         <Thead>
           <Tr>
-            {defaultVariant.map((variant) => (
-              <Th>
+            {defaultVariant.map((variant, index) => (
+              <Th key={index}>
                 {variant.charAt(0).toLocaleUpperCase() + variant.slice(1)}
               </Th>
             ))}
@@ -38,8 +38,8 @@ export default function WithoutVariant({}: Props) {
         </Thead>
         <Tbody>
           <Tr>
-            {defaultVariant.map((variant) => (
-              <Td>
+            {defaultVariant.map((variant, index) => (
+              <Td key={index}>
                 <Input
                   type="number"
                   value={product[variant] as number}

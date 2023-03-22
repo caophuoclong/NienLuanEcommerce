@@ -71,7 +71,7 @@ export default function Link({ onPreview }: Props) {
             />
             <VStack noOfLines={4} overflowY="auto" my="2">
               {links.map((link, index) => (
-                <HStack role="group">
+                <HStack role="group" key={index}>
                   {edit !== null && edit === index ? (
                     <Input
                       value={link.link}

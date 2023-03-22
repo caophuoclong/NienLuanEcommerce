@@ -15,41 +15,34 @@ export default function Product({
   onEditProduct,
   createdAt,
   updatedAt,
-  variant,
   hasVariant,
   price,
   stock,
   sold,
+  variantDetails,
 }: Props) {
   const lang = useAppSelector((state) => state.homeSlice.lang)
-  console.log(variant)
+  const prices = variantDetails.map((v) => v.price)
+  const stocks = variantDetails.map((v) => v.stock)
   return (
     <Tr>
       <Td>{name}</Td>
       <Td>
         {hasVariant
           ? `
-        ${Math.min(...variant.map((v) => v.price))}
-        -
-        ${Math.max(...variant.map((v) => v.price))}
+        ${Math.min(...prices)} - ${Math.max(...prices)}
         `
           : price}
       </Td>
       <Td>{category[`name_${lang}`]}</Td>
       <Td>
         {hasVariant
-          ? variant.reduce((prev, current, i) => {
-              return prev + current.stock
-            }, 0)
+          ? `
+        ${Math.min(...stocks)} - ${Math.max(...stocks)}
+        `
           : stock}
       </Td>
-      <Td>
-        {hasVariant
-          ? variant.reduce((prev, current, i) => {
-              return prev + current.sold
-            }, 0)
-          : sold}
-      </Td>
+      <Td>{hasVariant ? 0 : sold}</Td>
       <Td
         title={
           new Date(+createdAt).toLocaleDateString("vi-VN") +

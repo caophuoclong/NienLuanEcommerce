@@ -5,6 +5,15 @@ export class ProductService {
   static async addProduct(product: IProduct) {
     return (await axiosClient.post("/product", product)).data
   }
+  static async uploadImage(formData: FormData) {
+    return (
+      await axiosClient.post("/product/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+    ).data
+  }
   static async getMyProducts() {
     return (await axiosClient.get<Array<IProduct>>("/product/shop")).data
   }
@@ -18,12 +27,7 @@ export class ProductService {
     ).data
   }
   static async getProduct(_id?: string) {
-    return (
-      await axiosClient.get<{
-        product: IProduct
-        categories: Array<any>
-      }>("/product" + "/get" + "/" + _id)
-    ).data
+    return await axiosClient.get<IProduct>("/product" + "/get" + "/" + _id)
   }
   static async editProduct(product: IProduct) {
     return (await axiosClient.put("/product", product)).data

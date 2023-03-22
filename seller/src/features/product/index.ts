@@ -6,31 +6,39 @@ interface ProductSlice {
   product: IProduct
   products: IProduct[]
 }
-const initialState: ProductSlice = {
-  product: {
-    _id: "",
-    createdAt: "",
-    category: {
-      _id: -999,
-      createdAt: -99999,
-      name_en: "",
-      name_vi: "",
-      requireDetail: "",
-    },
-    detail: [],
-    name: "",
-    variant: [],
-    updatedAt: "",
-    description: "",
-    hasVariant: false,
-    price: 0,
-    stock: 0,
-    sold: 0,
-    images: {
-      type: "link",
-      images: [],
-    },
+export const createProduct = createAsyncThunk(
+  "create product",
+  (product: IProduct) => {
+    return ProductService.addProduct(product)
+  }
+)
+export const emptyProduct: IProduct = {
+  _id: "",
+  createdAt: "",
+  category: {
+    _id: -999,
+    createdAt: -99999,
+    name_en: "",
+    name_vi: "",
+    requireDetail: "",
   },
+  variantDetails: [],
+  variants: [],
+  detail: [],
+  name: "",
+  updatedAt: "",
+  description: "",
+  hasVariant: false,
+  price: 0,
+  stock: 0,
+  sold: 0,
+  images: {
+    type: "link",
+    images: [],
+  },
+}
+const initialState: ProductSlice = {
+  product: emptyProduct,
   products: [],
 }
 export const getMyProduct = createAsyncThunk("Get my product", () => {
@@ -52,30 +60,7 @@ export const ProductSlice = createSlice({
     setEmptyNewProduct(state) {
       return {
         ...state,
-        product: {
-          _id: "",
-          createdAt: "",
-          category: {
-            _id: -999,
-            createdAt: -99999,
-            name_en: "",
-            name_vi: "",
-            requireDetail: "",
-          },
-          detail: [],
-          name: "",
-          variant: [],
-          updatedAt: "",
-          description: "",
-          hasVariant: false,
-          price: 0,
-          stock: 0,
-          sold: 0,
-          images: {
-            type: "link",
-            images: [],
-          },
-        },
+        product: emptyProduct,
       }
     },
     addProductToProducts(state, action: PayloadAction<IProduct>) {
@@ -97,6 +82,12 @@ export const ProductSlice = createSlice({
         ],
       }
     },
+    // setProduct(state, action: PayloadAction<IProduct>) {
+    //   return {
+    //     ...state,
+    //     product: action.payload,
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -105,6 +96,15 @@ export const ProductSlice = createSlice({
         return {
           ...state,
           products: [...action.payload],
+        }
+      }
+    )
+    builder.addCase(
+      createProduct.fulfilled,
+      (state, action: PayloadAction<IProduct>) => {
+        return {
+          ...state,
+          products: [...state.products, action.payload],
         }
       }
     )

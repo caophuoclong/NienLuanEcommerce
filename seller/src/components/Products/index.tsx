@@ -36,6 +36,7 @@ import home, {
 } from "../../features/home"
 import {
   addProductToProducts,
+  createProduct,
   getMyProduct,
   setEmptyNewProduct,
   updateProduct,
@@ -69,9 +70,8 @@ export default function Products({}: Props) {
   const onEditProduct = async (product: IProduct) => {
     setModalName("Edit Product")
     setProductAction("edit")
-    const { product: newProduct } = await ProductService.getProduct(product._id)
+    const newProduct = (await ProductService.getProduct(product._id)).data
     onOpen()
-    console.log(newProduct)
     dispatch(updateProduct(newProduct))
     // setProducts([
     //   ...products.filter((p) => p._id !== newProduct._id),
@@ -87,9 +87,40 @@ export default function Products({}: Props) {
     switch (productAction) {
       case "create":
         console.log(product)
-        // const response = await ProductService.addProduct(product)
-        // dispatch(addProductToProducts(response))
-        // alert("Add success!")
+        const { variants } = product
+        const copyVariants = await Promise.all(
+          variants.map(async (va) => {
+            return {
+              ...va,
+              options: await Promise.all(
+                va.options.map(async (o) => {
+                  if (o.image && typeof o.image === "string") {
+                    const blob = await fetch(o.image).then((r) => r.blob())
+                    const formData = new FormData()
+                    formData.append(
+                      "file",
+                      blob,
+                      `test.${blob.type.split("/")[1]}`
+                    )
+                    const name = await ProductService.uploadImage(formData)
+                    return {
+                      ...o,
+                      image: name,
+                    }
+                  } else {
+                    return o
+                  }
+                })
+              ),
+            }
+          })
+        )
+        const unwrap = dispatch(
+          createProduct({
+            ...product,
+            variants: copyVariants,
+          })
+        )
         break
       case "edit":
         const res = await ProductService.editProduct(product)

@@ -1,7 +1,7 @@
 import { Box, Button, Text } from "@chakra-ui/react"
 import React from "react"
-import { useAppSelector } from "../../../app/hooks"
-import { ICategory } from "../../../types/category"
+import { useAppSelector } from "../../../../app/hooks"
+import { ICategory } from "../../../../types/category"
 
 type Props = {
   categories: Array<ICategory>

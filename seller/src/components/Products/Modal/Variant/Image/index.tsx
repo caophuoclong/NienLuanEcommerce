@@ -19,7 +19,6 @@ export default function Image({}: Props) {
   const [image, setImage] = useState<string>("")
   const product = useAppSelector((state) => state.productSlice.product)
   const dispatch = useAppDispatch()
-  console.log(image)
   return (
     <Box>
       <Button
