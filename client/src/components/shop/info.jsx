@@ -2,7 +2,7 @@ import React from 'react'
 import { FaStar, FaTshirt } from 'react-icons/fa'
 import { RiMessage3Fill } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
-
+import BadgeShopMall from "./BadgeShopMall"
 export default function ShopInfo({img, auth, followers, following, productLength, shop_name, rating, color}) {
   return (
     <Link to={`/search?shop=${auth?.username}`} className={`flex h-32 w-full cursor-pointer items-center gap-2 rounded-lg p-4 shadow-lg ${color} my-2`}>
@@ -10,11 +10,7 @@ export default function ShopInfo({img, auth, followers, following, productLength
             <div className="relative h-16 w-16 rounded-full border-[0.5px] border-black">
               <img src="https://picsum.photos/80" className="rounded-full" />
               {/* Badge mall */}
-              <div className="absolute bottom-0 left-1/2 flex h-4 w-full translate-y-1/3 -translate-x-1/2 items-center justify-center rounded-lg bg-blue-700 px-1">
-                <span className="text-[11px] font-bold italic text-white">
-                  Shop mall
-                </span>
-              </div>
+              <BadgeShopMall/>
             </div>
             {/* Name */}
             <div>

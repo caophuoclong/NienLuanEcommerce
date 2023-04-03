@@ -1,5 +1,14 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { ProductVariantOption } from './options';
+import { CartItem } from '../../cart/cartItem';
 
 @Entity()
 export class ProductVariantDetail {
@@ -12,4 +21,6 @@ export class ProductVariantDetail {
   stock: number;
   @Column({ default: 0 })
   sold: number;
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product)
+  cartItems: CartItem[];
 }

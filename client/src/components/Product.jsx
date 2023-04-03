@@ -69,7 +69,6 @@ export default function Product(props) {
       if (opt.image) images.push(opt.image);
     });
   });
-  console.log(images);
   return (
     <Link
       to={`/product/${props.name}.${props._id}`}
@@ -101,6 +100,7 @@ export default function Product(props) {
       >
         {images.map((imgg, i) => (
           <div
+            key={i}
             className="flex h-[200px] items-center justify-center bg-cover bg-no-repeat"
             style={{
               backgroundImage: `url(${parseUrl(imgg)})`,

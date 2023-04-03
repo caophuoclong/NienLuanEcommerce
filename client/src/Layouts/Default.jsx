@@ -4,9 +4,9 @@ import Header from './Header'
 
 export default function Default({children}) {
   return (
-    <div className="flex flex-col gap-4 bg-[#f5f5f5]">
+    <div className="flex flex-col gap-4 bg-[#f5f5f5] relative">
         <Header/>
-        <main className={`px-[20rem] mt-32`}>
+        <main className={`w-4/5 mt-32 mx-auto`}>
           {children}
         </main>
         <Footer/>

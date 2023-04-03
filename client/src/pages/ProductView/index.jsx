@@ -4,17 +4,21 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { MdOutlineAddShoppingCart } from 'react-icons/md';
 import { IoIosArrowForward } from 'react-icons/io';
 import { ProductService } from '../../services';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
 import ShopInfo from '../../components/shop/info';
 import ProductDetail from './ProductDetail';
 import ProductDescription from './ProductDescription';
 import { parseUrl } from '../../utils';
-
+import { CartService } from '../../services/cart';
+import Quantity from '../../components/Quantity';
+import {addCartItem} from "../../app/slices/home.slice"
 const max = 1500;
 const min = 1000;
 export default function ProductView() {
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart.cart);
   const lang = useAppSelector((state) => state.settings.lang);
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
@@ -76,17 +80,28 @@ export default function ProductView() {
       }
     }
   }, [tmpVariant]);
-  console.log(product.shop);
-  const onAddToCart = () => {
+  const onAddToCart = async () => {
     console.log(Object.keys(variantDetail).length);
     if (Object.keys(variantDetail).length === 0) {
       alert('Please select!!!');
     }
+    const productId = variantDetail.sku.split('_');
+    const isExist = cart.find(
+      (item) => item.product.sku.split('_') === productId,
+    );
+    if (!isExist) {
+      const response = await CartService.addToCart({
+        productVariantDetail: variantDetail,
+        quantity,
+      });
+      console.log(response);
+      dispatch(addCartItem(1))
+      alert("Add to cart success!")
+    }else{
+      alert("Product already existed!")
+    }
   };
-  console.log(
-    '🚀 ~ file: index.jsx:71 ~ onAddToCart ~ variantDetail:',
-    variantDetail,
-  );
+
   return (
     <div className="px-[2rem]">
       <div className="flex h-[400px] gap-4 rounded-md bg-white p-4">
@@ -180,55 +195,11 @@ export default function ProductView() {
           <div className="flex items-center gap-4">
             <div className="flex gap-4">
               <span className="text-lg font-bold">Số lượng:</span>
-              <div className="flex items-center ">
-                <button
-                  onClick={() => {
-                    if (quantity > 0) {
-                      setQuantity((prev) => prev - 1);
-                    }
-                  }}
-                  className="rounded-lg bg-gray-100 p-2 hover:bg-gray-200"
-                >
-                  <FaMinus size="12px" />
-                </button>
-                <input
-                  className=" w-9 cursor-default text-center outline-none"
-                  type="number"
-                  value={quantity}
-                  // onChange={(e) => {
-                  //   if (Object.keys(tmpMeta).length > 0) {
-                  //     if (e.target.value > tmpMeta.stock) {
-                  //       alert('You are not ...');
-                  //     } else {
-                  //       setQuantity(+e.target.value);
-                  //     }
-                  //   } else {
-                  //     setQuantity(+e.target.value);
-                  //   }
-                  // }}
-                />
-                <button
-                  onClick={() => {
-                    // console.log(variantDetail);
-                    // console.log(Object.keys(variantDetail))
-                    if (
-                      variantDetail &&
-                      Object.keys(variantDetail).length > 0
-                    ) {
-                      if (+quantity + 1 > variantDetail.stock) {
-                        alert('You are not');
-                      } else {
-                        setQuantity((prev) => +prev + 1);
-                      }
-                    } else {
-                      setQuantity((prev) => +prev + 1);
-                    }
-                  }}
-                  className="rounded-lg bg-gray-100 p-2 hover:bg-gray-200"
-                >
-                  <FaPlus size="12px" />
-                </button>
-              </div>
+              <Quantity
+                current={quantity}
+                onChange={(q) => setQuantity(q)}
+                max={variantDetail.stock}
+              />
             </div>
             <span className="text-md text-gray-500">
               Stock:{' '}

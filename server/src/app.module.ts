@@ -20,6 +20,7 @@ import * as path from 'path';
 import { MulterModule } from '@nestjs/platform-express';
 import { v4 as uuidv4 } from 'uuid';
 import multer, { diskStorage } from 'multer';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import multer, { diskStorage } from 'multer';
     CartModule,
     ProductModule,
     CategoryModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -419,6 +419,7 @@ export class ProductService {
       relations: {
         category: true,
         detail: true,
+        shop: true,
       },
     });
     return await Promise.all(
@@ -519,10 +520,13 @@ export class ProductService {
         relations: {
           detail: true,
           category: true,
-          shop: true,
+          shop: {
+            auth: true,
+          },
         },
       });
       products = [...products, ...productByName];
+
       const productByCategory = await this.categoryService.repository.find({
         where: {
           [`name_${lang}`]: Like(`%${lstName[i]}%`),
@@ -530,7 +534,10 @@ export class ProductService {
         relations: {
           products: {
             detail: true,
-            variant: true,
+            category: true,
+            shop: {
+              auth: true,
+            },
           },
         },
       });
@@ -564,6 +571,7 @@ export class ProductService {
     const newProduct = products.filter((x, index) => {
       return index === products.findIndex((pr) => pr._id === x._id);
     });
+
     return await Promise.all(
       newProduct.map(async (pr) => await this._getProdctInformation(pr)),
     );

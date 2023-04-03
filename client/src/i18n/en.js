@@ -9,6 +9,10 @@ export default {
         "middleName": "Middle name",
         "email": "Email",
         "phone": "Phone",
-        "choseAvatar": "Chose avatar"
+        "choseAvatar": "Chose avatar",
+        "shipping_address": "Shipping Address",
+        "shipping_method": "Shipping Method",
+        "payment": "Payment",
+        "confirm": "Confirm"
     }
 }

@@ -29,7 +29,7 @@ async function bootstrap() {
       'https://sellerpage.pages.dev',
     ],
     credentials: true,
-    methods: 'GET, POST, PUT, DELETE, OPTION',
+    methods: 'GET, POST, PUT, DELETE, OPTION, PATCH',
   });
   app.useStaticAssets(path.join(__dirname, '..', 'public', 'home'), {
     prefix: '/home/',
@@ -38,7 +38,7 @@ async function bootstrap() {
     prefix: '/images/',
   });
   // app.use((req, res: Restponse, next)=>{
-  //   res.
+  //   res
   // })
   await app.listen(3003);
 }

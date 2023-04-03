@@ -1,4 +1,5 @@
 import {
+  AfterUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -11,18 +12,29 @@ import {
 import { Cart } from '.';
 import { Product } from '../product';
 import { ProductVariant } from '../product/variant';
+import { ProductVariantDetail } from '../product/variant/detail';
 
 @Entity()
 export class CartItem {
   @PrimaryGeneratedColumn()
   _id: string;
-  @ManyToMany(() => ProductVariant, {
+  @ManyToOne(() => ProductVariantDetail, (pro) => pro.cartItems, {
     onDelete: 'CASCADE',
   })
   @JoinTable()
-  products: ProductVariant[];
+  product: ProductVariantDetail;
   @ManyToOne(() => Cart, (cart) => cart.cartItems)
   cart: Cart;
   @Column()
   quantity: number;
+  @Column({
+    type: 'bigint',
+    default: Date.now(),
+  })
+  createdAt: number;
+  @Column({
+    type: 'bigint',
+    default: 0,
+  })
+  updatedAt: number;
 }

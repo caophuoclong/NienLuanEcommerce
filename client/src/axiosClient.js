@@ -10,12 +10,31 @@ export const axiosClient = axios.create({
         "Content-Type": "application/json",
     }
 })
+const publicApi = [
+    /\/product\/.*/,
+    /\/auth\/.*/,
+    /\/address\/.*/,
+
+]
 axiosClient.interceptors.request.use((config)=>{
-    config.headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`
+    console.log(config.url);
+    const isPublic = publicApi.find(item => item.test(config.url));
+    if(isPublic) return config;
+    const token = localStorage.getItem("access_token")
+    if(!token || token === undefined || token === "undefined" || token === null || token === "null")
+    {
+        const err = new Error("Please login to do this action");
+        err.name = "TokenNotGiven"
+        throw err;
+    }
+    config.headers.Authorization = `Bearer ${token}`
     return config;
 })
 
 axiosClient.interceptors.response.use((response) => response.data, async (error)=>{
+    if(error.name === "TokenNotGiven"){
+        alert(error.message);
+    }
     if(error.response.status === 401){
         try{
             const response =  await AuthService.refreshToken();

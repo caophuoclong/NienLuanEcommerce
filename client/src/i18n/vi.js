@@ -12,5 +12,9 @@ export default {
     email: 'Email',
     phone: 'Số điện thoại',
     choseAvatar: 'Chọn ảnh',
+    shipping_address: 'Địa chỉ nhận hàng',
+    shipping_method: 'Phương thức thanh toán',
+    payment: 'Thanh toán',
+    confirm: 'Xác nhận',
   },
 };

@@ -26,6 +26,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import User from './pages/User';
 import Purchase from './pages/User/Purchase';
 import Profile from './pages/User/Profile';
+import Checkout from './pages/Checkout';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -58,6 +59,12 @@ const router = createBrowserRouter([
     element: <DefaultLayout children={<Cart />}/>,
     errorElement: <NotFound />,
   },
+  {
+    path: 'checkout',
+    element: <Checkout />,
+    errorElement: <NotFound />,
+  }
+  ,
   {
     path: '/signin',
     element: <LogIn />,
