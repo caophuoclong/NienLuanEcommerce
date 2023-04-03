@@ -5,9 +5,12 @@ export interface IProduct {
   category: Category;
   detail: Array<IProductDetail>;
   description?: string;
-  meta: Array<IProductMeta>;
+  variant: Array<IProductVariant>;
+  sold?: number;
+  price?: number;
+  stock?: number;
 }
-export interface IProductMeta {
+export interface IProductVariant {
   _id?: string;
   images: string;
   price: number;

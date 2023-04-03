@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsCart4, BsSearch } from 'react-icons/bs';
 import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ProductService } from '../../services';
+import { useAppSelector } from '../../app/hooks';
 const primaryColor = '#243256';
 function DropDownCategories() {
   const categories = [
@@ -46,6 +48,7 @@ function DropDownCategories() {
         <div
           style={{
             opacity: showDropdown ? 1 : 0,
+            visibility: showDropdown ? 'visible' : 'hidden',
             backgroundColor: '#374151',
           }}
           className={`${
@@ -72,26 +75,36 @@ function DropDownCategories() {
 }
 export default function HeaderWithSearch() {
   const { t } = useTranslation();
-  const cartLength = 15;
+  const cartLength = useAppSelector((state) => state.home.user.cartLength);
+  const [nameKeyword, setNameKeyword] = useState('');
+  const navigate = useNavigate();
+
   return (
     <div
       style={{ backgroundColor: primaryColor }}
       className="flex items-center gap-x-4 px-[10rem] py-2"
     >
-      <div className="flex items-center gap-2">
+      <Link to="/" className="flex items-center gap-2">
         {/* Logo */}
         <img src="https://picsum.photos/40" className="rounded-full" />
         {/* Brand name */}
         <span className="text-xl font-medium italic">E-commerce</span>
-      </div>
+      </Link>
       {/* Search bar */}
       <div className="mx-auto flex w-[60%]">
         {/* categories */}
-        <div className="flex items-center justify-center rounded-l-[3px] bg-gray-700 px-2 ">
+        {/* <div className="flex items-center justify-center rounded-l-[3px] bg-gray-700 px-2 ">
           <DropDownCategories />
-        </div>
-        <input className="h-10 w-8/12 px-2 text-black outline-none" />
-        <button className="flex w-16 items-center justify-center rounded-r-[3px] bg-orange-400">
+        </div> */}
+        <input
+          value={nameKeyword}
+          onChange={(e) => setNameKeyword(e.target.value)}
+          className="h-10 w-8/12 px-2 text-black outline-none"
+        />
+        <button
+          className="flex w-16 items-center justify-center rounded-r-[3px] bg-orange-400"
+          onClick={() => navigate(`/search?keyword=${nameKeyword}`)}
+        >
           <BsSearch />
         </button>
       </div>
@@ -99,9 +112,11 @@ export default function HeaderWithSearch() {
       <Link to="/cart" className="flex items-center gap-2">
         <div className="relative h-[60px] w-[40px]">
           <BsCart4 size="full" />
-          <div className="absolute top-2 -right-6 flex h-4 w-6 items-center justify-center rounded-full bg-red-400 text-sm">
-            {cartLength > 0 && (cartLength > 9 ? '9+' : cartLength)}
-          </div>
+          {cartLength > 0 && (
+            <div className="absolute top-2 -right-6 flex h-4 w-6 items-center justify-center rounded-full bg-red-400 text-sm">
+              {cartLength > 9 ? '9+' : cartLength}
+            </div>
+          )}
         </div>
         {/* <div className="flex flex-col">
             <span>Cart</span>

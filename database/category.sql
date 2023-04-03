@@ -1,10 +1,4 @@
-CREATE TABLE IF NOT EXISTS category (
-    _id INT AUTO_INCREMENT PRIMARY KEY,
-    createdAt BIGINT(20) DEFAULT (UNIX_TIMESTAMP() * 1000),
-    name_en VARCHAR(255),
-    name_vi NVARCHAR(255),
-    requireDetail CHAR(255) DEFAULT NULL
-);
+
 insert into category (name_en, name_vi) values('Root', 'Root');
 insert into category (name_en, name_vi) values('Clothes', 'Quần áo');
 insert into category (name_en, name_vi) values('Men Clothes', 'Quần áo nam');
@@ -44,12 +38,7 @@ insert into category (name_en, name_vi) values('Egg', 'Trứng');
 
 -- use your brain to determine what is parent and what is child, i trust on you
 -- example women and men shoes is a child of shoes, e.t.c
-CREATE TABLE IF NOT EXISTS category_category (
-  parent INT NOT NULL,
-  child INT NOT NULL,
-  FOREIGN KEY (parent) REFERENCES category(_id),
-  FOREIGN KEY (child) REFERENCES category(_id)
-);
+
 insert into category_category(parent, child) values(1,2);
 insert into category_category(parent, child) values(1,3);
 insert into category_category(parent, child) values(6,7);

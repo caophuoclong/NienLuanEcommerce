@@ -1,25 +1,20 @@
 import { Box, IconButton, Input, Text } from "@chakra-ui/react"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { RiSubtractFill } from "react-icons/ri"
-import { ICategory } from "../../../types/category"
 import AddNewDetailButton from "./AddNewDetailButton"
 import { IProductDetail } from "../../../types/product"
-import product from "../../../features/product"
-import ProductContext from "../Context"
-import { setDeletedDetail, undeoDeletedDetail } from "../Reducer"
 import { CiUndo } from "react-icons/ci"
-import {
-  addNewDetail,
-  updateDetail,
-  setProductDetail,
-  setProductCategory,
-} from "../Reducer"
+import { useAppSelector, useAppDispatch } from "../../..//app/hooks"
+import { updateProduct } from "../../..//features/product"
 
 type Props = {}
 
 export default function Detail({}: Props) {
   const [chunks, setChunks] = useState<Array<Array<IProductDetail>>>([[]])
-  const [{ detail, category }, dispatch] = useContext(ProductContext)
+  const { category, detail } = useAppSelector(
+    (state) => state.productSlice.product
+  )
+  const dispatch = useAppDispatch()
   useEffect(() => {
     if (detail.length === 0) {
       if (Object.keys(category).length > 0) {
@@ -27,12 +22,13 @@ export default function Detail({}: Props) {
         if (!requireDetail) return
         const requireDetailArray = requireDetail.split("/")
         dispatch(
-          setProductDetail(
-            requireDetailArray.map((x) => ({
+          updateProduct({
+            detail: requireDetailArray.map((x) => ({
               key: x,
               value: "",
-            }))
-          )
+              deleted: false,
+            })),
+          })
         )
       } else {
       }
@@ -60,10 +56,40 @@ export default function Detail({}: Props) {
     if (category._id === undefined) {
       alert("Please select category first")
     } else {
+      const existDetail = [...detail]
+      const isExistKey = existDetail.filter((d) => d.key === name)
+      if (isExistKey.length === 0) {
+        dispatch(
+          updateProduct({
+            detail: [
+              ...existDetail,
+              {
+                key: name,
+                value: value,
+                deleted: false,
+              },
+            ],
+          })
+        )
+      }
+    }
+  }
+  const handleUpdateDetail = (
+    newDetail: Partial<IProductDetail> & {
+      key: string
+    }
+  ) => {
+    // const tmpDetail = [...detail];
+    const index = detail.findIndex((d) => d.key === newDetail.key)
+    if (index !== -1) {
+      const tmpDetail = [...detail]
+      tmpDetail[index] = {
+        ...tmpDetail[index],
+        ...newDetail,
+      }
       dispatch(
-        addNewDetail({
-          key: name,
-          value: value,
+        updateProduct({
+          detail: tmpDetail,
         })
       )
     }
@@ -107,7 +133,12 @@ export default function Detail({}: Props) {
                       </label>
                       {d.deleted ? (
                         <IconButton
-                          onClick={() => dispatch(undeoDeletedDetail(d.key))}
+                          onClick={() =>
+                            handleUpdateDetail({
+                              key: d.key,
+                              deleted: false,
+                            })
+                          }
                           aria-label="undo"
                           ml="auto"
                           size="sm"
@@ -116,9 +147,12 @@ export default function Detail({}: Props) {
                         />
                       ) : (
                         <IconButton
-                          onClick={() => {
-                            dispatch(setDeletedDetail(d.key))
-                          }}
+                          onClick={() =>
+                            handleUpdateDetail({
+                              key: d.key,
+                              deleted: true,
+                            })
+                          }
                           _groupHover={{ visibility: "visible" }}
                           visibility={"hidden"}
                           ml="auto"
@@ -138,13 +172,10 @@ export default function Detail({}: Props) {
                           : ""
                       }
                       onChange={(e) => {
-                        dispatch(
-                          updateDetail({
-                            _id: d._id,
-                            key: d.key,
-                            value: e.target.value,
-                          })
-                        )
+                        handleUpdateDetail({
+                          key: d.key,
+                          value: e.target.value,
+                        })
                       }}
                     />
                   </Box>

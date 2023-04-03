@@ -132,7 +132,7 @@ const Item = ({
 }
 export default function NavBar() {
   const { showNavBar, page, subItem } = useAppSelector(
-    (state) => state.homeSLice
+    (state) => state.homeSlice
   )
   const items: Array<item> = [
     {
@@ -151,6 +151,11 @@ export default function NavBar() {
           name: "Products",
           id: SalesSubItemId.PRODUCTS,
           pageName: "products",
+        },
+        {
+          name: "Coupon",
+          id: SalesSubItemId.COUPON,
+          pageName: "coupon",
         },
         {
           name: "Categories",

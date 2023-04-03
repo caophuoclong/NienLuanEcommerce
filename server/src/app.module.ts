@@ -1,4 +1,9 @@
-import {  MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { ConfigsModule } from './configs/configs.module';
 import { AuthModule } from './auth/auth.module';
@@ -12,12 +17,24 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
+import { MulterModule } from '@nestjs/platform-express';
+import { v4 as uuidv4 } from 'uuid';
+import multer, { diskStorage } from 'multer';
+import { AddressModule } from './address/address.module';
 
 @Module({
-  imports: [DatabaseModule, ConfigsModule, AuthModule, CustomerModule, ShopModule, CartModule, ProductModule, CategoryModule],
+  imports: [
+    DatabaseModule,
+    ConfigsModule,
+    AuthModule,
+    CustomerModule,
+    ShopModule,
+    CartModule,
+    ProductModule,
+    CategoryModule,
+    AddressModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule{
- 
-}
+export class AppModule {}

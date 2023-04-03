@@ -20,9 +20,13 @@ export class Category {
   name_vi: string;
   @Column()
   name_en: string;
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, {
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
+  })
   @JoinTable({
     name: 'category_category',
+
     joinColumn: {
       name: 'parent',
       referencedColumnName: '_id',

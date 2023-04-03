@@ -1,18 +1,30 @@
-import { GenderEnum } from "src/enum/gender.enum";
-import { AfterUpdate, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { AuthEntity } from "./auth.entity";
-import Address from "./address";
-import { Product } from "./product";
+import { GenderEnum } from 'src/enum/gender.enum';
+import {
+  AfterUpdate,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { AuthEntity } from './auth.entity';
+import Address from './address';
+import { Product } from './product';
 import { Cart } from './cart/index';
-import { CreditCart } from "./creditCart";
-import { Payment } from "./payment";
-import { Coupon } from "./coupon";
+import { CreditCart } from './creditCart';
+import { Payment } from './payment';
+import { Coupon } from './coupon';
 
 @Entity()
-export class Customer{
-@PrimaryGeneratedColumn('uuid')
+export class Customer {
+  @PrimaryGeneratedColumn('uuid')
   _id: string;
-  @OneToOne(() => AuthEntity, auth => auth.username)
+  @OneToOne(() => AuthEntity, (auth) => auth.username, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   auth: AuthEntity;
   @Column({
@@ -28,7 +40,7 @@ export class Customer{
   })
   middleName: string;
   @Column({
-    nullable: true
+    nullable: true,
   })
   shop_name: string;
   @Column({
@@ -54,19 +66,23 @@ export class Customer{
     type: 'bigint',
   })
   updatedAt: number;
-  @OneToMany(()=> Address, address => address.customer)
+  @OneToMany(() => Address, (address) => address.customer)
   address: Address[];
-  @OneToMany(() => Product, product => product.shop)
+  @OneToMany(() => Product, (product) => product.shop)
   products: Product[];
-  @OneToOne(()=> Cart, cart => cart.customer)
+  @OneToOne(() => Cart, (cart) => cart.customer)
   @JoinColumn()
   cart: Cart;
-  @OneToMany(()=>CreditCart, creditCart => creditCart.customer)
-  creditCards: CreditCart[]; 
-  @OneToMany(()=> Payment, payment => payment.customer)
+  @OneToMany(() => CreditCart, (creditCart) => creditCart.customer)
+  creditCards: CreditCart[];
+  @OneToMany(() => Payment, (payment) => payment.customer)
   payments: Payment[];
-  @ManyToMany(()=> Coupon, coupon => coupon.user)
-  storedCoupon: Coupon[]
+  @ManyToMany(() => Coupon, (coupon) => coupon.user)
+  storedCoupon: Coupon[];
+  @Column({
+    default: 'https://picsum.photos/40',
+  })
+  avatar: string;
 
   @AfterUpdate()
   afterUpdate() {

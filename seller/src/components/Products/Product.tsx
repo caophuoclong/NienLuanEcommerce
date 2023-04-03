@@ -2,6 +2,7 @@ import { Button, Td, Text, Tr } from "@chakra-ui/react"
 import React from "react"
 import { BiEdit } from "react-icons/bi"
 import { IProduct } from "../../types/product"
+import { useAppSelector } from "../../app/hooks"
 
 type Props = IProduct & {
   onEditProduct: () => void
@@ -14,29 +15,35 @@ export default function Product({
   onEditProduct,
   createdAt,
   updatedAt,
-  meta,
+  hasVariant,
+  price,
+  stock,
+  sold,
+  variantDetails,
 }: Props) {
-  console.log()
+  const lang = useAppSelector((state) => state.homeSlice.lang)
+  const prices = variantDetails.map((v) => v.price)
+  const stocks = variantDetails.map((v) => v.stock)
   return (
     <Tr>
       <Td>{name}</Td>
-      <Td>{`
-        ${Math.min(...meta.map((m) => m.price))}
-        -
-        ${Math.max(...meta.map((m) => m.price))}
-        `}</Td>
-      <Td>{category.name_vi}</Td>
       <Td>
-        {meta.reduce((prev, current, i) => {
-          return prev + current.stock
-        }, 0)}
+        {hasVariant
+          ? `
+        ${Math.min(...prices)} - ${Math.max(...prices)}
+        `
+          : price}
       </Td>
+      <Td>{category[`name_${lang}`]}</Td>
       <Td>
-        {meta.reduce((prev, current, i) => {
-          return prev + current.sold
-        }, 0)}
+        {hasVariant
+          ? `
+        ${Math.min(...stocks)} - ${Math.max(...stocks)}
+        `
+          : stock}
       </Td>
-      {/* <Td
+      <Td>{hasVariant ? 0 : sold}</Td>
+      <Td
         title={
           new Date(+createdAt).toLocaleDateString("vi-VN") +
           " " +
@@ -57,7 +64,7 @@ export default function Product({
         {+updatedAt === 0
           ? "-"
           : new Date(+updatedAt).toLocaleDateString("vi-VN")}
-      </Td> */}
+      </Td>
       <Td>
         <Button
           onClick={onEditProduct}

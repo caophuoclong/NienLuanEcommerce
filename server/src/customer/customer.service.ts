@@ -5,12 +5,15 @@ import { Repository } from 'typeorm';
 import { ICustomer } from 'src/interface/customer';
 import UserInfo from '../interface/userInfo';
 import { Customer } from 'src/database/entities/customer';
+import { CartItem } from '../database/entities/cart/cartItem';
 
 @Injectable()
 export class CustomerService implements ICustomer {
   constructor(
     @InjectRepository(Customer)
     private readonly customerEntity: Repository<Customer>,
+    @InjectRepository(CartItem)
+    private readonly cartItemRepository: Repository<CartItem>,
   ) {}
   async create(
     auth: AuthEntity,
@@ -18,7 +21,7 @@ export class CustomerService implements ICustomer {
       firstName: string;
       lastName: string;
       middleName: string;
-      name: string;
+      shop_name: string;
     }>,
   ) {
     try {
@@ -49,6 +52,7 @@ export class CustomerService implements ICustomer {
         auth: {
           email: true,
           phone: true,
+          username: true,
         },
         address: {
           _id: true,
@@ -61,6 +65,7 @@ export class CustomerService implements ICustomer {
               short_name: true,
               short_name_en: true,
             },
+
             district: {
               code: true,
               name: true,
@@ -99,6 +104,18 @@ export class CustomerService implements ICustomer {
         },
       },
     });
-    return user;
+    const [items, length] = await this.cartItemRepository.findAndCount({
+      where: {
+        cart: {
+          customer: {
+            _id: user._id,
+          },
+        },
+      },
+    });
+    return {
+      ...user,
+      cartLength: length,
+    };
   }
 }

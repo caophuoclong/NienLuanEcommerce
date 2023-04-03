@@ -27,7 +27,7 @@ export default function Slider({
         width={width}
       >
         {carousel.map((item, index) => (
-          <Link to={item.to}>
+          <Link to={item.to} key={index}>
             <img src={item.src} className={`h-[320px] rounded-lg`} />
           </Link>
         ))}

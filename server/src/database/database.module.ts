@@ -12,7 +12,6 @@ import { District } from './entities/address/district';
 import { Ward } from './entities/address/ward';
 import { Category } from './entities/category';
 import { Product } from './entities/product';
-import { ProductMeta } from './entities/product/meta';
 import { Cart } from './entities/cart';
 import { CartItem } from './entities/cart/cartItem';
 import { CreditCart } from './entities/creditCart';
@@ -20,7 +19,9 @@ import { Payment } from './entities/payment';
 import { Coupon } from './entities/coupon';
 import { TreeCategory } from './entities/category/category_category.entity';
 import { ProductDetail } from './entities/product/detail';
-
+import { ProductVariantOption } from './entities/product/variant/options';
+import { ProductVariantDetail } from './entities/product/variant/detail';
+import { ProductVariant } from './entities/product/variant';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -32,7 +33,7 @@ import { ProductDetail } from './entities/product/detail';
           username: string;
           password: string;
           name: string;
-          type: "mysql";
+          type: 'mysql';
         }>('database');
         return {
           type: config.type,
@@ -41,11 +42,31 @@ import { ProductDetail } from './entities/product/detail';
           username: config.username,
           password: config.password,
           database: config.name,
-          entities: [AuthEntity, Customer, Address, AdministrativeRegion, AdministrativeUnit, Province, District, Ward, Category, Product, ProductMeta, Cart, CartItem, CreditCart, Payment, Coupon, TreeCategory, ProductDetail],
+          entities: [
+            AuthEntity,
+            Customer,
+            Address,
+            AdministrativeRegion,
+            AdministrativeUnit,
+            Province,
+            District,
+            Ward,
+            Category,
+            Product,
+            Cart,
+            CartItem,
+            CreditCart,
+            Payment,
+            Coupon,
+            ProductVariantOption,
+            ProductVariantDetail,
+            ProductVariant,
+            ProductDetail,
+          ],
           synchronize: true,
         };
       },
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
   ],
 })

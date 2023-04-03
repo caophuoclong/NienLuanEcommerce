@@ -1,0 +1,9 @@
+export const SET_LIST_PROVINCE = "set_list_province";
+export const SET_LIST_DISTRCIT = "set_list_district";
+export const SET_LIST_WARD = "set_list_ward"
+export const SET_WARD = "set_ward";
+export const SET_DISTRICT = "set_district";
+export const SET_PROVINCE = "set_province";
+export const SET_NAME = "set_name";
+export const SET_PHONE = "set_phone";
+export const SET_ADDRESS_DETAIL = "set_address_detail";

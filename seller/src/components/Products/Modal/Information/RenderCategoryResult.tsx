@@ -1,7 +1,7 @@
 import { Box, Button, Text } from "@chakra-ui/react"
 import React from "react"
-import { useAppSelector } from "../../../app/hooks"
-import { ICategory } from "../../../types/category"
+import { useAppSelector } from "../../../../app/hooks"
+import { ICategory } from "../../../../types/category"
 
 type Props = {
   categories: Array<ICategory>
@@ -12,7 +12,7 @@ export default function RenderCategoryResult({
   categories,
   onSelectCategory,
 }: Props) {
-  const lang = useAppSelector((state) => state.homeSLice.lang)
+  const lang = useAppSelector((state) => state.homeSlice.lang)
   return (
     <>
       {categories.map((category) => (

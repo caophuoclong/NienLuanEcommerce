@@ -29,8 +29,8 @@ export class AuthController {
   })
   async register(@Body() dto: RegistrationDTO) {
     // console.log(dto);
-    await this.authService.registration(dto);
-    return 'Create user successfully';
+    return this.authService.registration(dto);
+    // return 'Create user successfully';
   }
   @Public()
   @Post('/login')
@@ -62,16 +62,18 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
-    console.log("adsajksdhkjashdjksaj")
     res.json(accessToken);
   }
-
   @Public()
   @Get('/refreshToken')
   async refreshToken(@Req() request: Request) {
     const refreshToken = request.cookies['refreshToken'];
-    // console.log("🚀 ~ file: auth.controller.ts:40 ~ AuthController ~ refreshToken ~ refreshToken", refreshToken)
+    console.log(
+      '🚀 ~ file: auth.controller.ts:40 ~ AuthController ~ refreshToken ~ refreshToken',
+      refreshToken,
+    );
     if (refreshToken === 'undefined' || !refreshToken) {
+      console.log('Not Privde refreshToken');
       throw new BadRequestException('Refresh token is not provided');
     }
     const accessToken = await this.authService.refreshToken(refreshToken);
@@ -89,5 +91,10 @@ export class AuthController {
     refreshToken && (await this.authService.logout(refreshToken));
     res.clearCookie('refreshToken');
     return 'Logout successfully';
+  }
+  @Public()
+  @Post('/confirm')
+  async confirm(@Body('token') token: string) {
+    return this.authService.confirm(token);
   }
 }

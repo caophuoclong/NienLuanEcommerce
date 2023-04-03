@@ -1,28 +1,69 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { HomeService } from '../../services/';
-
+import { ProductService } from '../../services/';
+import { UserService } from '../../services/user';
+const user = {
+  _id: '',
+  auth: {
+    email: '',
+    phone: '',
+    username: '',
+  },
+  firstName: '',
+  lastName: '',
+  middleName: '',
+  gender: '',
+  dob: '',
+  avatar: '',
+  cartLength: 0,
+};
 const initialState = {
   products: [],
   loggedIn: false,
+  user,
 };
-const getHome = createAsyncThunk('get home', () => {
-  return HomeService.getProducts();
+export const getHome = createAsyncThunk('get home', () => {
+  return ProductService.getProducts();
+});
+export const getMe = createAsyncThunk('Get me', async () => {
+  const data = await UserService.getMe();
+  return data;
 });
 
 export const HomeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    setUser: (state, action) => {
+      return {
+        ...state,
+        user: action.payload,
+      };
+    },
+    setDefaultUser: (state) => {
+      return {
+        ...state,
+        user: user,
+      };
+    },
+    addCartItem: (state, action) => {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          cartLength: state.user.cartLength + action.payload,
+        },
+      };
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getHome.fulfilled, (state, action) => {
-      state.products = action.payload.data;
+      state.products = action.payload;
+    });
+    builder.addCase(getMe.fulfilled, (state, action) => {
+      state.user = action.payload;
     });
   },
 });
 
-export const { increment } = HomeSlice.actions;
+export const { setDefaultUser, setUser, addCartItem } = HomeSlice.actions;
 export default HomeSlice.reducer;

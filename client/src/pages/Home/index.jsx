@@ -7,11 +7,16 @@ import HotServices from '../../components/HotServices';
 import SuggestProduct from '../../components/SuggestProduct';
 import { BASE_URL } from '../../configs';
 import axios from 'axios';
+import { getHome } from '../../app/slices/home.slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useNavigate } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function Home() {
   const {t} = useTranslation();
   const [slider, setSlider] = useState([]);
   const [banner, setBanner] = useState([]);
+  const dispatch = useAppDispatch();
   useEffect(()=>{
     (async()=>{
       const s = await axios.get(`${BASE_URL}/home/slider.json`);
@@ -38,15 +43,16 @@ export default function Home() {
   // generate categories with 24 categories
 
   const categories = Array(15).fill(category);
-  const product = {
-    name: "Con heo ngu ngoc",
-    cate: "1",
-    price: "30k",
-    sold: 30,
-    thumbnail: "https://cf.shopee.vn/file/sg-11134201-22100-aqap5ggz59iv59_tn",
-    link: "/product/con-heo-ngu-ngoc.12"
-  }
-  const products = Array(20).fill(product);
+
+  const products = useAppSelector(state => state.home.products);
+  useEffect(()=>{
+    (async()=>{
+      const unwrap = dispatch(getHome())
+    const result = await unwrapResult(unwrap);
+    console.log("🚀 ~ file: index.jsx:52 ~ result:", result)
+    
+    })()
+  },[])
   return (
     <div className="flex flex-col gap-4 pb-8">
       <Slider height={"400px"} width={"100%"} carousel={slider}/>

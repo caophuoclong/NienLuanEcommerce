@@ -11,40 +11,39 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Category } from '../category';
-import { ProductMeta } from './meta';
 import { Customer } from '../customer';
-import { CartItem } from '../cart/cartItem';
 import { ProductDetail } from './detail';
+import { ProductVariantOption } from './variant/options';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn('uuid')
-  _id: string;
+  @PrimaryGeneratedColumn()
+  _id: number;
   @Column()
   name: string;
   @Column({
-    default: '',
+    type: 'longtext',
   })
-  description: string;
+  description?: string;
   @ManyToOne(() => Category, (category) => category.products, {
     onDelete: 'CASCADE',
   })
   @JoinTable({ name: 'category_product' })
   category: Category;
-  @OneToMany(() => ProductMeta, (meta) => meta.product, {
+  @OneToMany(() => ProductVariantOption, (variant) => variant.product, {
     onDelete: 'CASCADE',
   })
-  meta: ProductMeta[];
+  variant: ProductVariantOption[];
   @ManyToOne(() => Customer, (customer) => customer.products, {
     onDelete: 'CASCADE',
   })
   shop: Customer;
-  @OneToMany(() => CartItem, (cartItem) => cartItem.product)
-  cartItems: CartItem[];
   @OneToMany(() => ProductDetail, (detail) => detail.product, {
     onDelete: 'CASCADE',
   })
   detail: ProductDetail[];
+  @OneToMany(() => ProductVariantOption, (option) => option.product)
+  productVariantOptions: ProductVariantOption[];
   @Column({ default: new Date().getTime(), type: 'bigint' })
   createdAt: number;
   @Column({
@@ -52,4 +51,20 @@ export class Product {
     type: 'bigint',
   })
   updatedAt: number;
+  @Column({
+    default: false,
+  })
+  hasVariant: boolean;
+  @Column({
+    default: null,
+  })
+  price: number;
+  @Column({
+    default: null,
+  })
+  stock: number;
+  @Column({
+    default: null,
+  })
+  sold: number;
 }
