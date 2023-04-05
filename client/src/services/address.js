@@ -17,5 +17,8 @@ export const AddressService = {
                 districtCode
             }
         })
+    },
+    getExistAddress: ()=>{
+        return axiosClient.get("/address")
     }
 }

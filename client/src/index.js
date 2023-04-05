@@ -27,17 +27,28 @@ import User from './pages/User';
 import Purchase from './pages/User/Purchase';
 import Profile from './pages/User/Profile';
 import Checkout from './pages/Checkout';
+import 'react-credit-cards/es/styles-compiled.css';
+
+
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
   {
     path: '/',
     element: <DefaultLayout children={<Home />} />,
+    children: [
+      
+    ],
     errorElement: <NotFound />,
   },
   {
     path: '/product/:id',
     element: <DefaultLayout children={<ProductView />} />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: 'search',
+    element: <DefaultLayout children={<SearchProduct />} />,
     errorElement: <NotFound />,
   },
   {
@@ -95,11 +106,7 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
     errorElement: <NotFound />,
   },
-  {
-    path: 'search',
-    element: <DefaultLayout children={<SearchProduct />} />,
-    errorElement: <NotFound />,
-  },
+  
 ]);
 const App = () => {
   const dispatch = useAppDispatch();

@@ -75,10 +75,9 @@ function DropDownCategories() {
 }
 export default function HeaderWithSearch() {
   const { t } = useTranslation();
-  const cartLength = useAppSelector((state) => state.home.user.cartLength);
+  const cartLength = useAppSelector((state) => state.cart.cart).length;
   const [nameKeyword, setNameKeyword] = useState('');
   const navigate = useNavigate();
-
   return (
     <div
       style={{ backgroundColor: primaryColor }}
