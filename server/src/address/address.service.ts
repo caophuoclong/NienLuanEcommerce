@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import Address from 'src/database/entities/address';
 import { District } from 'src/database/entities/address/district';
 import { Province } from 'src/database/entities/address/province';
 import { Ward } from 'src/database/entities/address/ward';
@@ -14,6 +15,8 @@ export class AddressService {
     private readonly districtRepository: Repository<District>,
     @InjectRepository(Ward)
     private readonly wardRepository: Repository<Ward>,
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
   ) {}
   getProvince() {
     return this.provinceRepository.find();
@@ -49,5 +52,26 @@ export class AddressService {
       },
     });
     return ward;
+  }
+  async getExistAddress(_id: string) {
+    const existAddress = await this.addressRepository.find({
+      where: {
+        customer: {
+          _id,
+        },
+      },
+      relations: {
+        ward: {
+          district: {
+            province: true,
+          },
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 3,
+    });
+    return existAddress;
   }
 }

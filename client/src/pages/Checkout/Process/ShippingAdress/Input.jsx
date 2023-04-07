@@ -2,7 +2,7 @@ import React, { useId } from 'react';
 
 export default function Input({
   value,
-  onChange,
+  onChange1,
   name,
   required = false,
   number = false,
@@ -18,11 +18,11 @@ export default function Input({
         value={value}
         onChange={(e) => {
           if (number) {
-            if (!isNaN(e.target.value)) {
-              onChange(e.target.value);
+            if (!isNaN(+e.target.value)) {
+              onChange1(e.target.value);
             }
           } else {
-            onChange(e.target.value);
+            onChange1(e.target.value);
           }
         }}
         type="text"

@@ -7,10 +7,7 @@ export const CartService = {
     getCart: ()=>{
         return axiosClient.get("/cart")
     },
-    update: (_id, field)=>{
-        return axiosClient.patch("/cart", {
-            _id,
-            field
-        })
+    update: (data)=>{
+        return axiosClient.patch("/cart", data)
     }
 }

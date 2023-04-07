@@ -14,7 +14,7 @@ import { Category } from './entities/category';
 import { Product } from './entities/product';
 import { Cart } from './entities/cart';
 import { CartItem } from './entities/cart/cartItem';
-import { CreditCart } from './entities/creditCart';
+import { CreditCard } from './entities/creditCard';
 import { Payment } from './entities/payment';
 import { Coupon } from './entities/coupon';
 import { TreeCategory } from './entities/category/category_category.entity';
@@ -22,6 +22,9 @@ import { ProductDetail } from './entities/product/detail';
 import { ProductVariantOption } from './entities/product/variant/options';
 import { ProductVariantDetail } from './entities/product/variant/detail';
 import { ProductVariant } from './entities/product/variant';
+import { Shipping } from './entities/shipping';
+import { Order } from './entities/order';
+import { OrderItem } from './entities/order/orderItem';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -55,13 +58,16 @@ import { ProductVariant } from './entities/product/variant';
             Product,
             Cart,
             CartItem,
-            CreditCart,
+            CreditCard,
             Payment,
             Coupon,
             ProductVariantOption,
             ProductVariantDetail,
             ProductVariant,
             ProductDetail,
+            Shipping,
+            Order,
+            OrderItem,
           ],
           synchronize: true,
         };

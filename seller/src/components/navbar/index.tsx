@@ -163,9 +163,9 @@ export default function NavBar() {
           pageName: "categories",
         },
         {
-          name: "Invoices",
-          id: SalesSubItemId.INVOICES,
-          pageName: "invoices",
+          name: "Orders",
+          id: SalesSubItemId.ORDERS,
+          pageName: "orders",
         },
       ],
     },

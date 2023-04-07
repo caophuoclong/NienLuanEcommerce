@@ -1,8 +1,9 @@
-import { Button, Td, Text, Tr } from "@chakra-ui/react"
+import { Button, Td, Text, Tr, Box } from "@chakra-ui/react"
 import React from "react"
 import { BiEdit } from "react-icons/bi"
 import { IProduct } from "../../types/product"
 import { useAppSelector } from "../../app/hooks"
+import Price from "../Price"
 
 type Props = IProduct & {
   onEditProduct: () => void
@@ -28,11 +29,15 @@ export default function Product({
     <Tr>
       <Td>{name}</Td>
       <Td>
-        {hasVariant
-          ? `
-        ${Math.min(...prices)} - ${Math.max(...prices)}
-        `
-          : price}
+        {hasVariant ? (
+          <Box display={"flex"} gap="2">
+            <Price price={Math.min(...prices)} />
+            <Text>-</Text>
+            <Price price={Math.max(...prices)} />
+          </Box>
+        ) : (
+          <Price price={price} />
+        )}
       </Td>
       <Td>{category[`name_${lang}`]}</Td>
       <Td>

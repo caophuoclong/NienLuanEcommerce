@@ -7,85 +7,126 @@ const initialState = {
 export const getCart = createAsyncThunk('Get cart', () => {
   return CartService.getCart();
 });
+export const updateCartItem = createAsyncThunk('Update cart item', (data) => {
+  return CartService.update(data);
+});
 export const CartSlice = createSlice({
   name: 'Cart',
   initialState,
   reducers: {
-    addToCart: (state, action) => {
+    addCartItem: (state, action) => {
       return {
         ...state,
         cart: [...state.cart, action.payload],
       };
     },
-    selectItem: (state, action) => {
-      const newItem = [...state.itemSelected];
-      if (Array.isArray(action.payload)) {
-        action.payload.forEach((item) => {
-          const isExist = newItem.find((x) => x._id === item._id);
-          if (!isExist) {
-            newItem.push(item);
-          }
-        });
-      } else {
-        const isExist = newItem.find((x) => x._id === action.payload._id);
-        if (!isExist) {
-          newItem.push(action.payload);
-        }
-      }
-      console.log("🚀 ~ file: cart.slice.js:22 ~ newItem:", newItem)
-
+    removeCartItem: (state, action) => {
+      // const tmpCart = [...state.cart];
+      // action.payload.forEach((item) => {
+      //   const index = tmpCart.findIndex((c) => c.product.sku === item.productVariantDetail.sku);
+      //   console.log(index);
+      //   if (index !== -1) {
+      //     tmpCart.splice(index, 1);
+      //   }
+      // });
+      const listSku = action.payload.map(x => x.product.sku);
       return {
         ...state,
-        itemSelected: newItem,
+        cart: state.cart.filter((cartItem)=> !listSku.includes(cartItem.product.sku)),
       };
     },
-    removeItem: (state, action)=>{
-        const currentItems = [...state.itemSelected];
-        if(Array.isArray(action.payload)){
-            action.payload.forEach(item =>{
-                const index = currentItems.findIndex(x => x._id === item._id);
-                if(index !== -1){
-                    currentItems.splice(index, 1);
-                }
-            })
-        }else{
-            const index = currentItems.findIndex(x => x._id === action.payload._id);
-            if(index !== -1){
-                currentItems.splice(index, 1);
-            }
-        }
-        return {
-            ...state,
-            itemSelected: currentItems
-        }
-    },
-    emptySelected: (state)=>{
+    selectItem: (state, action) => {
       return {
         ...state,
-        itemSelected: []
-      }
+        cart: state.cart.map((c) =>
+          c.product.sku === action.payload ? { ...c, selected: true } : c,
+        ),
+      };
     },
-    selectAllItem:(state)=>{
-      return{
+    removeItem: (state, action) => {
+      console.log(action.payload);
+      return {
         ...state,
-        itemSelected: [...state.cart]
-      }
+        cart: state.cart.map((c) =>
+          c.product.sku === action.payload ? { ...c, selected: false } : c,
+        ),
+      };
     },
-    updateCart: (state, action)=>{
-      const cart = [...state.cart];
-      
-    }
+    emptySelected: (state) => {
+      return {
+        ...state,
+        cart: state.cart.map((c) => ({
+          ...c,
+          selected: false,
+        })),
+      };
+    },
+    selectAllItem: (state) => {
+      return {
+        ...state,
+        cart: state.cart.map((c) => ({
+          ...c,
+          selected: true,
+        })),
+      };
+    },
+    selectAllProductShop: (state, action) => {
+      return {
+        ...state,
+        cart: state.cart.map((c) =>
+          c.product.shop._id === action.payload ? { ...c, selected: true } : c,
+        ),
+      };
+    },
+    removeProductShop: (state, action) => {
+      return {
+        ...state,
+        cart: state.cart.map((c) =>
+          c.product.shop._id === action.payload ? { ...c, selected: false } : c,
+        ),
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCart.fulfilled, (state, action) => {
       console.log(action);
       return {
         ...state,
-        cart: action.payload,
+        cart: action.payload.map((c) => {
+          return {
+            ...c,
+            selected: false,
+          };
+        }),
+      };
+    });
+    builder.addCase(updateCartItem.fulfilled, (state, action) => {
+      const cart = state.cart.map((c) => {
+        if (c._id === action.payload._id) {
+          return {
+            ...c,
+            ...action.payload.field,
+          };
+        } else {
+          return c;
+        }
+      });
+      return {
+        ...state,
+        cart,
       };
     });
   },
 });
 
-export const { addToCart, selectItem, removeItem, emptySelected, selectAllItem} = CartSlice.actions;
+export const {
+  addCartItem,
+  selectItem,
+  removeItem,
+  emptySelected,
+  selectAllItem,
+  selectAllProductShop,
+  removeProductShop,
+  removeCartItem,
+} = CartSlice.actions;
 export default CartSlice.reducer;

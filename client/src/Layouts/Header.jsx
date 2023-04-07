@@ -4,7 +4,7 @@ import HeaderWithSearch from '../components/header/HeaderWithSearch';
 export default function Header() {
 
   return (
-    <div className="flex flex-col text-white fixed z-[1000] w-full top-0 h-[100px]">
+    <div className="flex flex-col text-white fixed z-[1000] w-full top-0">
       <NavBar/>
       <HeaderWithSearch/>
     </div>

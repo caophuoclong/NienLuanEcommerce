@@ -73,12 +73,36 @@ export class CartService {
       },
       cart: cart,
     });
-    await this.cartItemRepository.save(cartItem);
-    console.log(
-      '🚀 ~ file: cart.service.ts:57 ~ CartService ~ addToCart ~ cartItem:',
+    const { cart: cart1, ...result } = await this.cartItemRepository.save(
       cartItem,
     );
-    return 'add success';
+    const sku = result.product.sku;
+    const [productId, ...x] = sku.split('_');
+    const detail = await this.productVariantDetail.findOne({
+      where: {
+        sku,
+      },
+    });
+
+    const newProduct = await this.productRepository.findOne({
+      where: {
+        _id: +productId,
+      },
+      relations: {
+        shop: true,
+        productVariantOptions: true,
+      },
+    });
+
+    return {
+      ...result,
+      product: {
+        ...newProduct,
+        price: detail.price,
+        stock: detail.stock,
+        sku: detail.sku,
+      },
+    };
   }
   async getCart(customer_id: string) {
     const cart = await this.cartRepository.findOne({
@@ -139,6 +163,9 @@ export class CartService {
         await this.cartItemRepository.save(cartItem);
       }
     }
-    return 'update success';
+    return {
+      _id,
+      field,
+    };
   }
 }

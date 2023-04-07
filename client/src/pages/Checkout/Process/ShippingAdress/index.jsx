@@ -1,43 +1,82 @@
-import React, { useState } from 'react';
-import NewAddress from "./NewAddress"
+import React, { useContext, useEffect, useState } from 'react';
+import NewAddress from './NewAddress';
+import { AddressService } from '../../../../services/address';
+import { CheckoutContext } from '../..';
+import { SET_ADDRESS_ID } from '../../actionType';
 export default function ShippingAddress() {
-  const existAdress = [1, 2, 3, 4];
-  const [address, setAddress] = useState();
-  console.log(address);
-  const hanldeAddressChange = (data)=>{
-    console.log(data);
-  }
+  const [existAddress, setExistAddress] = useState([]);
+  const [state, dispatch] = useContext(CheckoutContext);
+  useEffect(() => {
+    (async () => {
+      const response = await AddressService.getExistAddress();
+      setExistAddress(response);
+      if (response.length > 0) {
+        const lastExistAddress = response.sort(
+          (a, b) => b.createdAt - a.createdAt,
+        )[0];
+        dispatch({
+          type: SET_ADDRESS_ID,
+          payload: lastExistAddress._id,
+        });
+      } else {
+        dispatch({
+          type: SET_ADDRESS_ID,
+          payload: 'ADD_NEW_ADDRESS',
+        });
+      }
+    })();
+  }, []);
   return (
-    <div className="py-2 flex flex-col gap-1">
-      {existAdress.map((exist, index) => (
-        <div key={index} className="flex gap-2" >
+    <div className="flex flex-col gap-1 py-2">
+      {existAddress
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .map((item, index) => (
+          <div className="flex justify-between">
+            <div key={index} className="flex gap-2">
+              <input
+                checked={state.address._id === item._id}
+                onChange={(e) => {
+                  dispatch({
+                    type: SET_ADDRESS_ID,
+                    payload: item._id,
+                  });
+                }}
+                name="address"
+                type="radio"
+              />
+              <p className="font-bold">{item.name}</p>
+              <p>
+                {item.ward.name},{item.ward.district.name},
+                {item.ward.district.province.name}
+              </p>
+              <p>{item.phone}</p>
+            </div>
+            <div className="flex gap-1">
+              <button className="text-blue-500">Edit</button>
+              <span>|</span>
+              <button className="text-red-500">Delete</button>
+            </div>
+          </div>
+        ))}
+      <div className="">
+        <div className="flex items-center gap-2">
           <input
-            value={exist}
+            checked={state.address._id === 'newAddress'}
+            value={'newAddress'}
             onChange={(e) => {
-              setAddress(e.target.value);
+              dispatch({
+                type: SET_ADDRESS_ID,
+                payload: 'newAddress',
+              });
             }}
+            id="newAddress"
             name="address"
             type="radio"
           />
-        </div>
-      ))}
-      <div className="">
-        <div className="flex gap-2 items-center">
-            <input
-              value={'newAddress'}
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
-              id="newAddress"
-              name="address"
-              type="radio"
-            />
-            <label htmlFor="newAddress">Add new address</label>
+          <label htmlFor="newAddress">Add new address</label>
         </div>
       </div>
-      {
-        address === "newAddress" && <NewAddress/>
-      }
+      {state.address && state.address._id === 'newAddress' && <NewAddress />}
     </div>
   );
 }

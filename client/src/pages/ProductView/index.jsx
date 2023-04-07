@@ -13,7 +13,7 @@ import ProductDescription from './ProductDescription';
 import { parseUrl } from '../../utils';
 import { CartService } from '../../services/cart';
 import Quantity from '../../components/Quantity';
-import {addCartItem} from "../../app/slices/home.slice"
+import { addCartItem } from '../../app/slices/cart.slice';
 const max = 1500;
 const min = 1000;
 export default function ProductView() {
@@ -94,8 +94,9 @@ export default function ProductView() {
         productVariantDetail: variantDetail,
         quantity,
       });
-      console.log(response);
-      dispatch(addCartItem(1))
+      console.log("🚀 ~ file: index.jsx:96 ~ onAddToCart ~ response:", response)
+      // dispatch(addCartItem(1))
+      dispatch(addCartItem(response));
       alert("Add to cart success!")
     }else{
       alert("Product already existed!")
