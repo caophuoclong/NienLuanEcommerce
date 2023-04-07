@@ -9,6 +9,8 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./certs:/etc/nginx/certs
+    depends_on:
+      - server
   server:
     image: caophuoclongse/nienluan_server:latest
     container_name: server
