@@ -16,7 +16,7 @@ services:
     container_name: server
     restart: always
     ports:
-      - "3000:3000"
+      - "3070:3003"
     env_file: ./docker_env/server.env
     depends_on:
       - mysql
