@@ -27,12 +27,15 @@ CREATE TABLE `address` (
   `detail` varchar(255) NOT NULL,
   `customer_id` varchar(36) DEFAULT NULL,
   `ward_code` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `createdAt` bigint NOT NULL DEFAULT '1680804027529',
   PRIMARY KEY (`_id`),
   KEY `FK_9c9614b2f9d01665800ea8dbff7` (`customer_id`),
   KEY `FK_3b11e3dd0964b66967ce5acdfd8` (`ward_code`),
   CONSTRAINT `FK_3b11e3dd0964b66967ce5acdfd8` FOREIGN KEY (`ward_code`) REFERENCES `ward` (`code`),
   CONSTRAINT `FK_9c9614b2f9d01665800ea8dbff7` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +44,7 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
+INSERT INTO `address` VALUES (1,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(2,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(3,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(4,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(5,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(6,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(7,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(8,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(9,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(10,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(11,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(12,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(13,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(14,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(15,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(16,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(17,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(18,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(19,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(20,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(21,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00692','caophuoclong','0342200770',1680631492416),(22,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','03130','caophuoclong','0342200670',1680631492416),(23,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','03130','caophuoclong','0342200670',1680631492416),(24,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','03130','caophuoclong','0342200670',1680631492416),(25,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','03130','caophuoclong','0342200670',1680631492416),(26,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','01372','caophuoclong','0342200770',1680631492416),(27,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','01372','caophuoclong','0342200770',1680631492416),(28,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','00103','caophuoclong','0342200770',1680631492416),(29,'','4f95fb34-5e4a-4d75-a3e5-99d3f292a365','02809','tran cao phuoc long','0342200770',1680680199597);
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +171,7 @@ CREATE TABLE `cart_item` (
   `_id` int NOT NULL AUTO_INCREMENT,
   `quantity` int NOT NULL,
   `cart_id` varchar(36) DEFAULT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1680528201975',
+  `createdAt` bigint NOT NULL DEFAULT '1680804027533',
   `updatedAt` bigint NOT NULL DEFAULT '0',
   `productSku` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`_id`),
@@ -175,7 +179,7 @@ CREATE TABLE `cart_item` (
   KEY `FK_adce03deb423ba4f0d5abcaad79` (`productSku`),
   CONSTRAINT `FK_adce03deb423ba4f0d5abcaad79` FOREIGN KEY (`productSku`) REFERENCES `product_variant_detail` (`sku`) ON DELETE CASCADE,
   CONSTRAINT `FK_b6b2a4f1f533d89d218e70db941` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +188,7 @@ CREATE TABLE `cart_item` (
 
 LOCK TABLES `cart_item` WRITE;
 /*!40000 ALTER TABLE `cart_item` DISABLE KEYS */;
-INSERT INTO `cart_item` VALUES (17,2,'9d70d3e1-7440-48b8-80d3-6a12b657e473',1680170729803,0,'59_244_247'),(18,10,'9d70d3e1-7440-48b8-80d3-6a12b657e473',1680170729803,0,'58_240_243'),(19,5,'9d70d3e1-7440-48b8-80d3-6a12b657e473',1680170729803,0,'60_250_252'),(21,1,'af3c3c53-02fc-4c9c-869a-264fc8531de9',1680242918820,0,'61_256_255'),(25,9,'9d70d3e1-7440-48b8-80d3-6a12b657e473',1680248187074,0,'61_253_257'),(26,15,'9d70d3e1-7440-48b8-80d3-6a12b657e473',1680248187074,0,'59_246_245');
+INSERT INTO `cart_item` VALUES (21,1,'af3c3c53-02fc-4c9c-869a-264fc8531de9',1680242918820,0,'61_256_255');
 /*!40000 ALTER TABLE `cart_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +230,7 @@ CREATE TABLE `category` (
   `_id` int NOT NULL AUTO_INCREMENT,
   `name_vi` varchar(255) NOT NULL,
   `name_en` varchar(255) NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1680528201972',
+  `createdAt` bigint NOT NULL DEFAULT '1680804027530',
   `requireDetail` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -284,7 +288,7 @@ CREATE TABLE `coupon` (
   `minium` int NOT NULL,
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1680528201976',
+  `createdAt` bigint NOT NULL DEFAULT '1680804027537',
   `updatedAt` bigint NOT NULL,
   PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -300,31 +304,36 @@ LOCK TABLES `coupon` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `credit_cart`
+-- Table structure for table `credit_card`
 --
 
-DROP TABLE IF EXISTS `credit_cart`;
+DROP TABLE IF EXISTS `credit_card`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `credit_cart` (
+CREATE TABLE `credit_card` (
   `number` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `expire` datetime NOT NULL,
-  `ccv` int NOT NULL,
+  `cvv` int NOT NULL,
   `customer_id` varchar(36) DEFAULT NULL,
+  `holder` varchar(255) NOT NULL,
+  `mm` int NOT NULL,
+  `yy` int NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `createdAt` bigint NOT NULL DEFAULT '1680804027534',
+  `balance` bigint NOT NULL DEFAULT '16808040',
   PRIMARY KEY (`number`),
-  KEY `FK_4f23ed38c466c9694de4257ea62` (`customer_id`),
-  CONSTRAINT `FK_4f23ed38c466c9694de4257ea62` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`)
+  KEY `FK_38b7a4683d23c797e8a48f3cfc5` (`customer_id`),
+  CONSTRAINT `FK_38b7a4683d23c797e8a48f3cfc5` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `credit_cart`
+-- Dumping data for table `credit_card`
 --
 
-LOCK TABLES `credit_cart` WRITE;
-/*!40000 ALTER TABLE `credit_cart` DISABLE KEYS */;
-/*!40000 ALTER TABLE `credit_cart` ENABLE KEYS */;
+LOCK TABLES `credit_card` WRITE;
+/*!40000 ALTER TABLE `credit_card` DISABLE KEYS */;
+INSERT INTO `credit_card` VALUES ('4518236812638126',212,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','TRAN CAO PHUOC LONG',12,24,'longlonghihi@gmail.com',1680681202829,9879),('5132131231231231',212,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','TRAN CAO PHUOC LONG',12,23,'caophuoclong1@gmail.com',1680681202829,14729999);
+/*!40000 ALTER TABLE `credit_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -342,7 +351,7 @@ CREATE TABLE `customer` (
   `shop_name` varchar(255) DEFAULT NULL,
   `dob` date DEFAULT NULL,
   `gender` enum('male','female','other') DEFAULT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1680528201977',
+  `createdAt` bigint NOT NULL DEFAULT '1680804027537',
   `updatedAt` bigint NOT NULL DEFAULT '0',
   `authUsername` varchar(255) DEFAULT NULL,
   `cart_id` varchar(36) DEFAULT NULL,
@@ -400,6 +409,79 @@ INSERT INTO `district` VALUES ('001','Ba Đình','Ba Dinh','Quận Ba Đình','B
 UNLOCK TABLES;
 
 --
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order` (
+  `_id` int NOT NULL AUTO_INCREMENT,
+  `shippingCost` int NOT NULL,
+  `tax` int NOT NULL,
+  `status` enum('PENDING','PROCESSING','SHIPPED','DELIVERING','DELIVERED','CANCELLED','RETURNED','REFUNDED') NOT NULL DEFAULT 'PENDING',
+  `customer_id` varchar(36) DEFAULT NULL,
+  `shippingProvider_id` varchar(36) DEFAULT NULL,
+  `payment_id` varchar(36) DEFAULT NULL,
+  `address_id` int DEFAULT NULL,
+  `shop_id` varchar(36) DEFAULT NULL,
+  `createdAt` bigint NOT NULL DEFAULT '1680804027536',
+  PRIMARY KEY (`_id`),
+  KEY `FK_cd7812c96209c5bdd48a6b858b0` (`customer_id`),
+  KEY `FK_859022ddb87e739046f4a215090` (`shippingProvider_id`),
+  KEY `FK_28c756d4fd41223fedfbd2750e1` (`payment_id`),
+  KEY `FK_f07603e96b068aae820d4590270` (`address_id`),
+  KEY `FK_b8166afd2c225f9863a2ca0b470` (`shop_id`),
+  CONSTRAINT `FK_28c756d4fd41223fedfbd2750e1` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`_id`),
+  CONSTRAINT `FK_859022ddb87e739046f4a215090` FOREIGN KEY (`shippingProvider_id`) REFERENCES `shipping` (`_id`),
+  CONSTRAINT `FK_b8166afd2c225f9863a2ca0b470` FOREIGN KEY (`shop_id`) REFERENCES `customer` (`_id`),
+  CONSTRAINT `FK_cd7812c96209c5bdd48a6b858b0` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`),
+  CONSTRAINT `FK_f07603e96b068aae820d4590270` FOREIGN KEY (`address_id`) REFERENCES `address` (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order`
+--
+
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+INSERT INTO `order` VALUES (84,25000,0,'CANCELLED','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'20fe03f6-47e6-4a18-9c08-fa93b7a9267b',29,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577',1680799671762),(85,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'e8eba0e0-d04a-4a05-8a93-a36d535be41e',29,'57bc9ee4-c869-4650-a929-fa7528995249',1680799671762),(86,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'4458b46e-6f75-4fe7-98e5-82bcd105e1ff',29,'57bc9ee4-c869-4650-a929-fa7528995249',1680800309921),(87,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'c12a506b-4862-422c-91eb-6bb324c8af21',29,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577',1680800309921),(88,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'fad361b8-1f18-4260-bb3f-a0f24f7857da',29,'57bc9ee4-c869-4650-a929-fa7528995249',1680800309921),(89,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'40dd5153-afa5-4225-b3d3-5d034e663c02',29,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577',1680800309921),(90,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'bc82e0f7-c9bb-4a81-a4a9-aab01c3c7b57',29,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577',1680800309921),(91,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'fd4d021b-0f68-4830-8604-351240432e58',29,'57bc9ee4-c869-4650-a929-fa7528995249',1680800309921),(92,25000,0,'PENDING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'e4cbe4c4-b3ea-452a-88cb-e4040ee21f3f',29,'57bc9ee4-c869-4650-a929-fa7528995249',1680800309921),(93,25000,0,'DELIVERING','4f95fb34-5e4a-4d75-a3e5-99d3f292a365',NULL,'e302fe2b-3a82-430d-9c46-b880969698e1',29,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577',1680800728744);
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_item`
+--
+
+DROP TABLE IF EXISTS `order_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_item` (
+  `_id` int NOT NULL AUTO_INCREMENT,
+  `price` int NOT NULL DEFAULT '0',
+  `order_id` int DEFAULT NULL,
+  `productVariantDetailSku` varchar(255) DEFAULT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`_id`),
+  KEY `FK_93b062f1b2e4ed2768617eda157` (`productVariantDetailSku`),
+  KEY `FK_e9674a6053adbaa1057848cddfa` (`order_id`),
+  CONSTRAINT `FK_93b062f1b2e4ed2768617eda157` FOREIGN KEY (`productVariantDetailSku`) REFERENCES `product_variant_detail` (`sku`),
+  CONSTRAINT `FK_e9674a6053adbaa1057848cddfa` FOREIGN KEY (`order_id`) REFERENCES `order` (`_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=143 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_item`
+--
+
+LOCK TABLES `order_item` WRITE;
+/*!40000 ALTER TABLE `order_item` DISABLE KEYS */;
+INSERT INTO `order_item` VALUES (129,14000,84,'59_244_247',2),(130,170000,85,'61_253_257',3),(131,170000,86,'61_253_257',6),(132,190000,86,'61_256_255',5),(133,200000,87,'60_248_252',2),(134,170000,88,'61_253_257',3),(135,150000,88,'61_254_255',5),(136,14000,89,'58_241_242',10),(137,14000,89,'59_244_245',2),(138,150000,89,'60_249_251',4),(139,14000,90,'59_244_245',3),(140,150000,91,'61_254_255',4),(141,190000,92,'61_256_255',1),(142,14000,93,'58_241_242',3);
+/*!40000 ALTER TABLE `order_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `payment`
 --
 
@@ -408,13 +490,17 @@ DROP TABLE IF EXISTS `payment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payment` (
   `_id` varchar(36) NOT NULL,
-  `type` enum('COD','CREDIT_CARD','BANK_TRANSFER') NOT NULL,
-  `status` enum('PENDING','SUCCESS','FAILED') NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1680528201976',
+  `type` enum('COD','CREDIT_CARD','BANK_TRANSFER','PAYPAL') NOT NULL,
+  `status` enum('PENDING','SUCCESS','FAILED') NOT NULL DEFAULT 'SUCCESS',
+  `createdAt` bigint NOT NULL DEFAULT '1680804027536',
   `customer_id` varchar(36) DEFAULT NULL,
+  `creditCardNumber` varchar(255) DEFAULT NULL,
+  `amount` int NOT NULL,
   PRIMARY KEY (`_id`),
   KEY `FK_1e79dbe9790afe707259ebee508` (`customer_id`),
-  CONSTRAINT `FK_1e79dbe9790afe707259ebee508` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`)
+  KEY `FK_b29b832c351b6ad77eb534fa8a9` (`creditCardNumber`),
+  CONSTRAINT `FK_1e79dbe9790afe707259ebee508` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`),
+  CONSTRAINT `FK_b29b832c351b6ad77eb534fa8a9` FOREIGN KEY (`creditCardNumber`) REFERENCES `credit_card` (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -424,6 +510,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES ('20fe03f6-47e6-4a18-9c08-fa93b7a9267b','CREDIT_CARD','SUCCESS',1680799671762,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','5132131231231231',53000),('40dd5153-afa5-4225-b3d3-5d034e663c02','CREDIT_CARD','SUCCESS',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','5132131231231231',793000),('4458b46e-6f75-4fe7-98e5-82bcd105e1ff','CREDIT_CARD','SUCCESS',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','4518236812638126',1995000),('bc82e0f7-c9bb-4a81-a4a9-aab01c3c7b57','CREDIT_CARD','SUCCESS',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','4518236812638126',67000),('c12a506b-4862-422c-91eb-6bb324c8af21','CREDIT_CARD','SUCCESS',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','4518236812638126',425000),('e302fe2b-3a82-430d-9c46-b880969698e1','CREDIT_CARD','SUCCESS',1680800728744,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','4518236812638126',67000),('e4cbe4c4-b3ea-452a-88cb-e4040ee21f3f','CREDIT_CARD','FAILED',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','4518236812638126',215000),('e8eba0e0-d04a-4a05-8a93-a36d535be41e','CREDIT_CARD','SUCCESS',1680799671762,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','5132131231231231',535000),('fad361b8-1f18-4260-bb3f-a0f24f7857da','CREDIT_CARD','SUCCESS',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','5132131231231231',1285000),('fd4d021b-0f68-4830-8604-351240432e58','CREDIT_CARD','FAILED',1680800309922,'4f95fb34-5e4a-4d75-a3e5-99d3f292a365','4518236812638126',625000);
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -436,7 +523,7 @@ DROP TABLE IF EXISTS `product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `name` varchar(255) NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1680528201973',
+  `createdAt` bigint NOT NULL DEFAULT '1680804027532',
   `updatedAt` bigint NOT NULL DEFAULT '0',
   `category_id` int DEFAULT NULL,
   `shop_id` varchar(36) DEFAULT NULL,
@@ -539,7 +626,7 @@ CREATE TABLE `product_variant_detail` (
 
 LOCK TABLES `product_variant_detail` WRITE;
 /*!40000 ALTER TABLE `product_variant_detail` DISABLE KEYS */;
-INSERT INTO `product_variant_detail` VALUES ('58_240_242',17000,5,0),('58_240_243',17000,10,0),('58_241_242',14000,15,0),('58_241_243',14000,15,0),('59_244_245',14000,5,0),('59_244_247',14000,2,0),('59_246_245',14000,15,0),('59_246_247',14000,15,0),('60_248_251',200000,5,0),('60_248_252',200000,2,0),('60_249_251',150000,12,0),('60_249_252',150000,6,0),('60_250_251',150000,17,0),('60_250_252',150000,5,0),('61_253_255',170000,7,0),('61_253_257',170000,12,0),('61_254_255',150000,10,0),('61_254_257',150000,10,0),('61_256_255',190000,10,0),('61_256_257',190000,10,0);
+INSERT INTO `product_variant_detail` VALUES ('58_240_242',17000,5,0),('58_240_243',17000,9,0),('58_241_242',14000,2,0),('58_241_243',14000,15,0),('59_244_245',14000,0,0),('59_244_247',14000,0,0),('59_246_245',14000,0,0),('59_246_247',14000,15,0),('60_248_251',200000,5,0),('60_248_252',200000,0,0),('60_249_251',150000,8,0),('60_249_252',150000,6,0),('60_250_251',150000,17,0),('60_250_252',150000,5,0),('61_253_255',170000,7,0),('61_253_257',170000,0,0),('61_254_255',150000,0,0),('61_254_257',150000,10,0),('61_256_255',190000,4,0),('61_256_257',190000,10,0);
 /*!40000 ALTER TABLE `product_variant_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -606,6 +693,29 @@ LOCK TABLES `province` WRITE;
 /*!40000 ALTER TABLE `province` DISABLE KEYS */;
 INSERT INTO `province` VALUES ('01','Hà Nội','Ha Noi','Ha Noi City','Thành phố Hà Nội','ha_noi',1,3),('02','Hà Giang','Ha Giang','Ha Giang Province','Tỉnh Hà Giang','ha_giang',2,1),('04','Cao Bằng','Cao Bang','Cao Bang Province','Tỉnh Cao Bằng','cao_bang',2,1),('06','Bắc Kạn','Bac Kan','Bac Kan Province','Tỉnh Bắc Kạn','bac_kan',2,1),('08','Tuyên Quang','Tuyen Quang','Tuyen Quang Province','Tỉnh Tuyên Quang','tuyen_quang',2,1),('10','Lào Cai','Lao Cai','Lao Cai Province','Tỉnh Lào Cai','lao_cai',2,2),('11','Điện Biên','Dien Bien','Dien Bien Province','Tỉnh Điện Biên','dien_bien',2,2),('12','Lai Châu','Lai Chau','Lai Chau Province','Tỉnh Lai Châu','lai_chau',2,2),('14','Sơn La','Son La','Son La Province','Tỉnh Sơn La','son_la',2,2),('15','Yên Bái','Yen Bai','Yen Bai Province','Tỉnh Yên Bái','yen_bai',2,2),('17','Hoà Bình','Hoa Binh','Hoa Binh Province','Tỉnh Hoà Bình','hoa_binh',2,2),('19','Thái Nguyên','Thai Nguyen','Thai Nguyen Province','Tỉnh Thái Nguyên','thai_nguyen',2,1),('20','Lạng Sơn','Lang Son','Lang Son Province','Tỉnh Lạng Sơn','lang_son',2,1),('22','Quảng Ninh','Quang Ninh','Quang Ninh Province','Tỉnh Quảng Ninh','quang_ninh',2,1),('24','Bắc Giang','Bac Giang','Bac Giang Province','Tỉnh Bắc Giang','bac_giang',2,1),('25','Phú Thọ','Phu Tho','Phu Tho Province','Tỉnh Phú Thọ','phu_tho',2,1),('26','Vĩnh Phúc','Vinh Phuc','Vinh Phuc Province','Tỉnh Vĩnh Phúc','vinh_phuc',2,3),('27','Bắc Ninh','Bac Ninh','Bac Ninh Province','Tỉnh Bắc Ninh','bac_ninh',2,3),('30','Hải Dương','Hai Duong','Hai Duong Province','Tỉnh Hải Dương','hai_duong',2,3),('31','Hải Phòng','Hai Phong','Hai Phong City','Thành phố Hải Phòng','hai_phong',1,3),('33','Hưng Yên','Hung Yen','Hung Yen Province','Tỉnh Hưng Yên','hung_yen',2,3),('34','Thái Bình','Thai Binh','Thai Binh Province','Tỉnh Thái Bình','thai_binh',2,3),('35','Hà Nam','Ha Nam','Ha Nam Province','Tỉnh Hà Nam','ha_nam',2,3),('36','Nam Định','Nam Dinh','Nam Dinh Province','Tỉnh Nam Định','nam_dinh',2,3),('37','Ninh Bình','Ninh Binh','Ninh Binh Province','Tỉnh Ninh Bình','ninh_binh',2,3),('38','Thanh Hóa','Thanh Hoa','Thanh Hoa Province','Tỉnh Thanh Hóa','thanh_hoa',2,4),('40','Nghệ An','Nghe An','Nghe An Province','Tỉnh Nghệ An','nghe_an',2,4),('42','Hà Tĩnh','Ha Tinh','Ha Tinh Province','Tỉnh Hà Tĩnh','ha_tinh',2,4),('44','Quảng Bình','Quang Binh','Quang Binh Province','Tỉnh Quảng Bình','quang_binh',2,4),('45','Quảng Trị','Quang Tri','Quang Tri Province','Tỉnh Quảng Trị','quang_tri',2,4),('46','Thừa Thiên Huế','Thua Thien Hue','Thua Thien Hue Province','Tỉnh Thừa Thiên Huế','thua_thien_hue',2,4),('48','Đà Nẵng','Da Nang','Da Nang City','Thành phố Đà Nẵng','da_nang',1,5),('49','Quảng Nam','Quang Nam','Quang Nam Province','Tỉnh Quảng Nam','quang_nam',2,5),('51','Quảng Ngãi','Quang Ngai','Quang Ngai Province','Tỉnh Quảng Ngãi','quang_ngai',2,5),('52','Bình Định','Binh Dinh','Binh Dinh Province','Tỉnh Bình Định','binh_dinh',2,5),('54','Phú Yên','Phu Yen','Phu Yen Province','Tỉnh Phú Yên','phu_yen',2,5),('56','Khánh Hòa','Khanh Hoa','Khanh Hoa Province','Tỉnh Khánh Hòa','khanh_hoa',2,5),('58','Ninh Thuận','Ninh Thuan','Ninh Thuan Province','Tỉnh Ninh Thuận','ninh_thuan',2,5),('60','Bình Thuận','Binh Thuan','Binh Thuan Province','Tỉnh Bình Thuận','binh_thuan',2,5),('62','Kon Tum','Kon Tum','Kon Tum Province','Tỉnh Kon Tum','kon_tum',2,6),('64','Gia Lai','Gia Lai','Gia Lai Province','Tỉnh Gia Lai','gia_lai',2,6),('66','Đắk Lắk','Dak Lak','Dak Lak Province','Tỉnh Đắk Lắk','dak_lak',2,6),('67','Đắk Nông','Dak Nong','Dak Nong Province','Tỉnh Đắk Nông','dak_nong',2,6),('68','Lâm Đồng','Lam Dong','Lam Dong Province','Tỉnh Lâm Đồng','lam_dong',2,6),('70','Bình Phước','Binh Phuoc','Binh Phuoc Province','Tỉnh Bình Phước','binh_phuoc',2,7),('72','Tây Ninh','Tay Ninh','Tay Ninh Province','Tỉnh Tây Ninh','tay_ninh',2,7),('74','Bình Dương','Binh Duong','Binh Duong Province','Tỉnh Bình Dương','binh_duong',2,7),('75','Đồng Nai','Dong Nai','Dong Nai Province','Tỉnh Đồng Nai','dong_nai',2,7),('77','Bà Rịa - Vũng Tàu','Ba Ria - Vung Tau','Ba Ria - Vung Tau Province','Tỉnh Bà Rịa - Vũng Tàu','ba_ria_vung_tau',2,7),('79','Hồ Chí Minh','Ho Chi Minh','Ho Chi Minh City','Thành phố Hồ Chí Minh','ho_chi_minh',1,7),('80','Long An','Long An','Long An Province','Tỉnh Long An','long_an',2,8),('82','Tiền Giang','Tien Giang','Tien Giang Province','Tỉnh Tiền Giang','tien_giang',2,8),('83','Bến Tre','Ben Tre','Ben Tre Province','Tỉnh Bến Tre','ben_tre',2,8),('84','Trà Vinh','Tra Vinh','Tra Vinh Province','Tỉnh Trà Vinh','tra_vinh',2,8),('86','Vĩnh Long','Vinh Long','Vinh Long Province','Tỉnh Vĩnh Long','vinh_long',2,8),('87','Đồng Tháp','Dong Thap','Dong Thap Province','Tỉnh Đồng Tháp','dong_thap',2,8),('89','An Giang','An Giang','An Giang Province','Tỉnh An Giang','an_giang',2,8),('91','Kiên Giang','Kien Giang','Kien Giang Province','Tỉnh Kiên Giang','kien_giang',2,8),('92','Cần Thơ','Can Tho','Can Tho City','Thành phố Cần Thơ','can_tho',1,8),('93','Hậu Giang','Hau Giang','Hau Giang Province','Tỉnh Hậu Giang','hau_giang',2,8),('94','Sóc Trăng','Soc Trang','Soc Trang Province','Tỉnh Sóc Trăng','soc_trang',2,8),('95','Bạc Liêu','Bac Lieu','Bac Lieu Province','Tỉnh Bạc Liêu','bac_lieu',2,8),('96','Cà Mau','Ca Mau','Ca Mau Province','Tỉnh Cà Mau','ca_mau',2,8);
 /*!40000 ALTER TABLE `province` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shipping`
+--
+
+DROP TABLE IF EXISTS `shipping`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shipping` (
+  `_id` varchar(36) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shipping`
+--
+
+LOCK TABLES `shipping` WRITE;
+/*!40000 ALTER TABLE `shipping` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shipping` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -678,4 +788,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-03 13:52:56
+-- Dump completed on 2023-04-07  6:47:55
