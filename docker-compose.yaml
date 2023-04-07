@@ -8,17 +8,6 @@ services:
     restart: always
     ports:
       - "3000:3000"
-    environment: DATABASE_TYPE=${DB_TYPE}
-      DATABASE_PORT=${DB_PORT}
-      DATABASE_PASSWORD=${DB_PASSWORD}
-      DATABASE_USERNAME=${DB_USERNAME}
-      DATABASE_NAME=${DB_NAME}
-      DATABASE_HOST=${DB_HOST}
-      JWT_SECRET=${JWT_SECRET}
-      JWT_ACCESS_TOKEN_EXPORE=${JWT_ACCESS_TOKEN_EXPORE}
-      JWT_REFRESH_TOKEN_EXPIRE=${JWT_REFRESH_TOKEN_EXPIRE}
-      REDIS_HOST=${REDIS_HOST}
-      REDIS_PORT=${REDIS_HOST}
     env_file: ./docker_env/server.env
     depends_on:
       - mysql
@@ -27,11 +16,6 @@ services:
     image: mysql:latest
     container_name: database_nienluan1
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_USER: ${USER}
-      MYSQL_PASSWORD: ${PASSWORD}
     env_file:
       - ./docker_env/mysql.env
     ports:

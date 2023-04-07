@@ -1,5 +1,5 @@
 FROM node:18.15.0-alpine3.17
-RUN apk update && apk install yarn
+RUN apk update && apk add yarn
 WORKDIR /app
 
 COPY package*.json ./
