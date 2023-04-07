@@ -6,6 +6,9 @@ interface AdminstrativeUnit {
 export interface IAddress {
   _id: number
   detail: string
+  createdAt: number
+  name: string
+  phone: string
   ward: {
     code: number
     name: string

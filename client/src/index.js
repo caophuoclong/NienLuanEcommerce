@@ -21,61 +21,68 @@ import ResetPassword from './pages/ResetPassword';
 import ProductView from './pages/ProductView';
 import SearchProduct from './pages/SearchProduct';
 import { UserService } from './services/user';
-import { getMe } from './app/slices/home.slice';
+import { getHome, getMe } from './app/slices/home.slice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import User from './pages/User';
 import Purchase from './pages/User/Purchase';
 import Profile from './pages/User/Profile';
 import Checkout from './pages/Checkout';
 import 'react-credit-cards/es/styles-compiled.css';
-
+import { getCart } from './app/slices/cart.slice';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <DefaultLayout children={<Home />} />,
+    element: <DefaultLayout children={<Outlet />} />,
     children: [
-      
+      // default path is home
+      {
+        path: '/',
+        element: <Home />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: '/product/:id',
+        element: <ProductView />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: 'search',
+        element: <SearchProduct />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: '/user',
+        element: <Outlet />,
+        children: [
+          {
+            path: 'purchase',
+            element: <Purchase />,
+            errorElement: <NotFound />,
+          },
+          {
+            path: 'profile',
+            element: <Profile />,
+            errorElement: <NotFound />,
+          },
+        ],
+        errorElement: <NotFound />,
+      },
+      {
+        path: 'cart',
+        element: <Cart />,
+        errorElement: <NotFound />,
+      },
     ],
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/product/:id',
-    element: <DefaultLayout children={<ProductView />} />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: 'search',
-    element: <DefaultLayout children={<SearchProduct />} />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/user",
-    element: <DefaultLayout children={<Outlet/>}/>,
-    children: [{
-      path: "purchase",
-      element: <Purchase/>,
-      errorElement: <NotFound/>
-    }, {
-      path: "profile",
-      element: <Profile/>,
-      errorElement: <NotFound/>
-    }],
-    errorElement: <NotFound/>
-  },
-  {
-    path: 'cart',
-    element: <DefaultLayout children={<Cart />}/>,
     errorElement: <NotFound />,
   },
   {
     path: 'checkout',
     element: <Checkout />,
     errorElement: <NotFound />,
-  }
-  ,
+  },
   {
     path: '/signin',
     element: <LogIn />,
@@ -106,7 +113,6 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
     errorElement: <NotFound />,
   },
-  
 ]);
 const App = () => {
   const dispatch = useAppDispatch();
@@ -117,17 +123,22 @@ const App = () => {
     dispatch(setDarkMode(darkMode));
     changeLanguage(lang);
   }, []);
-  useEffect(() => {
-    (async () => {
-      const access_token = window.localStorage.getItem('access_token');
-      console.log(access_token);
-      if (access_token !== "undefined" && access_token !== null && access_token !== undefined) {
-        dispatch(getMe());
-        // const unwrap = 
-        // const result = unwrapResult(unwrap);
-      }
-    })();
-  }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const access_token = window.localStorage.getItem('access_token');
+  //     console.log(access_token);
+  //     if (
+  //       access_token !== 'undefined' &&
+  //       access_token !== null &&
+  //       access_token !== undefined
+  //     ) {
+  //       dispatch(getMe());
+  //       // const unwrap =
+  //       // const result = unwrapResult(unwrap);
+  //     }
+  //   })();
+  // }, []);
   return <RouterProvider router={router} />;
 };
 root.render(

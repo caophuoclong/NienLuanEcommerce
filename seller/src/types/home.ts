@@ -8,7 +8,7 @@ export enum itemId {
 export enum SalesSubItemId {
   PRODUCTS = "PRODUCTS",
   CATEGORIES = "CATEGORIES",
-  INVOICES = "INVOICES",
+  ORDERS = "ORDERS",
   COUPON = "COUPON",
 }
 export enum RatingSubItemId {
@@ -20,7 +20,7 @@ export type selectedPage =
   | "home"
   | "products"
   | "categories"
-  | "invoices"
+  | "orders"
   | "reviews"
   | "ratings"
   | "profile"

@@ -226,11 +226,11 @@ export default function Checkout() {
   // 2 false true => true
   // 3 false false => false
 
-  useEffect(() => {
-    if (cart.every((i) => !i.selected)) {
-      navigate('/cart');
-    }
-  }, [cart]);
+  // useEffect(() => {
+  //   if (cart.every((i) => !i.selected)) {
+  //     navigate('/cart');
+  //   }
+  // }, [cart]);
   return (
     <CheckoutContext.Provider value={[state, dispatch]}>
       <div className="px-8">

@@ -17,7 +17,6 @@ const publicApi = [
 
 ]
 axiosClient.interceptors.request.use((config)=>{
-    console.log(config.url);
     const isPublic = publicApi.find(item => item.test(config.url));
     if(isPublic) return config;
     const token = localStorage.getItem("access_token")

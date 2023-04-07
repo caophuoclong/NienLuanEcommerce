@@ -74,10 +74,10 @@ export default function Product(props) {
       to={`/product/${props.name}.${props._id}`}
       style={{
         width: `calc(100% / ${props.perRow} - 1rem)`,
-        height: '300px',
+        minHeight: '300px',
       }}
       ref={refProduct}
-      className="box-border rounded-md rounded-b-none border-red-500 bg-white pb-2  hover:scale-105 hover:border"
+      className="box-border rounded-md rounded-b-none bg-white pb-2  hover:scale-105"
     >
       {/* <img
         src={thumbnail}
@@ -99,11 +99,14 @@ export default function Product(props) {
         width={'100%'}
       >
         {images.map((imgg, i) => (
-          <div
-            key={i}
-            className="flex h-[200px] items-center justify-center bg-cover bg-no-repeat"
+           <div
+            className="rounded-lg bg-no-repeat"
             style={{
               backgroundImage: `url(${parseUrl(imgg)})`,
+              backgroundPosition: '50% 50%',
+              backgroundSize: `${"300px"} ${"300px"}`,
+              width: "300px",
+              height: "300px",
             }}
           ></div>
         ))}

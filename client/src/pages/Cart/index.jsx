@@ -4,7 +4,6 @@ import { BiTrash } from 'react-icons/bi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   emptySelected,
-  getCart,
   selectAllItem,
 } from '../../app/slices/cart.slice';
 import Item from './Item';

@@ -17,10 +17,12 @@ import {
 import { SAVE_INFORMATION, SET_CARD_TYPE } from '../actionType';
 import { useAppSelector } from '../../../app/hooks';
 import { OrderService } from '../../../services/order';
+import { useNavigate } from 'react-router-dom';
 
 export default function Process({ handleShowSummary }) {
   const { t } = useTranslation();
   const [state, dispatch] = useContext(CheckoutContext);
+  const navigate = useNavigate()
   const cart = useAppSelector((state) => state.cart.cart);
   const [confirmData, setConfirmdata] = useState({});
   const [tabElements, setTabElements] = useState([
@@ -143,7 +145,14 @@ export default function Process({ handleShowSummary }) {
       handleChangeTab('confirm');
       handleShowSummary(false);
     } catch (error) {
-      alert('Checkout failed');
+      if(error.response.status === 400){
+        const message = error.response.data.message;
+        alert(message);
+        navigate("/cart");
+      }else{
+        alert('Checkout failed');
+      }
+      console.log(error);
     }
   };
   return (

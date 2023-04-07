@@ -21,9 +21,18 @@ export const CartSlice = createSlice({
       };
     },
     removeCartItem: (state, action) => {
+      // const tmpCart = [...state.cart];
+      // action.payload.forEach((item) => {
+      //   const index = tmpCart.findIndex((c) => c.product.sku === item.productVariantDetail.sku);
+      //   console.log(index);
+      //   if (index !== -1) {
+      //     tmpCart.splice(index, 1);
+      //   }
+      // });
+      const listSku = action.payload.map(x => x.product.sku);
       return {
         ...state,
-        cart: state.cart.filter((c) => c._id !== action.payload),
+        cart: state.cart.filter((cartItem)=> !listSku.includes(cartItem.product.sku)),
       };
     },
     selectItem: (state, action) => {

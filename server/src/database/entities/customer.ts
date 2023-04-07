@@ -14,9 +14,10 @@ import { AuthEntity } from './auth.entity';
 import Address from './address';
 import { Product } from './product';
 import { Cart } from './cart/index';
-import { CreditCart } from './creditCart';
 import { Payment } from './payment';
 import { Coupon } from './coupon';
+import { Order } from './order';
+import { CreditCard } from './creditCard';
 
 @Entity()
 export class Customer {
@@ -73,8 +74,8 @@ export class Customer {
   @OneToOne(() => Cart, (cart) => cart.customer)
   @JoinColumn()
   cart: Cart;
-  @OneToMany(() => CreditCart, (creditCart) => creditCart.customer)
-  creditCards: CreditCart[];
+  @OneToMany(() => CreditCard, (creditCard) => creditCard.customer)
+  creditCards: CreditCard[];
   @OneToMany(() => Payment, (payment) => payment.customer)
   payments: Payment[];
   @ManyToMany(() => Coupon, (coupon) => coupon.user)
@@ -83,7 +84,8 @@ export class Customer {
     default: 'https://picsum.photos/40',
   })
   avatar: string;
-
+  @OneToMany(() => Order, (order) => order.customer)
+  orders: Order[];
   @AfterUpdate()
   afterUpdate() {
     this.updatedAt = Date.now();
