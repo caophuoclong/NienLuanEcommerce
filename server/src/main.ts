@@ -40,9 +40,6 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'public', 'images'), {
     prefix: '/images/',
   });
-  // app.use((req, res: Restponse, next)=>{
-  //   res
-  // })
   await app.listen(3003);
 }
 bootstrap();
