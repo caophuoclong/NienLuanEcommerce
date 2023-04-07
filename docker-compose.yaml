@@ -19,7 +19,7 @@ services:
     env_file:
       - ./docker_env/mysql.env
     ports:
-      - "3309:3306"
+      - "3306:3306"
     volumes:
       - ./mysql:/var/lib/mysql
       - ./database/backup.sql:/docker-entrypoint-initdb.d/backup.sql
