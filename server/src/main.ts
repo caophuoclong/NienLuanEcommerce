@@ -21,7 +21,6 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()));
   SwaggerModule.setup('api', app, documet);
   app.use(cookieParser());
-
   app.enableCors({
     origin: [
       'http://localhost:3000',
