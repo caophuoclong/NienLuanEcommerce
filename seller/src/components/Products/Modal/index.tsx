@@ -28,7 +28,7 @@ import {
 import React, { useEffect, useState } from "react"
 import { FaTimes } from "react-icons/fa"
 import { ICategory } from "../../../types/category"
-import { IProduct } from "../../../types/product"
+import { IProduct, ProductStatus } from "../../../types/product"
 import { useAppSelector, useDebounce } from "../../../app/hooks"
 import { CategoryService } from "../../../service/api/category"
 import RenderCategoryResult from "./Information/RenderCategoryResult"
@@ -39,13 +39,16 @@ import Description from "./Information/Description"
 import WithoutVariant from "./Variant/WithoutVariant"
 import WithVariant from "./Variant/WithVariant"
 import { useAppDispatch } from "../../../app/hooks"
-import { setEmptyNewProduct, updateProduct } from "../../../features/product"
+import {
+  setEmptyNewProduct,
+  setProductStatus,
+  updateProduct,
+} from "../../../features/product"
 import { emptyCategory } from "../../../types/category"
 import Information from "./Information"
 type Props = {
   name: string
   isOpen: boolean
-  onClose: () => void
   onSubmit: (product: IProduct) => void
 }
 export const defaulKeysHeader = [
@@ -66,23 +69,20 @@ enum Variant {
   WITH_VARIANT = "WITH_VARIANT",
   DEFAULT = "DEFAULT",
 }
-export default function ModalProduct({
-  name,
-  isOpen,
-  onClose,
-  onSubmit,
-}: Props) {
+export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
   const dispatch = useAppDispatch()
   const product = useAppSelector((state) => state.productSlice.product)
+  console.log("🚀 ~ file: index.tsx:77 ~ product:", product)
   const handleSubmit = () => {
     onSubmit(product)
   }
+  console.log(product._id !== "" && product.hasVariant === true)
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
+        dispatch(setProductStatus(ProductStatus.HIDE))
         dispatch(setEmptyNewProduct())
-        onClose()
       }}
       size="3xl"
     >
@@ -116,8 +116,22 @@ export default function ModalProduct({
                   }}
                 >
                   <Stack direction={"row"} spacing={"16px"}>
-                    <Radio value={"false"}>Default</Radio>
-                    <Radio value={"true"}>WithVariant</Radio>
+                    <Radio
+                      isDisabled={
+                        product._id !== "" && product.hasVariant === true
+                      }
+                      value={"false"}
+                    >
+                      Default
+                    </Radio>
+                    <Radio
+                      isDisabled={
+                        product._id !== "" && product.hasVariant === false
+                      }
+                      value={"true"}
+                    >
+                      WithVariant
+                    </Radio>
                   </Stack>
                 </RadioGroup>
                 {/* <Meta

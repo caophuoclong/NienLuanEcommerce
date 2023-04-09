@@ -32,4 +32,13 @@ export class ProductService {
   static async editProduct(product: IProduct) {
     return (await axiosClient.put("/product", product)).data
   }
+  static async updateVariantDetailsProduct(
+    data: {
+      sku: string
+      price: number
+      stock: number
+    }[]
+  ) {
+    return (await axiosClient.put("/product/variantDetail", data)).data
+  }
 }
