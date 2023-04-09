@@ -27,6 +27,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import multer, { diskStorage, Multer } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
+import { ProductVariantDetail } from 'src/database/entities/product/variant/detail';
 @Controller('product')
 @UseGuards(RolesGuard)
 @ApiTags('Product')
@@ -104,6 +105,10 @@ export class ProductController {
     const { page = 0 } = query;
     const result = await this.productService.getShopProducts(_id, page, skip);
     return result;
+  }
+  @Put('/variantDetail')
+  async updateVariantDetail(@Body() body: ProductVariantDetail[]) {
+    return this.productService.updateVariantDetail(body);
   }
   @Post('/image')
   @UseInterceptors(
