@@ -636,4 +636,7 @@ export class ProductService {
       products.map(async (pr) => await this._getProdctInformation(pr)),
     );
   }
+  async updateVariantDetail(data: ProductVariantDetail[]) {
+    return await this.productVariantDetailRepository.save(data);
+  }
 }

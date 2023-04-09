@@ -21,12 +21,14 @@ async function bootstrap() {
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()));
   SwaggerModule.setup('api', app, documet);
   app.use(cookieParser());
-
   app.enableCors({
     origin: [
       'http://localhost:3000',
       'http://localhost:3005',
       'https://sellerpage.pages.dev',
+      'https://shop.shopifyify.shop',
+      'https://shopifyify.shop',
+      'https://www.shopifyify.shop',
     ],
     credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTION, PATCH',
@@ -37,9 +39,6 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'public', 'images'), {
     prefix: '/images/',
   });
-  // app.use((req, res: Restponse, next)=>{
-  //   res
-  // })
   await app.listen(3003);
 }
 bootstrap();

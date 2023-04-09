@@ -14,7 +14,7 @@ import {
 import React, { useEffect, useState } from "react"
 
 import ProductHeader from "./ProductHeader"
-import { IProduct } from "../../types/product"
+import { IProduct, ProductStatus } from "../../types/product"
 import Product from "./Product"
 import ModalProduct from "./Modal"
 import { ProductService } from "../../service/api/product"
@@ -37,10 +37,13 @@ import home, {
 import {
   addProductToProducts,
   createProduct,
+  emptyListVariantDetail,
   getMyProduct,
   setEmptyNewProduct,
+  setProductStatus,
   updateProduct,
   updateProductInProducts,
+  updateVariantDetailInProducts,
 } from "../../../src/features/product"
 
 type Props = {}
@@ -50,43 +53,19 @@ export default function Products({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const homeState = useAppSelector((state) => state.homeSlice)
   const productState = useAppSelector((state) => state.productSlice)
+  const productStatus = productState.product.status
   const dispatch = useAppDispatch()
-  // const [state, dispatch] = useReducer(reducer, initial)
-  // const [productSelected, setProductSelected] = useState<IProduct>(
-  //   {} as IProduct
-  // )
-  const [productAction, setProductAction] = useState<
-    "create" | "edit" | "none"
-  >("none")
-  // pare product meta
-  // const [products, setProducts] = useState<Array<IProduct>>([])
   useEffect(() => {
-    // ;(async () => {
-    //   const newProdcuts = await ProductService.getMyProducts()
-    //   setProducts(newProdcuts)
-    // })()
     const uwrawp = dispatch(getMyProduct())
   }, [])
   const onEditProduct = async (product: IProduct) => {
-    setModalName("Edit Product")
-    setProductAction("edit")
     const newProduct = (await ProductService.getProduct(product._id)).data
-    onOpen()
     dispatch(updateProduct(newProduct))
-    // setProducts([
-    //   ...products.filter((p) => p._id !== newProduct._id),
-    //   newProduct,
-    // ])
-  }
-  const handleClose = () => {
-    setModalName("")
-    setProductAction("none")
-    onClose()
+    dispatch(setProductStatus(ProductStatus.UPDATE))
   }
   const onSubmit = async (product: IProduct) => {
-    switch (productAction) {
-      case "create":
-        console.log(product)
+    switch (productStatus) {
+      case ProductStatus.CREATE:
         const { variants } = product
         const copyVariants = await Promise.all(
           variants.map(async (va) => {
@@ -122,15 +101,39 @@ export default function Products({}: Props) {
           })
         )
         break
-      case "edit":
-        const res = await ProductService.editProduct(product)
-        dispatch(updateProductInProducts(res))
+      case ProductStatus.UPDATE:
+        if (productState.updateVariantDetailList.length > 0) {
+          const x = await ProductService.updateVariantDetailsProduct(
+            productState.updateVariantDetailList
+          )
+          dispatch(updateVariantDetailInProducts(x))
+        }
+        // const res = await ProductService.editProduct(product)
+        // console.log("🚀 ~ file: index.tsx:107 ~ onSubmit ~ res:", res)
         alert("Update success!")
+        dispatch(setProductStatus(ProductStatus.HIDE))
+        dispatch(emptyListVariantDetail())
         break
       default:
         return
     }
   }
+  useEffect(() => {
+    if (
+      productStatus === ProductStatus.CREATE ||
+      productStatus === ProductStatus.UPDATE
+    ) {
+      if (productStatus === ProductStatus.CREATE) {
+        setModalName("Create product")
+      } else {
+        setModalName("Update Product")
+      }
+      onOpen()
+    } else {
+      onClose()
+      setModalName("")
+    }
+  }, [productStatus])
   // useEffect(() => {
   //   const sortType = homeState.sort.name
   //   const newProducts = [...products]
@@ -289,13 +292,7 @@ export default function Products({}: Props) {
 
   return (
     <Box h="100%">
-      <ProductHeader
-        onAddProduct={() => {
-          setModalName("Add Product")
-          setProductAction("create")
-          onOpen()
-        }}
-      />
+      <ProductHeader />
       <TableContainer overflowY={"auto"} h="92%">
         <Table>
           <Thead bgColor={"#f3f4f6"} position="sticky" top={0} zIndex="docked">
@@ -423,14 +420,7 @@ export default function Products({}: Props) {
           </Tbody>
         </Table>
       </TableContainer>
-      <ModalProduct
-        name={modalName}
-        isOpen={isOpen}
-        onClose={handleClose}
-        onSubmit={onSubmit}
-        // product={productState.newProduct}
-        // unSelectProduct={() => dispatch(setEmptyNewProduct())}
-      />
+      <ModalProduct name={modalName} isOpen={isOpen} onSubmit={onSubmit} />
     </Box>
   )
 }

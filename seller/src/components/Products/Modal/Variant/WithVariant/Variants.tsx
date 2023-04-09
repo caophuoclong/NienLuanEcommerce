@@ -5,17 +5,28 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri"
 import { useAppDispatch, useAppSelector } from "../../../../../app/hooks"
 import { updateProduct } from "../../../../../features/product"
 
-type Props = {
-  handleAddVariant: () => void
-}
+type Props = {}
 
-export default function Variants({ handleAddVariant }: Props) {
+export default function Variants({}: Props) {
   const [tmpOption, setTmpOption] = useState<string>("")
   const [isCollapseVariant, setIsCollapseVariant] = useState(false)
   const variants = useAppSelector(
     (state) => state.productSlice.product.variants
   )
   const dispatch = useAppDispatch()
+  const handleAddVariant = () => {
+    const variant = {
+      type: "",
+      options: [],
+    }
+    const newVariants = variants ? [...variants] : []
+    newVariants.push(variant)
+    dispatch(
+      updateProduct({
+        variants: newVariants,
+      })
+    )
+  }
   return (
     <Box display={"flex"} my=".5rem" justifyContent={"start"}>
       <Button

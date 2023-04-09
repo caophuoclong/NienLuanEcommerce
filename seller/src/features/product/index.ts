@@ -1,10 +1,15 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
-import { IProduct } from "../../types/product"
+import { IProduct, ProductStatus } from "../../types/product"
 import { emptyCategory } from "../..//types/category"
 import { ProductService } from "../../service/api/product"
 interface ProductSlice {
   product: IProduct
   products: IProduct[]
+  updateVariantDetailList: Array<{
+    sku: string
+    price: number
+    stock: number
+  }>
 }
 export const createProduct = createAsyncThunk(
   "create product",
@@ -36,10 +41,12 @@ export const emptyProduct: IProduct = {
     type: "link",
     images: [],
   },
+  status: ProductStatus.HIDE,
 }
 const initialState: ProductSlice = {
   product: emptyProduct,
   products: [],
+  updateVariantDetailList: [],
 }
 export const getMyProduct = createAsyncThunk("Get my product", () => {
   return ProductService.getMyProducts()
@@ -82,6 +89,65 @@ export const ProductSlice = createSlice({
         ],
       }
     },
+    setProductStatus(state, action: PayloadAction<ProductStatus>) {
+      return {
+        ...state,
+        product: {
+          ...state.product,
+          status: action.payload,
+        },
+      }
+    },
+    updateVariantDetailProduct: (
+      state,
+      action: PayloadAction<{
+        sku: string
+        price: number
+        stock: number
+      }>
+    ) => {
+      const index = state.updateVariantDetailList.findIndex(
+        (x) => x.sku === action.payload.sku
+      )
+      if (index !== -1) {
+        state.updateVariantDetailList[index] = action.payload
+      } else {
+        state.updateVariantDetailList.push(action.payload)
+      }
+    },
+    emptyListVariantDetail: (state) => {
+      state.updateVariantDetailList = []
+    },
+    updateVariantDetailInProducts: (
+      state,
+      action: PayloadAction<
+        {
+          sku: string
+          price: number
+          stock: number
+        }[]
+      >
+    ) => {
+      return {
+        ...state,
+        products: state.products.map((x) => {
+          return {
+            ...x,
+            variantDetails: x.variantDetails.map((y) => {
+              const index = action.payload.findIndex((z) => z.sku === y.sku)
+              if (index !== -1) {
+                return {
+                  ...y,
+                  price: action.payload[index].price,
+                  stock: action.payload[index].stock,
+                }
+              }
+              return y
+            }),
+          }
+        }),
+      }
+    },
     // setProduct(state, action: PayloadAction<IProduct>) {
     //   return {
     //     ...state,
@@ -116,5 +182,9 @@ export const {
   addProductToProducts,
   updateProductInProducts,
   setEmptyNewProduct,
+  setProductStatus,
+  updateVariantDetailProduct,
+  emptyListVariantDetail,
+  updateVariantDetailInProducts,
 } = ProductSlice.actions
 export default ProductSlice.reducer

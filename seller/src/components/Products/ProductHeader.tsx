@@ -6,13 +6,15 @@ import { HiSearch } from "react-icons/hi"
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 import { RiFilterFill, RiFilterOffFill } from "react-icons/ri"
 import ModalProduct from "./Modal"
+import { useAppDispatch } from "../../app/hooks"
+import { setProductStatus } from "../../features/product"
+import { ProductStatus } from "../../types/product"
 
-type Props = {
-  onAddProduct: () => void
-}
+type Props = {}
 
-export default function ProductHeader({ onAddProduct }: Props) {
+export default function ProductHeader({}: Props) {
   const [isFilter, setIsFilter] = useState(false)
+  const dispatch = useAppDispatch()
   return (
     <Box display={"flex"} p="1rem" h="8%">
       <Box>
@@ -35,7 +37,7 @@ export default function ProductHeader({ onAddProduct }: Props) {
       {/* Last */}
       <Box ml="auto" display={"flex"} alignItems="center" gap="1rem">
         <Box
-          onClick={onAddProduct}
+          onClick={() => dispatch(setProductStatus(ProductStatus.CREATE))}
           bg="#1f1e13"
           rounded="lg"
           p=".5rem"

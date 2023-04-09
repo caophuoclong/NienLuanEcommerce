@@ -16,7 +16,12 @@ import React, { useEffect, useState } from "react"
 import { FaStore } from "react-icons/fa"
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri"
 import { useAppSelector, useAppDispatch } from "../../../../../app/hooks"
-import { updateProduct } from "../../../../../features/product"
+import {
+  updateProduct,
+  updateVariantDetailProduct,
+} from "../../../../../features/product"
+import { ProductService } from "../../../../../service/api/product"
+import { ProductStatus } from "../../../../../types/product"
 import { parseUrl } from "../../../../../utils"
 
 type Props = {}
@@ -31,7 +36,6 @@ export default function VariantList({}: Props) {
   const variants = product.variants
   const dispatch = useAppDispatch()
   const variantDetails = product.variantDetails
-
   const [image, setImage] = useState<{
     key: string
     data: File
@@ -40,8 +44,12 @@ export default function VariantList({}: Props) {
     if (variants.length < 1) {
       return
     }
-    const isExist = product.variantDetails
-    if (true) {
+    // isExist in database
+    const isExist: Array<number> = []
+    variants.forEach(({ type, options }) =>
+      options.forEach((opt) => isExist.push(opt._id))
+    )
+    if (!isExist.every((i) => i !== undefined && i !== -1)) {
       const variantDetails: Array<any> = []
       if (variants.length == 1) {
         variants[0].options.forEach((opt) => {
@@ -112,30 +120,8 @@ export default function VariantList({}: Props) {
     }
   }
   // useEffect(() => {
-  //   if (image) {
-  //     const url = URL.createObjectURL(image.data)
-  //     const variant = variants[0]
-
-  //     if (variantDetails) {
-  //       const { images } = variantDetails
-  //       dispatch(
-  //         updateProduct({
-  //           variantDetails: {
-  //             ...variantDetails,
-  //             images: {
-  //               ...images,
-  //               [variant.type]: {
-  //                 ...images[variant.type],
-  //                 [image.key]: url,
-  //               },
-  //             },
-  //           },
-  //         })
-  //       )
-  //     }
-  //   }
-  //   setImage(null)
-  // }, [image])
+  //   console.log(variantDetails)
+  // }, [variantDetails])
   return (
     <Box display={"flex"} my=".5rem" justifyContent={"start"}>
       <Button
@@ -165,6 +151,7 @@ export default function VariantList({}: Props) {
                 children="$"
               />
               <Input
+                disabled={product.status === ProductStatus.UPDATE}
                 placeholder="EnterPrice"
                 value={common.price}
                 type="number"
@@ -184,6 +171,7 @@ export default function VariantList({}: Props) {
                 children={<FaStore />}
               />
               <Input
+                disabled={product.status === ProductStatus.UPDATE}
                 placeholder="EnterStock"
                 type="number"
                 value={common.stock}
@@ -196,7 +184,12 @@ export default function VariantList({}: Props) {
               />
             </InputGroup>
 
-            <Button onClick={onApplyToAll} w="20%" size="md">
+            <Button
+              isDisabled={product.status === ProductStatus.UPDATE}
+              onClick={onApplyToAll}
+              w="20%"
+              size="md"
+            >
               AppyToAll
             </Button>
           </Box>
@@ -248,6 +241,8 @@ export default function VariantList({}: Props) {
                                 htmlFor={`addImage_${va.value}`}
                                 as="label"
                                 height="100px"
+                                w={"100px"}
+                                backgroundSize="100px 100px"
                                 borderWidth="1px"
                                 borderColor={"black"}
                                 borderStyle={"dashed"}
@@ -280,6 +275,18 @@ export default function VariantList({}: Props) {
                                         vd.sku ===
                                           `${product._id}_${va._id}_${variant._id}`
                                       ) {
+                                        if (
+                                          product.status ===
+                                          ProductStatus.UPDATE
+                                        ) {
+                                          dispatch(
+                                            updateVariantDetailProduct({
+                                              sku: vd.sku,
+                                              stock: vd.stock,
+                                              price: +value,
+                                            })
+                                          )
+                                        }
                                         return {
                                           ...vd,
                                           price: +value,
@@ -317,6 +324,18 @@ export default function VariantList({}: Props) {
                                         vd.sku ===
                                           `${product._id}_${va._id}_${variant._id}`
                                       ) {
+                                        if (
+                                          product.status ===
+                                          ProductStatus.UPDATE
+                                        ) {
+                                          dispatch(
+                                            updateVariantDetailProduct({
+                                              sku: vd.sku,
+                                              price: vd.price,
+                                              stock: +value,
+                                            })
+                                          )
+                                        }
                                         return {
                                           ...vd,
                                           stock: +value,

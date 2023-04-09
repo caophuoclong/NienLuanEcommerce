@@ -42,7 +42,7 @@ export default function WithoutVariant({}: Props) {
               <Td key={index}>
                 <Input
                   type="number"
-                  value={product[variant] as number}
+                  value={product[variant] ? (product[variant] as number) : 0}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     dispatch(
                       updateProduct({

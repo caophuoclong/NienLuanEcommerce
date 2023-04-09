@@ -1,5 +1,9 @@
 import { ICategory } from "./category"
-
+export enum ProductStatus {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE",
+  HIDE = "HIDE",
+}
 export interface IProduct {
   _id: string
   name: string
@@ -35,6 +39,7 @@ export interface IProduct {
       type?: string
     }[]
   }
+  status: ProductStatus
 }
 export interface IProductVariant {
   _id?: number

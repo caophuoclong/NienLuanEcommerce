@@ -19,23 +19,10 @@ export default function WithVariant({}: Props) {
   const variants = useAppSelector(
     (state) => state.productSlice.product.variants
   )
-  const dispatch = useAppDispatch()
-  const handleAddVariant = () => {
-    const variant = {
-      type: "",
-      options: [],
-    }
-    const newVariants = variants ? [...variants] : []
-    newVariants.push(variant)
-    dispatch(
-      updateProduct({
-        variants: newVariants,
-      })
-    )
-  }
+
   return (
     <React.Fragment>
-      <Variants handleAddVariant={handleAddVariant} />
+      <Variants />
       <VariantList />
     </React.Fragment>
   )

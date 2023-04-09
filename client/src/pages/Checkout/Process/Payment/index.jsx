@@ -6,15 +6,16 @@ export default function Payment() {
   const [state, dispatch] = useContext(CheckoutContext);
   const listMethod = [
     {
-      id: 'COD',
-      name: 'Cash on delivery',
-      developing: false
-    },
-    {
       id: 'CREDIT_CARD',
       name: 'Credit card',
       developing: false,
     },
+    {
+      id: 'COD',
+      name: 'Cash on delivery',
+      developing: true
+    },
+    
     {
       id: "BANK_TRANSFER",
       name: "Bank transfer",
