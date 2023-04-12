@@ -6,5 +6,8 @@ export const OrderService = {
     },
     getExistingCard: ()=>{
         return axiosClient.get("/order/card");
+    },
+    getAllOrders: ()=>{
+        return axiosClient.get("/order") 
     }
 }

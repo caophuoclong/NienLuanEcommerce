@@ -42,3 +42,4 @@ services:
       - 6379:6379
     volumes:
       - ./redis:/data
+      - ./redis.conf:/etc/redis/redis.conf

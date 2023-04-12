@@ -24,6 +24,14 @@ export class OrderController {
     } = request;
     return this.orderService.checkout(_id, order);
   }
+  @Patch('/')
+  updateOrderStatus(@Body() data: { _id: number; status: OrderStatus }) {
+    return this.orderService.updateOrderStatus(data._id, data.status);
+  }
+  @Get('/')
+  getAllOrders(@Req() { user: { _id } }: Request) {
+    return this.orderService.getAllOrders(_id);
+  }
   @Get('/card')
   getExistingCard(@Req() request: Request) {
     return this.orderService.getExistingCard(request.user._id);
@@ -31,9 +39,5 @@ export class OrderController {
   @Get('/shop')
   getOrdersPershop(@Req() { user: { _id } }: Request) {
     return this.orderService.getOrdersPerShop(_id);
-  }
-  @Patch('/')
-  updateOrderStatus(@Body() data: { _id: number; status: OrderStatus }) {
-    return this.orderService.updateOrderStatus(data._id, data.status);
   }
 }

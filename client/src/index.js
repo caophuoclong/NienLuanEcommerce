@@ -5,7 +5,12 @@ import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { RouterProvider, createBrowserRouter, Outlet } from 'react-router-dom';
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
 import Cart from './pages/Cart';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
@@ -29,6 +34,12 @@ import Profile from './pages/User/Profile';
 import Checkout from './pages/Checkout';
 import 'react-credit-cards/es/styles-compiled.css';
 import { getCart } from './app/slices/cart.slice';
+import AllOrders from './pages/User/Purchase/AllOrders';
+import Processing from './pages/User/Purchase/Processing';
+import Completed from './pages/User/Purchase/Completed';
+import Refunded from './pages/User/Purchase/Refunded';
+import Shipping from './pages/User/Purchase/Shipping';
+import Canceled from './pages/User/Purchase/Canceled';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -59,8 +70,43 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'purchase',
-            element: <Purchase />,
-            errorElement: <NotFound />,
+            
+            element: (
+              <Purchase>
+                <Outlet />
+              </Purchase>
+            ),
+            children: [
+              {
+               
+                index: true,
+                element: <AllOrders />,
+              },
+              {
+                path: 'processing',
+                element: <Processing />,
+              },
+              {
+                path: 'completed',
+                element: <Completed />,
+              },
+              {
+                path: 'shipping',
+                element: <Shipping />,
+              },
+              {
+                path: 'canceled',
+                element: <Canceled />,
+              },
+              {
+                path: 'refunded',
+                element: <Refunded />,
+              },
+              {
+                path: '*',
+                element: <NotFound />,
+              },
+            ],
           },
           {
             path: 'profile',
