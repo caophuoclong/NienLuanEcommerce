@@ -32,7 +32,7 @@ export default function ShippingAddress() {
         .sort((a, b) => b.createdAt - a.createdAt)
         .map((item, index) => (
           <div className="flex justify-between">
-            <div key={index} className="flex gap-2">
+            <label key={index} className="gap-2 w-1/2 border-blue-300 border-2 rounded-lg p-2 cursor-pointer">
               <input
                 checked={state.address._id === item._id}
                 onChange={(e) => {
@@ -44,18 +44,15 @@ export default function ShippingAddress() {
                 name="address"
                 type="radio"
               />
-              <p className="font-bold">{item.name}</p>
-              <p>
+              <p className="font-bold text-2xl">{item.name}</p>
+              <p className="text-base">
                 {item.ward.name},{item.ward.district.name},
                 {item.ward.district.province.name}
               </p>
-              <p>{item.phone}</p>
-            </div>
-            <div className="flex gap-1">
-              <button className="text-blue-500">Edit</button>
-              <span>|</span>
-              <button className="text-red-500">Delete</button>
-            </div>
+              <p>
+                Mobile: {item.phone}</p>
+            </label>
+            
           </div>
         ))}
       <div className="">

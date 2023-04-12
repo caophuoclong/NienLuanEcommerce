@@ -211,15 +211,25 @@ export class OrderService {
       };
     });
   }
-  async getOrdersPerShop(_id: string) {
-    console.log(_id);
-    const orders = await this.orderRepository.find({
-      where: {
-        shop: {
-          _id,
+  async _getOrderPer(
+    condition:
+      | {
+          shop: {
+            _id: string;
+          };
+        }
+      | {
+          customer: {
+            _id: string;
+          };
         },
-      },
+  ) {
+    const orders = await this.orderRepository.find({
+      where: condition,
       relations: {
+        shop: {
+          auth: true,
+        },
         customer: {
           auth: true,
         },
@@ -288,6 +298,14 @@ export class OrderService {
       }),
     );
   }
+  async getOrdersPerShop(_id: string) {
+    const orders = await this._getOrderPer({
+      shop: {
+        _id,
+      },
+    });
+    return orders.map(({ shop, ...order }) => order);
+  }
   async updateOrderStatus(_id: number, status: OrderStatus) {
     const order = await this.orderRepository.findOne({
       where: {
@@ -296,5 +314,14 @@ export class OrderService {
     });
     order.status = status;
     return await this.orderRepository.save(order);
+  }
+  async getAllOrders(customerId: string) {
+    const orders = await this._getOrderPer({
+      customer: {
+        _id: customerId,
+      },
+    });
+    console.log('adfasdf');
+    return orders.map(({ customer, ...order }) => order);
   }
 }

@@ -23,7 +23,7 @@ export default function Confirm({confirm}) {
         <p>Hey <span className="font-semibold">{confirm.address.name}</span>, </p>
         <p className='font-bold text-3xl'>Your order is cofrimed</p>
         <p className="text-sm">We'll send your products as soon as possible</p>
-        <button onClick={()=>navigate("/cart")} className="bg-blue-300 rounded-md p-8 py-4 text-xl font-bold text-white my-2">CHECK STATUS</button>
+        <button onClick={()=>navigate("/user/purchase/processing")} className="bg-blue-300 rounded-md p-8 py-4 text-xl font-bold text-white my-2">CHECK STATUS</button>
     </div>
   )
 }
