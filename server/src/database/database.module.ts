@@ -3,9 +3,28 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigsModule } from 'src/configs/configs.module';
 import { AuthEntity } from './entities/auth.entity';
-import { UserEntity } from './entities/user.entity';
-import { ShopEntity } from './entities/shop.entity';
-
+import { Customer } from './entities/customer';
+import Address from './entities/address';
+import { AdministrativeRegion } from './entities/address/administrativeRegion';
+import { AdministrativeUnit } from './entities/address/administrativeUnit';
+import { Province } from './entities/address/province';
+import { District } from './entities/address/district';
+import { Ward } from './entities/address/ward';
+import { Category } from './entities/category';
+import { Product } from './entities/product';
+import { Cart } from './entities/cart';
+import { CartItem } from './entities/cart/cartItem';
+import { CreditCard } from './entities/creditCard';
+import { Payment } from './entities/payment';
+import { Coupon } from './entities/coupon';
+import { TreeCategory } from './entities/category/category_category.entity';
+import { ProductDetail } from './entities/product/detail';
+import { ProductVariantOption } from './entities/product/variant/options';
+import { ProductVariantDetail } from './entities/product/variant/detail';
+import { ProductVariant } from './entities/product/variant';
+import { Shipping } from './entities/shipping';
+import { Order } from './entities/order';
+import { OrderItem } from './entities/order/orderItem';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -17,7 +36,7 @@ import { ShopEntity } from './entities/shop.entity';
           username: string;
           password: string;
           name: string;
-          type: "mysql";
+          type: 'mysql';
         }>('database');
         return {
           type: config.type,
@@ -26,7 +45,30 @@ import { ShopEntity } from './entities/shop.entity';
           username: config.username,
           password: config.password,
           database: config.name,
-          entities: [AuthEntity, UserEntity, ShopEntity],
+          entities: [
+            AuthEntity,
+            Customer,
+            Address,
+            AdministrativeRegion,
+            AdministrativeUnit,
+            Province,
+            District,
+            Ward,
+            Category,
+            Product,
+            Cart,
+            CartItem,
+            CreditCard,
+            Payment,
+            Coupon,
+            ProductVariantOption,
+            ProductVariantDetail,
+            ProductVariant,
+            ProductDetail,
+            Shipping,
+            Order,
+            OrderItem,
+          ],
           synchronize: true,
         };
       },

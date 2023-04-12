@@ -1,7 +1,6 @@
 import { Column, Entity, Index, OneToOne, PrimaryColumn } from "typeorm";
 import { RolesEnum } from '../../enum/roles.enum';
-import { UserEntity } from './user.entity';
-import { ShopEntity } from './shop.entity';
+import { Customer } from './customer';
 
 @Entity({
     name: "auth"
@@ -37,8 +36,6 @@ export class AuthEntity{
     })
     // @Index()
     email: string
-    @OneToOne(()=> UserEntity, (u)=>u.auth)
-    user: UserEntity
-    @OneToOne(()=> ShopEntity, s => s.auth)
-    shop: ShopEntity
+    @OneToOne(()=> Customer, customer => customer.auth)
+    customer: Customer
 }

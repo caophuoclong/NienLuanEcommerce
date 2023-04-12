@@ -1,7 +1,20 @@
 export default {
-    translation:{
-        "Welcome to React": "Chào mừng đến với React và react-i18next",
-        "English": "Tiếng Anh",
-        "Vietnamese": "Tiếng Việt",
-    }
-}
+  translation: {
+    English: 'Tiếng Anh',
+    Vietnamese: 'Tiếng Việt',
+    Home: 'Trang chủ',
+    'Sign In': 'Đăng nhập',
+    'Create an Account': 'Tạo tài khoản mới',
+    username: 'Tên đăng nhập',
+    firstName: 'Tên',
+    lastName: 'Họ',
+    middleName: 'Tên đệm',
+    email: 'Email',
+    phone: 'Số điện thoại',
+    choseAvatar: 'Chọn ảnh',
+    shipping_address: 'Địa chỉ nhận hàng',
+    shipping_method: 'Phương thức thanh toán',
+    payment: 'Thanh toán',
+    confirm: 'Xác nhận',
+  },
+};
