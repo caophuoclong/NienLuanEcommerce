@@ -30,7 +30,24 @@ export class AuthService {
   ) {}
   async registration(dto: RegistrationDTO) {
     try {
-      const { firstName, lastName, middleName, shop_name, ...authDTO } = dto;
+      const { firstName, lastName, middleName, shop_name, dob, ...authDTO } =
+        dto;
+      const existAuth = await this.authRepository.findOne({
+        where: [{ username: authDTO.username }, { email: authDTO.email }],
+      });
+      if (existAuth) {
+        if (existAuth.username === authDTO.username) {
+          throw new BadRequestException({
+            name: 'username',
+            message: 'Username is exist',
+          });
+        } else {
+          throw new BadRequestException({
+            name: 'email',
+            message: 'Email is exist',
+          });
+        }
+      }
       const auth = await this.authRepository.save({
         ...authDTO,
         password: await hashPassword(authDTO.password),
@@ -41,6 +58,7 @@ export class AuthService {
             firstName,
             lastName,
             middleName,
+            dob,
           });
           return this.createConfirmation(auth);
         case RolesEnum.SHOP:
@@ -54,7 +72,8 @@ export class AuthService {
           throw new BadRequestException('Role is not supported');
       }
     } catch (err) {
-      throw new BadRequestException(err.message);
+      console.log(err);
+      throw new BadRequestException(err.response);
     }
   }
   async loginSeller(dto: LoginDTO) {
@@ -293,6 +312,8 @@ export class AuthService {
     auth.active = true;
     this.authRepository.save(auth);
     this.cacheService.del(token);
-    return 'Active account successful!';
+    return {
+      role: auth.role,
+    };
   }
 }

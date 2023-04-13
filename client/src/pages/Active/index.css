@@ -1,0 +1,25 @@
+.hexagon-shape {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  /* add slash at the end of line to see the rhombus *
+        outline: solid 1px red;/**/
+  width: 100px;
+  height: 100px;
+  transform: rotate(-30deg) skewX(30deg) scaleY(.866);
+}
+.hexagon-shape::before {
+  position: absolute;
+  right: 6.7%;
+  bottom: 0;
+  left: 6.7%;
+  top: 0;
+  transform: scaleY(1.155) skewX(-30deg) rotate(30deg);
+  font-size: 50px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}

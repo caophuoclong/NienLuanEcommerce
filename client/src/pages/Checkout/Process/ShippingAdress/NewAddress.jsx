@@ -22,9 +22,8 @@ export default function NewAddress() {
       listProvince,
       listDistrict,
       listWard,
-      
-      address: { ward, province, district, detail,name,
-      phone },
+
+      address: { ward, province, district, detail, name, phone },
     },
     dispatch,
   ] = useContext(CheckoutContext);
@@ -140,7 +139,7 @@ export default function NewAddress() {
         </label>
         <textarea
           id="addressDetail"
-          className="w-full resize-none rounded-md border outline-none ring-0 p-2"
+          className="w-full resize-none rounded-md border p-2 outline-none ring-0"
           placeholder="Address Detail"
           rows={3}
           draggable={false}

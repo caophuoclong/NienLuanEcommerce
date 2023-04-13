@@ -117,9 +117,10 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
                 >
                   <Stack direction={"row"} spacing={"16px"}>
                     <Radio
-                      isDisabled={
-                        product._id !== "" && product.hasVariant === true
-                      }
+                      // isDisabled={
+                      //   product._id !== "" && product.hasVariant === true
+                      // }
+                      isDisabled={true}
                       value={"false"}
                     >
                       Default

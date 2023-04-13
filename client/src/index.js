@@ -40,7 +40,8 @@ import Completed from './pages/User/Purchase/Completed';
 import Refunded from './pages/User/Purchase/Refunded';
 import Shipping from './pages/User/Purchase/Shipping';
 import Canceled from './pages/User/Purchase/Canceled';
-
+import Active from './pages/Active';
+import { AuthService } from './services/auth';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -70,7 +71,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'purchase',
-            
+
             element: (
               <Purchase>
                 <Outlet />
@@ -78,7 +79,6 @@ const router = createBrowserRouter([
             ),
             children: [
               {
-               
                 index: true,
                 element: <AllOrders />,
               },
@@ -130,10 +130,18 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: '/signin',
-    element: <LogIn />,
-    errorElement: <NotFound />,
+    path: 'active/:token',
+    loader: async (data) => {
+      try {
+        const response = await AuthService.active(data.params.token);
+        return response;
+      } catch (error) {
+        return 0;
+      }
+    },
+    element: <Active />,
   },
+
   {
     path: 'register',
     element: <Register />,
