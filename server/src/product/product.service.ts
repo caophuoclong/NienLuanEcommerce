@@ -186,8 +186,18 @@ export class ProductService {
         variantsOptions.forEach((vo) =>
           vo.options.forEach((o) => tempOptions.push(o)),
         );
+        console.log(
+          '🚀 ~ file: product.service.ts:186 ~ ProductService ~ createProduct ~ tempOptions:',
+          tempOptions,
+        );
+        console.log(
+          '🚀 ~ file: product.service.ts:208 ~ ProductService ~ variantDetails.map ~ variantDetails:',
+          variantDetails,
+        );
+
         const listPromiseVariantDetails = await Promise.all(
           variantDetails.map(async (vd) => {
+            console.log(vd);
             const key = vd.key.split('_');
             const result = tempOptions
               .filter((to) => key.includes(to.value))

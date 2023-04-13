@@ -33,7 +33,7 @@ export const emptyProduct: IProduct = {
   name: "",
   updatedAt: "",
   description: "",
-  hasVariant: false,
+  hasVariant: true,
   price: 0,
   stock: 0,
   sold: 0,

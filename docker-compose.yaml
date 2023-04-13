@@ -43,3 +43,4 @@ services:
     volumes:
       - ./redis:/data
       - ./redis.conf:/etc/redis/redis.conf
+    command: redis-server --appendonly yes
