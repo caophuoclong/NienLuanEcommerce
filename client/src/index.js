@@ -42,6 +42,8 @@ import Shipping from './pages/User/Purchase/Shipping';
 import Canceled from './pages/User/Purchase/Canceled';
 import Active from './pages/Active';
 import { AuthService } from './services/auth';
+  import { ToastContainer, toast,  } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -197,6 +199,7 @@ const App = () => {
 };
 root.render(
   <Provider store={store}>
+<ToastContainer/>
     <App />
   </Provider>,
 );

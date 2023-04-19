@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getAllOrders } from '../../../app/slices/order.slice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
 
 export default function Purchase({ children }) {
   const [active, setActive] = useState('/');
@@ -27,6 +28,7 @@ export default function Purchase({ children }) {
       setActive(x);
     }
   }, [location]);
+  const {t} = useTranslation();
 
   return (
     <div>
@@ -39,7 +41,7 @@ export default function Purchase({ children }) {
           }`}
           to="/user/purchase"
         >
-          ALL
+          {t("all")}
         </Link>
         <Link
           className={`w-[calc(100%/7)] rounded-lg pb-1 text-center text-lg font-semibold hover:text-blue-500 ${
@@ -49,7 +51,7 @@ export default function Purchase({ children }) {
           }`}
           to="/user/purchase/processing"
         >
-          Processing
+          {t("processing")}
         </Link>
         <Link
           className={`w-[calc(100%/7)] rounded-lg pb-1 text-center text-lg font-semibold hover:text-blue-500 ${
@@ -59,7 +61,7 @@ export default function Purchase({ children }) {
           }`}
           to="/user/purchase/shipping"
         >
-          Shipping
+          {t("shipping")}
         </Link>
         <Link
           className={`w-[calc(100%/7)] rounded-lg pb-10 text-center text-lg font-semibold hover:text-blue-500 ${
@@ -69,7 +71,7 @@ export default function Purchase({ children }) {
           }`}
           to="/user/purchase/completed"
         >
-          Completed
+          {t("completed")}
         </Link>
         <Link
           className={`w-[calc(100%/7)] rounded-lg pb-1 text-center text-lg font-semibold hover:text-blue-500 ${
@@ -79,7 +81,7 @@ export default function Purchase({ children }) {
           }`}
           to="/user/purchase/canceled"
         >
-          Canceled
+          {t("cancelled")}
         </Link>
         <Link
           className={`w-[calc(100%/7)] rounded-lg pb-1 text-center text-lg font-semibold hover:text-blue-500 ${
@@ -89,7 +91,7 @@ export default function Purchase({ children }) {
           }`}
           to="/user/purchase/refunded"
         >
-          Refund
+          {t("refunded")}
         </Link>
       </div>
       {children}

@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
-const numberItemsPerPage = 20;
+import { useTranslation } from 'react-i18next';
+const numberItemsPerPage = 5;
 export default function Category({ categories = [] }) {
   const x = categories.length % numberItemsPerPage;
+  const {t} = useTranslation();
   const pages = Math.ceil(categories.length / numberItemsPerPage);
-  console.log('🚀 ~ file: Category.jsx:7 ~ Category ~ pages', pages);
-  const [currentPage, setCurrentPage] = React.useState(2);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   useEffect(() => {
     const t = setTimeout(() => {
@@ -18,7 +19,7 @@ export default function Category({ categories = [] }) {
   }, [loading]);
   return (
     <div className="rounded-md bg-white p-4 shadow-lg">
-      <div className="my-2 font-bold ">Category</div>
+      <div className="my-2 font-bold ">{t("category")}</div>
       <div className="relative group">
         <div
           className={`flex flex-wrap transition-opacity duration-300 ease-in-out`}
@@ -35,7 +36,7 @@ export default function Category({ categories = [] }) {
               <Link
                 to={category.link}
                 key={index}
-                className="flex w-[calc(100%/10)] flex-col items-center justify-center border border-solid hover:shadow-xl"
+                className="flex w-[calc(100%/5)] flex-col items-center justify-center border border-solid hover:shadow-xl"
               >
                 <img
                   src={category.src}

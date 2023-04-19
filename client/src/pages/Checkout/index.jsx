@@ -244,7 +244,7 @@ export default function Checkout() {
               <Process handleShowSummary={(value) => setShowSummary(value)} />
             </div>
             {showSummary && (
-              <div className="flex-1 border-l py-4 px-2">
+              <div className="flex-1 border-l py-4 px-2 flex flex-col">
                 <OrderSummary />
               </div>
             )}
