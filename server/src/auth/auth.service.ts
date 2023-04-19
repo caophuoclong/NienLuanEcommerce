@@ -316,4 +316,19 @@ export class AuthService {
       role: auth.role,
     };
   }
+  async changePassword(newPassword: string, username: string) {
+    const auth = await this.authRepository.findOne({
+      where: {
+        username,
+      },
+    });
+    if (!auth) {
+      throw new BadRequestException('Could not find username');
+    }
+    auth.password = await hashPassword(newPassword);
+    this.authRepository.save(auth);
+    return {
+      role: auth.role,
+    };
+  }
 }

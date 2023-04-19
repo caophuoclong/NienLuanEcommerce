@@ -20,5 +20,8 @@ export default () => {
       port: process.env.REDIS_PORT,
       password: process.env.REDIS_PASSWORD,
     },
+    server: {
+      secret: process.env.SECRET,
+    },
   };
 };

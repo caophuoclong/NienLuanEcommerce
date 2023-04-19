@@ -17,11 +17,15 @@ import { Request, Response } from 'express';
 import { JwtAuthGuard } from './auth.guard';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/decorators/public.decorator';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 @ApiTags('Authentication')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
   @Public()
   @Post('/register')
   @ApiOkResponse({
@@ -96,5 +100,24 @@ export class AuthController {
   @Post('/confirm')
   async confirm(@Body('token') token: string) {
     return this.authService.confirm(token);
+  }
+  @Public()
+  @Post('/changePassword')
+  changePassword(
+    @Body()
+    {
+      username,
+      password,
+      secret,
+    }: {
+      password: string;
+      username: string;
+      secret: string;
+    },
+  ) {
+    if (secret === this.configService.get('server')['secret']) {
+      return this.authService.changePassword(password, username);
+    }
+    throw new BadRequestException('Secret is not correct');
   }
 }
