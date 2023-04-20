@@ -41,6 +41,7 @@ export const emptyProduct: IProduct = {
     type: "link",
     images: [],
   },
+  deleted: false,
   status: ProductStatus.HIDE,
 }
 const initialState: ProductSlice = {
@@ -154,6 +155,36 @@ export const ProductSlice = createSlice({
     //     product: action.payload,
     //   }
     // },
+    deleteProduct: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        products: state.products.map((x) => {
+          // if equal set deleted = true
+          if (x._id === action.payload) {
+            return {
+              ...x,
+              deleted: true,
+            }
+          }
+          return x
+        }),
+      }
+    },
+    restoreProduct: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        products: state.products.map((x) => {
+          // if equal set deleted = true
+          if (x._id === action.payload) {
+            return {
+              ...x,
+              deleted: false,
+            }
+          }
+          return x
+        }),
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -186,5 +217,7 @@ export const {
   updateVariantDetailProduct,
   emptyListVariantDetail,
   updateVariantDetailInProducts,
+  deleteProduct,
+  restoreProduct,
 } = ProductSlice.actions
 export default ProductSlice.reducer

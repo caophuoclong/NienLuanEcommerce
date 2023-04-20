@@ -26,7 +26,8 @@ export default function ItemSelected() {
   }
   useEffect(() => {
     if (cart.filter(c => c.selected).length > 0) {
-      const price = cart.reduce((prev, curr) => {
+      console.log(cart.map(c => c.selected))
+      const price = cart.filter(c => c.selected).reduce((prev, curr) => {
         return prev + curr.product.price * curr.quantity;
       }, 0);
       settotalPrice(price);
@@ -99,7 +100,7 @@ export default function ItemSelected() {
           </p>
           <button
             onClick={handleBuy}
-            disabled={cart.some(i => i.selected).length === 0 ? true : false}
+            disabled={cart.map(i => i.selected).every(i => i === false)}
             className="flex items-center justify-center rounded-md bg-blue-300 py-2 px-12 hover:scale-[1.05] disabled:cursor-not-allowed"
           >
             {t("checkout")}

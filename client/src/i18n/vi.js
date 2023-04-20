@@ -120,5 +120,7 @@ export default {
     cancle_order: 'Hủy đơn hàng',
     received_order: 'Đã nhận hàng',
     return_refund: 'Trả lại và hoàn tiền',
+    product_is_deleted: "Sản phẩm đã bị xóa",
+
   },
 };

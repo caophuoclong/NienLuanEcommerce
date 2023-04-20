@@ -30,6 +30,7 @@ export interface IProduct {
     price: number
     stock: number
   }>
+  deleted: boolean
   images: {
     type: "link" | "file"
     images: {

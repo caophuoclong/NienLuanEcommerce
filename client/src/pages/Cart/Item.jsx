@@ -14,24 +14,13 @@ import { CartService } from '../../services/cart';
 import { parseUrl } from '../../utils';
 import { useTranslation } from 'react-i18next';
 import {AppToast} from "../../utils/appToast"
+import {FcInfo} from "react-icons/fc"
 const imageSize = '80px';
 export default function Item({ product, selected }) {
   const [loading, setLoading] = useState(false);
-  // const [quantity, setQuantity] = useState(product.quantity);
   const cart = useAppSelector((state) => state.cart.cart);
-  // const itemSelected = useAppSelector((state) => state.cart.itemSelected);
-  // const [checked, setChecked] = useState(false);
+
   const dispatch = useAppDispatch();
-  // useEffect(() => {
-  //   const item = itemSelected.filter((x) => {
-  //     return x.product.sku === product.sku;
-  //   });
-  //   if (item.length > 0) {
-  //     setChecked(true);
-  //   } else {
-  //     setChecked(false);
-  //   }
-  // }, [itemSelected]);
   const variants = product.productVariantOptions.filter((value) =>
     product.sku
       .split('_')
@@ -61,7 +50,6 @@ export default function Item({ product, selected }) {
       })();
     }
   };
-  // console.log(product);
   const onSelect = (e) => {
     if (product.selected) {
       dispatch(removeItem(product.sku));
@@ -80,9 +68,12 @@ export default function Item({ product, selected }) {
     }
   }
   return (
-    <div className="my-2 flex items-center gap-4 border-b ">
+    <div
+    
+    className={`my-2 flex items-center gap-4 border-b ${product.deleted ? 'opacity-50' : 'opacity-1'}`}>
       <div className="flex flex-[5] items-center">
         <input
+          disabled={product.deleted}
           type="checkbox"
           className="h-5 w-5"
           checked={product.selected}
@@ -101,7 +92,9 @@ export default function Item({ product, selected }) {
           ></div>
           <p className="w-40 line-clamp-2 ">{product.name}</p>
           <div>
-            <button className="flex items-center gap-2">
+            <button
+            disabled={product.deleted}
+             className="flex items-center gap-2">
               {t("sort")} <AiFillCaretDown size="16px" />
             </button>
             <p>{variants.map((v) => v.value).join(',')}</p>
@@ -114,6 +107,7 @@ export default function Item({ product, selected }) {
       </div>
       <div className="flex-[2]">
         <Quantity
+          deleted={product.deleted}
           isLoading={loading}
           current={product.quantity}
           onChange={onUpdateQuantity}
@@ -123,7 +117,10 @@ export default function Item({ product, selected }) {
         <Price price={product.quantity * product.price} />
         <VietNamCurrency />
       </div>
-      <button onClick={handleDeleteProduct} className="border-gray-200 p-2 rounded-md text-sm px-4 font-bold border-2 hover:shadow-md hover:border-white">{t("delete")}</button>
+      <div>
+        <button disabled={product.deleted } onClick={handleDeleteProduct} className="border-gray-200 p-2 rounded-md text-sm px-4 font-bold border-2 hover:shadow-md hover:border-white disabled:shadow-none hover:disabled:border-gray-200" >{t("delete")}</button>
+        {product.deleted && <FcInfo className='ml-auto my-1' title={t("product_is_deleted")}/>}
+        </div>
     </div>
   );
 }

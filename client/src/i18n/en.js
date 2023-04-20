@@ -116,6 +116,7 @@ export default {
     feature_developing: "Feature is on developing",
     cancle_order: "Cancle order",
     received_order: "Received order",
-    return_refund: "Return and refund"
+    return_refund: "Return and refund",
+    product_is_deleted: "Product is deleted",
   },
 };
