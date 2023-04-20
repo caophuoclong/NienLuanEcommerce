@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -31,5 +33,17 @@ export class CartController {
   @Patch('/')
   async updateCart(@Body() dto: UpdateCartDTO) {
     return this.cartService.update(dto._id, dto.field);
+  }
+  @Delete('/product/many')
+  async handleDeleteManyCartItem(@Body() body: number[]) {
+    return this.cartService.handleDeleteManyCartItem(body);
+  }
+  @Delete('/product')
+  async handleDeleteProductItem(
+    @Query('sku') sku: string,
+    @Req() req: Request,
+  ) {
+    const { _id } = req.user;
+    return this.cartService.handleDeleteProductItem(sku, _id);
   }
 }

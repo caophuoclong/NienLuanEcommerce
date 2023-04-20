@@ -4,6 +4,7 @@ import { BiTrash } from 'react-icons/bi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   emptySelected,
+  removeManyCartItem,
   selectAllItem,
 } from '../../app/slices/cart.slice';
 import Item from './Item';
@@ -11,6 +12,8 @@ import Shop from './Shop';
 import LoadingSkeleton from './LoadingSkeleton';
 import ItemSelected from './ItemSelected';
 import { useTranslation } from 'react-i18next';
+import { AppToast } from '../../utils/appToast';
+import { CartService } from '../../services/cart';
 
 export default function Cart() {
   const cart = useAppSelector((state) => state.cart.cart);
@@ -58,7 +61,22 @@ export default function Cart() {
       dispatch(selectAllItem());
     }
   };
-
+  const handleDelete = async()=>{
+    const anySelected = cart.map(x => x.selected).every(x => x === false);
+    console.log(cart);
+    if(anySelected){
+      AppToast(t("please_choose_product"), "warning")
+    }else{
+      const cartSelected = cart.filter(cart => cart.selected);
+      try{
+        await CartService.handleDeleteManyCartItem(cartSelected.map(cart => cart._id))
+      AppToast(t("remove_product_success"), "success")
+        dispatch(removeManyCartItem(cartSelected.map(cart => cart._id)))
+        }catch(error){
+        AppToast(`${t("remove_product_fail")}, ${t("please_try_again")}`, "error")
+      }
+    }
+  }
   return (
     <div className="mt-3 relative">
       <Link to="/" className="text-blue-500">
@@ -84,7 +102,7 @@ export default function Cart() {
             <div className="flex-[1]">{t("unit_price")}</div>
             <div className="flex-[2]">{t("quantity")}</div>
             <div className="flex-[2]">{t("total_price")}</div>
-            <button>
+            <button onClick={handleDelete}>
               <BiTrash size="24px" />
             </button>
           </div>
