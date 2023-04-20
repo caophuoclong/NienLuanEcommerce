@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Address from 'src/database/entities/address';
 import { CartItem } from 'src/database/entities/cart/cartItem';
@@ -17,6 +21,7 @@ import { ProductVariantOption } from 'src/database/entities/product/variant/opti
 import { PaymentService } from 'src/payment/payment.service';
 import { In, Repository } from 'typeorm';
 import { CheckoutDTO, IAdress, ICard } from './dto/checkoutDTO';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class OrderService {
@@ -323,5 +328,22 @@ export class OrderService {
     });
     console.log('adfasdf');
     return orders.map(({ customer, ...order }) => order);
+  }
+  async updateStatusOrder({
+    _id,
+    status,
+  }: {
+    _id: number;
+    status: OrderStatus;
+  }) {
+    const order = await this.orderRepository.findOneBy({
+      _id,
+    });
+    if (!order) {
+      throw new NotFoundException('Could not found order');
+    }
+    order.status = status;
+    await this.orderRepository.save(order);
+    return 'Update status success';
   }
 }

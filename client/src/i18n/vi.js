@@ -113,7 +113,12 @@ export default {
     remove_product_success: 'Xóa sản phẩm thành công!',
     remove_product_fail: 'Xóa sản phẩm thất bại',
     please_try_again: 'Vui lòng thử lại',
-        please_choose_product: "Vui lòng chọn sản phẩm"
- 
+    please_choose_product: 'Vui lòng chọn sản phẩm',
+    update_success: 'Cập nhật thành công',
+    update_fail: 'Cập nhật thất bại',
+    feature_developing: 'Tính năng đang được phát triển',
+    cancle_order: 'Hủy đơn hàng',
+    received_order: 'Đã nhận hàng',
+    return_refund: 'Trả lại và hoàn tiền',
   },
 };
