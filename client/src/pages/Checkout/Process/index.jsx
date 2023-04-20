@@ -70,6 +70,7 @@ export default function Process({ handleShowSummary }) {
   const handleBack = () => {
     switch (tabElements.find((tab) => tab.current).id) {
       case 'shipping_address':
+        navigate("/cart")
         break;
       case 'payment':
         handleChangeTab('shipping_address');

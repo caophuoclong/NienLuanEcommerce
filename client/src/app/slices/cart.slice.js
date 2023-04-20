@@ -17,10 +17,13 @@ export const CartSlice = createSlice({
     addCartItem: (state, action) => {
       return {
         ...state,
-        cart: [...state.cart, {
-          ...action.payload,
-          selected: false
-        }],
+        cart: [
+          ...state.cart,
+          {
+            ...action.payload,
+            selected: false,
+          },
+        ],
       };
     },
     removeCartItem: (state, action) => {
@@ -32,10 +35,12 @@ export const CartSlice = createSlice({
       //     tmpCart.splice(index, 1);
       //   }
       // });
-      const listSku = action.payload.map(x => x.product.sku);
+      const listSku = action.payload.map((x) => x.product.sku);
       return {
         ...state,
-        cart: state.cart.filter((cartItem)=> !listSku.includes(cartItem.product.sku)),
+        cart: state.cart.filter(
+          (cartItem) => !listSku.includes(cartItem.product.sku),
+        ),
       };
     },
     selectItem: (state, action) => {
@@ -67,17 +72,26 @@ export const CartSlice = createSlice({
     selectAllItem: (state) => {
       return {
         ...state,
-        cart: state.cart.map((c) => ({
-          ...c,
-          selected: true,
-        })),
+        cart: state.cart.map((c) => {
+          if (!c.product.deleted) {
+            return ({
+              ...c,
+              selected: true,
+            });
+          }else{
+            return {
+              ...c,
+              selected: false
+            };
+          }
+        }),
       };
     },
     selectAllProductShop: (state, action) => {
       return {
         ...state,
         cart: state.cart.map((c) =>
-          c.product.shop._id === action.payload ? { ...c, selected: true } : c,
+          (c.product.shop._id === action.payload && c.product.deleted === false) ? { ...c, selected: true } : c,
         ),
       };
     },
@@ -85,22 +99,24 @@ export const CartSlice = createSlice({
       return {
         ...state,
         cart: state.cart.map((c) =>
-          c.product.shop._id === action.payload ? { ...c, selected: false } : c,
+          (c.product.shop._id === action.payload && c.product.deleted === false) ? { ...c, selected: false } : c,
         ),
       };
     },
     deleteProductItem: (state, action) => {
       return {
         ...state,
-        cart: state.cart.filter(item => item.product._id !== action.payload._id)
-      }
+        cart: state.cart.filter(
+          (item) => item.product._id !== action.payload._id,
+        ),
+      };
     },
-    removeManyCartItem: (state, action)=>{
+    removeManyCartItem: (state, action) => {
       return {
         ...state,
-        cart: state.cart.filter(cart => !action.payload.includes(cart._id) )
-      }
-    }
+        cart: state.cart.filter((cart) => !action.payload.includes(cart._id)),
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCart.fulfilled, (state, action) => {
@@ -144,6 +160,6 @@ export const {
   selectAllProductShop,
   removeProductShop,
   removeCartItem,
-  deleteProductItem
+  deleteProductItem,
 } = CartSlice.actions;
 export default CartSlice.reducer;

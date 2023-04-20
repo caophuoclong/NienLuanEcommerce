@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -106,9 +107,17 @@ export class ProductController {
     const result = await this.productService.getShopProducts(_id, page, skip);
     return result;
   }
+  @Delete('/:id')
+  async deleteProduct(@Param('id') id: number) {
+    return this.productService.handleRemoveProduct(id);
+  }
   @Put('/variantDetail')
   async updateVariantDetail(@Body() body: ProductVariantDetail[]) {
     return this.productService.updateVariantDetail(body);
+  }
+  @Put('/restore/:id')
+  async restoreProduct(@Param('id') id: number) {
+    return this.productService.restoreProduct(id);
   }
   @Post('/image')
   @UseInterceptors(

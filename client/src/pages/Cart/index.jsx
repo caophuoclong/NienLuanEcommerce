@@ -25,6 +25,7 @@ export default function Cart() {
       const tmp = {};
       cart.forEach((cartItem)=>{
         const {product, quantity, selected} = cartItem;
+        console.log("🚀 ~ file: index.jsx:28 ~ cart.forEach ~ selected:", selected)
         const {shop, ...temp} = product;
         if(!tmp[shop._id]){
           tmp[shop._id] = {

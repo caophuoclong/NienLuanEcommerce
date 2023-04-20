@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductCreateDto } from './dto/product.create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/database/entities/category';
@@ -506,6 +510,9 @@ export class ProductService {
     page: number;
   }) {
     const response = await this.productRepository.find({
+      where: {
+        deleted: false,
+      },
       skip: page * perPage,
       take: perPage,
       relations: {
@@ -648,5 +655,39 @@ export class ProductService {
   }
   async updateVariantDetail(data: ProductVariantDetail[]) {
     return await this.productVariantDetailRepository.save(data);
+  }
+  async handleRemoveProduct(_id: number) {
+    const product = await this.productRepository.findOne({
+      where: {
+        _id,
+      },
+    });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    product.deleted = true;
+    // const productVariantDetail = await this.productVariantDetailRepository.find(
+    //   {
+    //     where: {
+    //       sku: Like(`${product._id}%`),
+    //     },
+    //   },
+    // );
+    // await this.productVariantDetailRepository.remove(productVariantDetail);
+    await this.productRepository.save(product);
+    return 'Remove product success';
+  }
+  async restoreProduct(_id: number) {
+    const product = await this.productRepository.findOne({
+      where: {
+        _id,
+      },
+    });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    product.deleted = false;
+    await this.productRepository.save(product);
+    return 'Restore product success';
   }
 }

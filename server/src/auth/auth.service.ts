@@ -248,10 +248,6 @@ export class AuthService {
   }
   async refreshToken(refreshToken: string) {
     try {
-      console.log(
-        '🚀 ~ file: auth.service.ts:225 ~ AuthService ~ refreshToken ~ refreshToken',
-        refreshToken,
-      );
       const keys = await this.cacheService.keys(`*-${refreshToken}`);
       const data = await this.cacheService.hGetAll(keys[0]);
       console.log(
