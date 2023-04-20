@@ -108,6 +108,6 @@ please_select_variant: 'Vui lòng chọn loại sản phẩm',
 add_to_cart_success: 'Thêm vào giỏ hàng thành công',
 product_already_existed_in_cart: 'Sản phẩm đã có trong giỏ hàng',
 out_of_stock: 'Hết hàng',
-
+price: 'Giá',
   },
 };

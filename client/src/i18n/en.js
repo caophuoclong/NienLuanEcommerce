@@ -106,5 +106,6 @@ export default {
     add_to_cart_success: 'Add to cart success',
     product_already_existed_in_cart: 'Product already existed in cart',
     out_of_stock: 'Out of stock',
+    price: 'Price',
   },
 };
