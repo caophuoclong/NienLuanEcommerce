@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { parseUrl } from '../../../../utils';
 import Price from '../../../../components/Price';
 import VietNamCurrency from '../../../../components/Sign/VietNamCurrency';
+import { useTranslation } from 'react-i18next';
 
 export default function PurchaseItem({
   shop,
@@ -12,6 +13,7 @@ export default function PurchaseItem({
   orderItems,
   shippingCost,
 }) {
+  const {t} = useTranslation();
   return (
     <div className="my-4 shadow-lg p-2 drop-shadow-md rounded-md">
       <div className="flex justify-between border-b px-2">
@@ -25,12 +27,14 @@ export default function PurchaseItem({
               className="flex items-center gap-1 text-sm"
             >
               <BsShop size="16px" />
-              <p>View shop</p>
+              <p>{t("view_shop")}</p>
             </Link>
-            <div className="text-blue-300">Follow me</div>
+            <div className="text-blue-300">{t("follow_me")}</div>
           </div>
         )}
-        <div>{status}</div>
+        <div>{
+          t(status.toLowerCase().replace(" ", "_")).toUpperCase()
+          }</div>
       </div>
       {orderItems.length > 0 &&
         orderItems.map((orderItem, index) => (
@@ -64,13 +68,13 @@ export default function PurchaseItem({
               <p className="text-xl font-bold">{orderItem.product.name}</p>
               {orderItem.product && orderItem.product.hasVariant && (
                 <p className="text-sm text-gray-500">
-                  Category:{' '}
+                  {t("category")}:{' '}
                   {Object.values(orderItem.product.variants)
                     .map((x) => x.value)
                     .join(', ')}
                 </p>
               )}
-              <p>Quantity: {orderItem.quantity}</p>
+              <p>{t("quantity")}: {orderItem.quantity}</p>
             </div>
             <div className="flex-1">
               <Price price={orderItem.price} />
@@ -79,7 +83,7 @@ export default function PurchaseItem({
           </div>
         ))}
       <div className="flex justify-end gap-2 items-center">
-        <p className="flex-lg font-semibold">Total Price:</p>
+        <p className="flex-lg font-semibold">{t("total_price")}:</p>
         <div className='text-blue-400 text-xl'>
           <Price
             price={

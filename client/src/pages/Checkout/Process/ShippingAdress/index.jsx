@@ -3,9 +3,11 @@ import NewAddress from './NewAddress';
 import { AddressService } from '../../../../services/address';
 import { CheckoutContext } from '../..';
 import { SET_ADDRESS_ID } from '../../actionType';
+import { useTranslation } from 'react-i18next';
 export default function ShippingAddress() {
   const [existAddress, setExistAddress] = useState([]);
   const [state, dispatch] = useContext(CheckoutContext);
+  const {t} = useTranslation();
   useEffect(() => {
     (async () => {
       const response = await AddressService.getExistAddress();
@@ -50,7 +52,7 @@ export default function ShippingAddress() {
                 {item.ward.district.province.name}
               </p>
               <p>
-                Mobile: {item.phone}</p>
+                {t("phone_number")}: {item.phone}</p>
             </label>
             
           </div>
@@ -70,7 +72,7 @@ export default function ShippingAddress() {
             name="address"
             type="radio"
           />
-          <label htmlFor="newAddress">Add new address</label>
+          <label htmlFor="newAddress">{t("add_new_address")}</label>
         </div>
       </div>
       {state.address && state.address._id === 'newAddress' && <NewAddress />}

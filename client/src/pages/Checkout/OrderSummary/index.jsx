@@ -4,6 +4,7 @@ import Item from './Item';
 import Price from '../../../components/Price';
 import VietNamCurrency from '../../../components/Sign/VietNamCurrency';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function OrderSummary() {
   const cart = useAppSelector((state) => state.cart.cart);
@@ -16,10 +17,11 @@ export default function OrderSummary() {
     }, 0);
     setSubTotal(newPrice);
   }, [cart]);
+  const {t} = useTranslation()
   return (
     <React.Fragment>
       <div className="text-xl font-bold">
-        Order Summary{' '}
+        {t("order_summary")}{' '}
         <span className="text-sm text-gray-400">
           {cart.filter(x => x.selected).length} items
         </span>
@@ -29,7 +31,7 @@ export default function OrderSummary() {
           <Item key={item._id} {...item} />
         ))}
       </div>
-      <p className="text-xl font-bold">Enter coupon</p>
+      {/* <p className="text-xl font-bold">Enter coupon</p>
       <div className="w-full border">
         <input
           type="text"
@@ -43,23 +45,23 @@ export default function OrderSummary() {
         <button className="w-[10%] bg-blue-400 p-2 font-semibold text-white">
           Apply
         </button>
-      </div>
-      <div className="flex items-center justify-between px-2">
-        <span className="text-md text-gray-400">Subtotal: </span>
+      </div> */}
+      <div className="flex items-center justify-between px-2 mt-auto">
+        <span className="text-md text-gray-400">{t("sub_total")}: </span>
         <span className="font-bold">
           <Price price={subTotal} />
           <VietNamCurrency />
         </span>
       </div>
       <div className="flex items-center justify-between px-2">
-        <span className="text-md text-gray-400">Shipping: </span>
+        <span className="text-md text-gray-400">{t("shipping_fee")}: </span>
         <span className="font-bold">
           <Price price={25000} />
           <VietNamCurrency />
         </span>
       </div>
       <div className="flex items-center justify-between px-2">
-        <span className="text-md text-gray-400">Total: </span>
+        <span className="text-md text-gray-400">{t("total")}: </span>
         <span className="font-bold">
           <Price price={shipping + subTotal} />
           <VietNamCurrency />

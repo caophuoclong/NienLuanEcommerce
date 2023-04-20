@@ -12,6 +12,7 @@ import VietNamCurrency from '../../components/Sign/VietNamCurrency';
 import { CartService } from '../../services/cart';
 import { parseUrl } from '../../utils';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
 const imageSize = '80px';
 export default function Item({ product, selected }) {
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ export default function Item({ product, selected }) {
       dispatch(selectItem(product.sku));
     }
   };
-
+  const {t} = useTranslation();
   return (
     <div className="my-2 flex items-center gap-4 border-b ">
       <div className="flex flex-[5] items-center">
@@ -91,7 +92,7 @@ export default function Item({ product, selected }) {
           <p className="w-40 line-clamp-2 ">{product.name}</p>
           <div>
             <button className="flex items-center gap-2">
-              Sort <AiFillCaretDown size="16px" />
+              {t("sort")} <AiFillCaretDown size="16px" />
             </button>
             <p>{variants.map((v) => v.value).join(',')}</p>
           </div>
@@ -112,7 +113,7 @@ export default function Item({ product, selected }) {
         <Price price={product.quantity * product.price} />
         <VietNamCurrency />
       </div>
-      <div className="">Delete</div>
+      <div className="">{t("delete")}</div>
     </div>
   );
 }

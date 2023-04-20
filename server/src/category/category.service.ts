@@ -114,4 +114,7 @@ export class CategoryService {
     return categories;
     // return response
   }
+  async getAllCategories() {
+    return this.categoryRepository.find();
+  }
 }

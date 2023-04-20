@@ -49,12 +49,13 @@ export default function SearchProduct() {
     }
   }, [products]);
   return (
-    <div className="flex h-full">
+    <div className="h-full">
       <div className="bl-gray-500 flex flex-1  gap-2">
         <FaFilter />
         <span className="font-bold ">Filter</span>
       </div>
-      <div className="flex-[5]">
+     {
+      products.length > 0 ?  <div className="flex-[5]">
         {keyword && (
           <React.Fragment>
             <div>
@@ -85,7 +86,10 @@ export default function SearchProduct() {
             ))}
           </div>
         </div>
-      </div>
+      </div>: <div className=" mx-auto w-1/2 bg-white shadow-xl h-20 rounded-lg flex items-center justify-center">
+          <p className="font-bold text-xl">Keyword not found</p>
+        </div>
+     }
     </div>
   );
 }

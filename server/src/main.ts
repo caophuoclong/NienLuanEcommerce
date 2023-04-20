@@ -29,6 +29,8 @@ async function bootstrap() {
       'https://shop.shopifyify.shop',
       'https://shopifyify.shop',
       'https://www.shopifyify.shop',
+      'https://www.bebes.site',
+      'https://bebes.site',
     ],
     credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTION, PATCH',
@@ -39,6 +41,6 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'public', 'images'), {
     prefix: '/images/',
   });
-  await app.listen(3070);
+  await app.listen(3003);
 }
 bootstrap();

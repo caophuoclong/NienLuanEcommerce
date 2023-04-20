@@ -12,21 +12,24 @@ import { CustomerModule } from '../customer/customer.module';
 import { CacheModule } from 'src/cache/cache.module';
 
 @Module({
-  imports: [ConfigModule,TypeOrmModule.forFeature([AuthEntity], ),CustomerModule,
-  CacheModule,
-  PassportModule,
-  JwtModule.registerAsync({
-    imports: [ConfigsModule],
-    useFactory: (configService: ConfigService)=>{
-      return {
-        secret: configService.get<string>("jwt.secret"),
-      }
-    
-    },
-    inject: [ConfigService]
-    
-  })],
+  imports: [
+    ConfigModule,
+    TypeOrmModule.forFeature([AuthEntity]),
+    CustomerModule,
+    CacheModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigsModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          secret: configService.get<string>('jwt.secret'),
+          server: configService.get<{ secret: string }>('server'),
+        };
+      },
+      inject: [ConfigService],
+    }),
+  ],
   providers: [AuthService, JwtStrategy],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
 export class AuthModule {}
