@@ -40,4 +40,8 @@ export class OrderController {
   getOrdersPershop(@Req() { user: { _id } }: Request) {
     return this.orderService.getOrdersPerShop(_id);
   }
+  @Patch('/status')
+  updateStatusOrder(@Body() data: { _id: number; status: OrderStatus }) {
+    return this.orderService.updateStatusOrder(data);
+  }
 }

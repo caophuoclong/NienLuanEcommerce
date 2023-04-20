@@ -9,5 +9,19 @@ export const CartService = {
     },
     update: (data)=>{
         return axiosClient.patch("/cart", data)
+    },
+    deleteProductItem: (sku)=>{
+        return axiosClient.delete("/cart/product", {
+            params:{
+                sku
+            }
+        })
+
+    },
+    handleDeleteManyCartItem: (data)=>{
+        console.log(data);
+        return axiosClient.delete("/cart/product/many", {
+            data
+        })
     }
 }

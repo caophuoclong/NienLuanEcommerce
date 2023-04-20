@@ -9,5 +9,8 @@ export const OrderService = {
     },
     getAllOrders: ()=>{
         return axiosClient.get("/order") 
+    },
+    updateStatusOrder: (data)=>{
+        return axiosClient.patch("/order/status", data)
     }
 }

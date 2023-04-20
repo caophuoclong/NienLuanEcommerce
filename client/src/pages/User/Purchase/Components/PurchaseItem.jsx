@@ -6,14 +6,43 @@ import { parseUrl } from '../../../../utils';
 import Price from '../../../../components/Price';
 import VietNamCurrency from '../../../../components/Sign/VietNamCurrency';
 import { useTranslation } from 'react-i18next';
+import { AppToast } from '../../../../utils/appToast';
+import { useAppDispatch } from '../../../../app/hooks';
+import { handleChangeStatus } from '../../../../app/slices/order.slice';
+import { OrderService } from '../../../../services/order';
 
 export default function PurchaseItem({
   shop,
   status,
   orderItems,
   shippingCost,
+  _id
 }) {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
+  const handleUpdateStatus = async(status)=>{
+    try{
+      await OrderService.updateStatusOrder({
+        _id,
+        status
+      })
+      dispatch(handleChangeStatus({
+      _id,
+      status
+    }))
+    AppToast(t("update_success"),"success")
+      
+    }catch(error){
+      AppToast(t("update_fail"), "error")
+
+    }
+    
+    
+  } 
+  const handleRefundOrder = ()=>{
+    AppToast(t("feature_developing"))
+  }
+
   return (
     <div className="my-4 shadow-lg p-2 drop-shadow-md rounded-md">
       <div className="flex justify-between border-b px-2">
@@ -95,6 +124,17 @@ export default function PurchaseItem({
           />
           <VietNamCurrency />
         </div>
+      </div>
+      <div className="flex items-center justify-end">
+        {
+          (status === "PENDING" || status === "PROCESSING" )&& <button onClick={()=>handleUpdateStatus("CANCELLED")} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-red-400">{t("cancle_order")}</button>
+        }
+        {
+          status === "DELIVERING" && <button onClick={()=>handleUpdateStatus("DELIVERED")} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-yellow-400">{t("received_order")}</button>
+        }
+        {
+          status === "DELIVERED" && <button onClick={handleRefundOrder} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-orange-400">{t("refund")}</button>
+        }
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+  deleteProductItem,
   removeItem,
   selectItem,
   updateCartItem,
@@ -11,8 +12,8 @@ import Quantity from '../../components/Quantity';
 import VietNamCurrency from '../../components/Sign/VietNamCurrency';
 import { CartService } from '../../services/cart';
 import { parseUrl } from '../../utils';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
+import {AppToast} from "../../utils/appToast"
 const imageSize = '80px';
 export default function Item({ product, selected }) {
   const [loading, setLoading] = useState(false);
@@ -69,6 +70,15 @@ export default function Item({ product, selected }) {
     }
   };
   const {t} = useTranslation();
+  const handleDeleteProduct = async()=>{
+    try{
+    await CartService.deleteProductItem(product.sku);
+      AppToast(t("remove_product_success"), "success")
+      dispatch(deleteProductItem(product))
+    }catch(error){
+      AppToast(`${t("remove_product_fail")}, ${t("please_try_again")}`, "error")
+    }
+  }
   return (
     <div className="my-2 flex items-center gap-4 border-b ">
       <div className="flex flex-[5] items-center">
@@ -113,7 +123,7 @@ export default function Item({ product, selected }) {
         <Price price={product.quantity * product.price} />
         <VietNamCurrency />
       </div>
-      <div className="">{t("delete")}</div>
+      <button onClick={handleDeleteProduct} className="border-gray-200 p-2 rounded-md text-sm px-4 font-bold border-2 hover:shadow-md hover:border-white">{t("delete")}</button>
     </div>
   );
 }

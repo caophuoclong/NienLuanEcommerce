@@ -17,7 +17,10 @@ export const CartSlice = createSlice({
     addCartItem: (state, action) => {
       return {
         ...state,
-        cart: [...state.cart, action.payload],
+        cart: [...state.cart, {
+          ...action.payload,
+          selected: false
+        }],
       };
     },
     removeCartItem: (state, action) => {
@@ -86,6 +89,18 @@ export const CartSlice = createSlice({
         ),
       };
     },
+    deleteProductItem: (state, action) => {
+      return {
+        ...state,
+        cart: state.cart.filter(item => item.product._id !== action.payload._id)
+      }
+    },
+    removeManyCartItem: (state, action)=>{
+      return {
+        ...state,
+        cart: state.cart.filter(cart => !action.payload.includes(cart._id) )
+      }
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getCart.fulfilled, (state, action) => {
@@ -120,6 +135,7 @@ export const CartSlice = createSlice({
 });
 
 export const {
+  removeManyCartItem,
   addCartItem,
   selectItem,
   removeItem,
@@ -128,5 +144,6 @@ export const {
   selectAllProductShop,
   removeProductShop,
   removeCartItem,
+  deleteProductItem
 } = CartSlice.actions;
 export default CartSlice.reducer;

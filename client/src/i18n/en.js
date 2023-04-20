@@ -106,5 +106,16 @@ export default {
     add_to_cart_success: 'Add to cart success',
     product_already_existed_in_cart: 'Product already existed in cart',
     out_of_stock: 'Out of stock',
+    price: 'Price',
+    remove_product_success: "Remove product successfully!",
+    remove_product_fail: "Remove product failed",
+    please_try_again: "Please try again",
+    please_choose_product: "Please choose product",
+    update_success: "Update success",
+    update_fail: "Update fail",
+    feature_developing: "Feature is on developing",
+    cancle_order: "Cancle order",
+    received_order: "Received order",
+    return_refund: "Return and refund"
   },
 };
