@@ -120,7 +120,13 @@ export default {
     cancle_order: 'Hủy đơn hàng',
     received_order: 'Đã nhận hàng',
     return_refund: 'Trả lại và hoàn tiền',
-    product_is_deleted: "Sản phẩm đã bị xóa",
-
+    product_is_deleted: 'Sản phẩm đã bị xóa',
+    export_receipt: 'Xuất hóa đơn',
+    receipt: 'Hóa đơn',
+    invoice: 'Hóa đơn',
+    date_time: 'Ngày giờ',
+    customer: 'Khách hàng',
+    description: 'Mô tả',
+    amount: 'Số tiền',
   },
 };

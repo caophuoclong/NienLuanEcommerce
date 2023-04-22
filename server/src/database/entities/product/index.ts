@@ -67,6 +67,7 @@ export class Product {
     default: null,
   })
   sold: number;
-  @Column()
+  @Column({
+    default: false})
   deleted: boolean;
 }

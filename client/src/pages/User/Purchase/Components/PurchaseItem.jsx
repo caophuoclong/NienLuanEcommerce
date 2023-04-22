@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsShop } from 'react-icons/bs';
 import { FaShopify } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { parseUrl } from '../../../../utils';
 import Price from '../../../../components/Price';
 import VietNamCurrency from '../../../../components/Sign/VietNamCurrency';
@@ -19,6 +19,7 @@ export default function PurchaseItem({
   _id
 }) {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const handleUpdateStatus = async(status)=>{
     try{
@@ -41,6 +42,9 @@ export default function PurchaseItem({
   } 
   const handleRefundOrder = ()=>{
     AppToast(t("feature_developing"))
+  }
+  const exportReceipt = ()=>{
+    navigate("/receipt/"+_id)
   }
 
   return (
@@ -133,7 +137,10 @@ export default function PurchaseItem({
           status === "DELIVERING" && <button onClick={()=>handleUpdateStatus("DELIVERED")} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-yellow-400">{t("received_order")}</button>
         }
         {
-          status === "DELIVERED" && <button onClick={handleRefundOrder} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-orange-400">{t("refund")}</button>
+          status === "DELIVERED" && <React.Fragment>
+            <button onClick={exportReceipt} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-gray-400">{t("export_receipt")}</button>
+            <button onClick={handleRefundOrder} className="p-2 px-4 text-xl font-bold border rounded-md text-white bg-orange-400">{t("refund")}</button>
+          </React.Fragment>
         }
       </div>
     </div>

@@ -42,8 +42,10 @@ import Shipping from './pages/User/Purchase/Shipping';
 import Canceled from './pages/User/Purchase/Canceled';
 import Active from './pages/Active';
 import { AuthService } from './services/auth';
-  import { ToastContainer, toast,  } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Receipt from './pages/Receipt';
+import { OrderService } from './services/order';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -132,6 +134,19 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
+    path: 'receipt/:id',
+    loader: async (data) => {
+      try {
+        const response = await OrderService.getReceipt(data.params.id);
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+      // return 'test';
+    },
+    element: <Receipt />,
+  },
+  {
     path: 'active/:token',
     loader: async (data) => {
       try {
@@ -199,7 +214,7 @@ const App = () => {
 };
 root.render(
   <Provider store={store}>
-<ToastContainer/>
+    <ToastContainer />
     <App />
   </Provider>,
 );

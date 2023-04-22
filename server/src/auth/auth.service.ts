@@ -58,7 +58,6 @@ export class AuthService {
             firstName,
             lastName,
             middleName,
-            dob,
           });
           return this.createConfirmation(auth);
         case RolesEnum.SHOP:
