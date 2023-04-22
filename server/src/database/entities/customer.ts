@@ -35,7 +35,7 @@ export class Customer {
   @Column({
     nullable: true,
   })
-  lastName: string;
+  familyName: string;
   @Column({
     nullable: true,
   })
@@ -44,12 +44,12 @@ export class Customer {
     nullable: true,
   })
   shop_name: string;
-  @Column({
-    type: 'date',
-    nullable: true,
-    // current date in 18y before
-  })
-  dob: Date;
+  // @Column({
+  //   type: 'date',
+  //   nullable: true,
+  //   // current date in 18y before
+  // })
+  // dob: Date;
   @Column({
     type: 'enum',
     enum: GenderEnum,
@@ -80,6 +80,9 @@ export class Customer {
   payments: Payment[];
   @ManyToMany(() => Coupon, (coupon) => coupon.user)
   storedCoupon: Coupon[];
+  @ManyToOne(() => Address, (address) => address.shop)
+  @JoinColumn()
+  shop_address: Address;
   @Column({
     default: 'https://picsum.photos/40',
   })

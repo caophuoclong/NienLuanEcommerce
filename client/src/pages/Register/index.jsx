@@ -31,7 +31,7 @@ const defaultSchema = yup.object({
     .trim()
     .min(8, 'At least 8 characters')
     .required('This field must be not empty!'),
-  dob: yup.date('Date is invalid!'),
+  // dob: yup.date('Date is invalid!'),
 });
 export default function Register() {
   const [role, setRole] = useState('USER');
@@ -239,7 +239,7 @@ export default function Register() {
                     <option value={'female'}>Female</option>
                   </select>
                 </div>
-                <div className="flex w-full flex-col gap-1">
+                {/* <div className="flex w-full flex-col gap-1">
                   <label htmlFor="dob">
                     Date of birth{' '}
                     <span className="text-red-500">
@@ -253,7 +253,7 @@ export default function Register() {
                     placeholder="Birthday"
                     className="h-10 rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
                   />
-                </div>
+                </div> */}
               </div>
             )}
 

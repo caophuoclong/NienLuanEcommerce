@@ -22,7 +22,6 @@ export class CustomerService implements ICustomer {
       lastName: string;
       middleName: string;
       shop_name: string;
-      dob: Date;
     }>,
   ) {
     try {

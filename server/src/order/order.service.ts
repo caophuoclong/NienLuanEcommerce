@@ -346,4 +346,71 @@ export class OrderService {
     await this.orderRepository.save(order);
     return 'Update status success';
   }
+  async getReceipt(_id: number) {
+    const order = await this.orderRepository.findOne({
+      where: {
+        _id,
+      },
+      relations: {
+        shop: {
+          shop_address: {
+            ward: {
+              district: {
+                province: true,
+              },
+            },
+          },
+        },
+        customer: true,
+        address: {
+          ward: {
+            district: {
+              province: true,
+            },
+          },
+        },
+        orderItems: {
+          productVariantDetail: true,
+        },
+      },
+    });
+    const orderItems = await Promise.all(
+      order.orderItems.map(async (item) => {
+        const [productId, ...variantId] =
+          item.productVariantDetail.sku.split('_');
+        const product = await this.productRepository.findOne({
+          where: {
+            _id: +productId,
+          },
+        });
+        const { _id, price, stock, sold, ...newProduct } = product;
+        const variantOption = await this.productVariantOptionRepository.find({
+          where: {
+            _id: In(variantId),
+          },
+          relations: {
+            productVariant: true,
+          },
+        });
+        const variants = variantOption.map((variant) => {
+          return {
+            type: variant.productVariant.name,
+            value: variant.value,
+            Image: variant.image,
+          };
+        });
+        return {
+          ...newProduct,
+          price: item.price,
+          quantity: item.quantity,
+          variants,
+        };
+      }),
+    );
+
+    return {
+      ...order,
+      orderItems,
+    };
+  }
 }
