@@ -105,7 +105,7 @@ export default function Detail({}: Props) {
         fontWeight={"bold"}
         marginBottom="1rem"
       >
-        Details
+        Chi tiết
       </Text>
       <Box>
         {chunks.length === 0 && (

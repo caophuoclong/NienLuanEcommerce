@@ -7,11 +7,13 @@ import { MdLockOutline } from 'react-icons/md';
 import { AuthService } from '../../services/auth';
 import { useAppDispatch } from '../../app/hooks';
 import { getMe } from '../../app/slices/home.slice';
+import { useTranslation } from 'react-i18next';
 
 export default function LogIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const {t} = useTranslation();
   const navigate = useNavigate()
   const dispatch = useAppDispatch();
   const onSubmit = async() => {
@@ -33,7 +35,7 @@ export default function LogIn() {
         <div className="z-50 h-full w-full bg-white  shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
           <div className="flex h-full flex-col items-center justify-center space-y-5">
             <div className="font-sans text-3xl font-bold text-green-500">
-              <p>Sign In Account</p>
+              <p>{t("sign_in")}</p>
             </div>
 
             <div className="flex flex-row space-x-9">
@@ -51,21 +53,18 @@ export default function LogIn() {
               </Link>
             </div>
 
-            <div className="text-slate-400">
-              <p>For use your email account</p>
-            </div>
 
             <div className="flex w-[70%] flex-col space-y-5">
               <input
                 type="text"
-                placeholder="Username"
+                placeholder={t("username")}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="h-10 rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
               />
               <input
                 type="password"
-                placeholder="Password"
+                placeholder={t("password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-10 rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
@@ -87,11 +86,11 @@ export default function LogIn() {
                 htmlFor="rememberMe"
                 className="flex cursor-pointer select-none items-center text-sm"
               >
-                Remember me
+                {t("remember_me")}
               </label>
 
               <Link to={'/forgotpassword'} className="text-sm">
-                Forgot Password?
+                {t("forgot_password")}
               </Link>
             </div>
 
@@ -99,7 +98,7 @@ export default function LogIn() {
               onClick={onSubmit}
               className="inline-block rounded-full border-2 border-green-500 px-12 py-2 font-semibold text-green-500 hover:bg-green-500 hover:text-white"
             >
-              SIGN IN
+              {t("sign_in").toUpperCase()}
             </button>
           </div>
         </div>
@@ -107,13 +106,12 @@ export default function LogIn() {
         {/*right side*/}
         <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-5 bg-green-500 text-center shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)]">
           <div className="font-sans text-3xl font-bold text-white">
-            <p>Hello, Friend!</p>
+            <p>{t("hello")},</p>
           </div>
 
           <div className="text-white">
             <p>
-              Fill up personal information and
-              <br /> start journey with us
+              {t("let_join_with_us")}
             </p>
           </div>
 
@@ -122,7 +120,7 @@ export default function LogIn() {
               to={'/register'}
               className="inline-block rounded-full border-2 border-white px-12 py-2 font-semibold text-white hover:bg-white hover:text-green-500"
             >
-              SIGN UP
+              {t("sign_up").toUpperCase()}
             </Link>
           </div>
         </div>

@@ -38,7 +38,7 @@ export default function Variants({}: Props) {
         fontWeight={"bold"}
         justifyContent="end"
       >
-        Variants{" "}
+        Biến thể{" "}
         {isCollapseVariant ? (
           <RiArrowDropUpLine size="24px" />
         ) : (
@@ -79,7 +79,7 @@ export default function Variants({}: Props) {
               />
               <Box display={"flex"} alignItems="center" gap="4">
                 <Box w="15%">
-                  <label htmlFor={`variantType${i}`}>Variant {i + 1}</label>
+                  <label htmlFor={`variantType${i}`}>Biến thể {i + 1}</label>
                 </Box>
                 <Box w="85%">
                   <Input

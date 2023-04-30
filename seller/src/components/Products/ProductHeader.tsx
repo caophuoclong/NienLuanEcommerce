@@ -30,7 +30,7 @@ export default function ProductHeader({}: Props) {
           }}
         >
           <HiSearch size="24px" />
-          <Input variant={"unstyled"} placeholder="Search something" />
+          <Input variant={"unstyled"} placeholder="Tìm kiếm..." />
         </Box>
       </Box>
 
@@ -48,7 +48,7 @@ export default function ProductHeader({}: Props) {
           cursor={"pointer"}
         >
           <AiOutlinePlus size="24px" />
-          <Text>Add Product</Text>
+          <Text>Thêm sản phẩm</Text>
         </Box>
         <Box position="relative">
           <IconButton
@@ -80,7 +80,7 @@ export default function ProductHeader({}: Props) {
             icon={<IoIosArrowForward size="24px" />}
           />
           <Text fontSize={"xs"}>
-            1-10 of 1000 <Text as="span">Products</Text>
+            1-10 của 1000 <Text as="span">Sản phẩm</Text>
           </Text>
         </Box>
       </Box>

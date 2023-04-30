@@ -142,7 +142,7 @@ export default function VariantList({}: Props) {
         fontWeight={"bold"}
         justifyContent="end"
       >
-        Variant list{" "}
+        Danh sách{" "}
         {isCollapseVariantList ? (
           <RiArrowDropUpLine size="24px" />
         ) : (
@@ -151,7 +151,13 @@ export default function VariantList({}: Props) {
       </Button>
       {!isCollapseVariantList && (
         <Box>
-          <Box w="80%" display="flex" justifyContent={"space-evenly"} gap="2">
+          <Box
+            w="80%"
+            display="flex"
+            justifyContent={"space-evenly"}
+            gap="2"
+            mx="auto"
+          >
             <InputGroup w="40%">
               <InputLeftElement
                 pointerEvents="none"
@@ -161,7 +167,7 @@ export default function VariantList({}: Props) {
               />
               <Input
                 disabled={product.status === ProductStatus.UPDATE}
-                placeholder="EnterPrice"
+                placeholder="Nhập giá"
                 value={common.price}
                 type="number"
                 onChange={(e) =>
@@ -181,7 +187,7 @@ export default function VariantList({}: Props) {
               />
               <Input
                 disabled={product.status === ProductStatus.UPDATE}
-                placeholder="EnterStock"
+                placeholder="Nhập số lượng"
                 type="number"
                 value={common.stock}
                 onChange={(e) =>
@@ -196,10 +202,9 @@ export default function VariantList({}: Props) {
             <Button
               isDisabled={product.status === ProductStatus.UPDATE}
               onClick={onApplyToAll}
-              w="20%"
               size="md"
             >
-              AppyToAll
+              Áp dụng tất cả
             </Button>
           </Box>
 
@@ -218,10 +223,10 @@ export default function VariantList({}: Props) {
                   <Table>
                     <Thead>
                       <Tr>
-                        <Th>Image</Th>
+                        <Th>Ảnh</Th>
                         <Th>{variants[1].type}</Th>
-                        <Th>Price</Th>
-                        <Th>Stock</Th>
+                        <Th>Giá</Th>
+                        <Th>Số lượng</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -265,7 +270,7 @@ export default function VariantList({}: Props) {
                                   backgroundImage: `url(${parseUrl(va.image)})`,
                                 }}
                               >
-                                Add image
+                                Thêm ảnh
                               </Box>
                             </Td>
                           )}
@@ -382,9 +387,9 @@ export default function VariantList({}: Props) {
                       {variants[0].type.charAt(0).toLocaleUpperCase() +
                         variants[0].type.slice(1)}
                     </Td>
-                    <Td>Image</Td>
-                    <Td>Price</Td>
-                    <Td>Stock</Td>
+                    <Td>Ảnh</Td>
+                    <Td>Giá</Td>
+                    <Td>Số lượng</Td>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -405,7 +410,7 @@ export default function VariantList({}: Props) {
                           alignItems="center"
                           fontSize={"14px"}
                         >
-                          Add image
+                          Thêm ảnh
                         </Box>
                       </Td>
                       <Td>

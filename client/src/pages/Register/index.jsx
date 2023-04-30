@@ -5,36 +5,41 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthService } from '../../services/auth';
-const shopSchema = yup.object({
-  shopName: yup.string().required('This field must be not empty!'),
-  username: yup.string().required('This field must be not empty!'),
-  email: yup
-    .string()
-    .email('Email invalid!')
-    .required('This field must be not empty!'),
-  password: yup
-    .string()
-    .trim()
-    .min(8, 'At least 8 characters')
-    .required('This field must be not empty!'),
-});
-const defaultSchema = yup.object({
-  firstName: yup.string().required('This field must be not empty!'),
-  lastName: yup.string().required('This field must be not empty!'),
-  username: yup.string().required('This field must be not empty!'),
-  email: yup
-    .string()
-    .email('Email invalid!')
-    .required('This field must be not empty!'),
-  password: yup
-    .string()
-    .trim()
-    .min(8, 'At least 8 characters')
-    .required('This field must be not empty!'),
-  // dob: yup.date('Date is invalid!'),
-});
+import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../app/hooks';
+import { toast } from 'react-toastify';
+
 export default function Register() {
   const [role, setRole] = useState('USER');
+  const { t } = useTranslation();
+  const shopSchema = yup.object({
+  shopName: yup.string().required(t("this_field_must_be_filled")),
+  username: yup.string().required(t("this_field_must_be_filled")),
+  email: yup
+    .string()
+    .email(t("email_invalid"))
+    .required(t("this_field_must_be_filled")),
+  password: yup
+    .string()
+    .trim()
+    .min(8, t("password_must_be_at_least_8_characters"))
+    .required(t("this_field_must_be_filled")),
+});
+const defaultSchema = yup.object({
+  firstName: yup.string().required(t("this_field_must_be_filled")),
+  lastName: yup.string().required(t("this_field_must_be_filled")),
+  username: yup.string().required(t("this_field_must_be_filled")),
+  email: yup
+    .string()
+    .email(t("email_invalid"))
+    .required(t("this_field_must_be_filled")),
+  password: yup
+    .string()
+    .trim()
+    .min(8, t("password_must_be_at_least_8_characters"))
+    .required(t("this_field_must_be_filled")),
+  // dob: yup.date('Date is invalid!'),
+});
   const {
     register,
     formState: { errors },
@@ -43,36 +48,38 @@ export default function Register() {
   } = useForm({
     resolver:
       role === 'USER' ? yupResolver(defaultSchema) : yupResolver(shopSchema),
-    });
-    console.log(window.location.origin);
+  });
+  console.log(window.location.origin);
+  const lang = useAppSelector((state) => state.settings.lang);
   const onSubmit = async (data) => {
     // console.log(data);
     try {
       const response = await AuthService.register(data);
-      console.log(`${window.location.origin}/active/${response}`)
+      toast(t("register_success"), {
+        type: 'success',
+      })
+      console.log(`Active Link: ${window.location.origin}/active/${response}`);
     } catch (error) {
       console.log(error);
-      // console.log(response.status);
-
       if (error.response.status === 400) {
-        setError(error.response.data.name, {message: error.response.data.message});
+        setError(error.response.data.name, {
+          message: error.response.data.message,
+        });
       }
     }
   };
-  console.log(errors);
   return (
     <div className="flex h-[93vh] min-h-[90vh] w-full items-center justify-center bg-white ">
       <div className="flex h-[80%] w-[90%] items-center justify-center shadow-lg ">
         {/*left side*/}
         <div className="z-10 flex h-full w-full flex-col items-center justify-center space-y-5 bg-green-500 text-center shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)]">
           <div className="font-sans text-3xl font-bold text-white">
-            <p>Welcome Back!</p>
+            <p>{t('welcome_back')}</p>
           </div>
 
           <div className="text-white">
             <p>
-              To keep connected with us please login
-              <br /> with your personal info
+              {t('let_login_to_connect_with_thousands_of_goods_and_services')}
             </p>
           </div>
 
@@ -81,7 +88,7 @@ export default function Register() {
               to={'/signin'}
               className="inline-block rounded-full border-2 border-white px-12 py-2 font-semibold text-white hover:bg-white hover:text-green-500"
             >
-              SIGN IN
+              {t('sign_in').toUpperCase()}
             </Link>
           </div>
         </div>
@@ -93,13 +100,13 @@ export default function Register() {
         >
           <div className="flex h-full flex-col items-center justify-center space-y-3">
             <div className="font-sans text-3xl font-bold text-green-500">
-              <p>Create Account</p>
+              <p>{t('create_account')}</p>
             </div>
 
             <div className="flex w-[70%] justify-center gap-4">
-              <p className="font-bold">Account type:</p>
+              <p className="font-bold">{t('account_type')}:</p>
               <div className="flex gap-2">
-                <label htmlFor="roleDefault">Default</label>
+                <label htmlFor="roleDefault">{t('default')}</label>
                 <input
                   {...register('role')}
                   onChange={() => setRole('USER')}
@@ -110,7 +117,7 @@ export default function Register() {
                 />
               </div>
               <div className="flex gap-2">
-                <label htmlFor="roleShop">Shop</label>
+                <label htmlFor="roleShop">{t('seller')}</label>
                 <input
                   {...register('role')}
                   onChange={() => setRole('SHOP')}
@@ -123,52 +130,99 @@ export default function Register() {
             </div>
 
             {role === 'USER' ? (
-              <div className="mx-5 flex w-[70%] gap-1">
-                <div className="w-[30%] flex-1">
-                  <label htmlFor="fName">
-                    First Name{' '}
-                    <span className="text-red-500">
-                      * {errors && errors.firstName && errors.firstName.message}
-                    </span>
-                  </label>
-                  <input
-                    {...register('firstName', { required: true })}
-                    id="fName"
-                    type="text"
-                    placeholder="First Name"
-                    className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
-                  />
+              lang === 'vi' ? (
+                <div className="mx-5 flex w-[70%] gap-1">
+                  <div className="w-[30%] flex-1">
+                    <label htmlFor="lName">
+                      {t('last_name')}
+                      <span className="text-red-500">
+                        * {errors && errors.lastName && errors.lastName.message}
+                      </span>
+                    </label>
+                    <input
+                      {...register('lastName', { required: true })}
+                      id="lName"
+                      type="text"
+                      placeholder={t('last_name')}
+                      className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
+                    />
+                  </div>
+                  <div className="w-[30%] flex-1">
+                    <label htmlFor="mName">{t('middle_name')}</label>
+                    <input
+                      {...register('middleName', { required: false })}
+                      id="mName"
+                      type="text"
+                      placeholder={t('middle_name')}
+                      className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
+                    />
+                  </div>
+                  <div className="w-[30%] flex-1">
+                    <label htmlFor="fName">
+                      {t('first_name')}
+                      <span className="text-red-500">
+                        *{' '}
+                        {errors && errors.firstName && errors.firstName.message}
+                      </span>
+                    </label>
+                    <input
+                      {...register('firstName', { required: true })}
+                      id="fName"
+                      type="text"
+                      placeholder={t('first_name')}
+                      className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
+                    />
+                  </div>
                 </div>
-                <div className="w-[30%] flex-1">
-                  <label htmlFor="mName">Middle Name</label>
-                  <input
-                    {...register('middleName', { required: false })}
-                    id="mName"
-                    type="text"
-                    placeholder="Middle Name"
-                    className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
-                  />
+              ) : (
+                <div className="mx-5 flex w-[70%] gap-1">
+                  <div className="w-[30%] flex-1">
+                    <label htmlFor="fName">
+                      {t('first_name')}
+                      <span className="text-red-500">
+                        *{' '}
+                        {errors && errors.firstName && errors.firstName.message}
+                      </span>
+                    </label>
+                    <input
+                      {...register('firstName', { required: true })}
+                      id="fName"
+                      type="text"
+                      placeholder={t('first_name')}
+                      className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
+                    />
+                  </div>
+                  <div className="w-[30%] flex-1">
+                    <label htmlFor="mName">{t('middle_name')}</label>
+                    <input
+                      {...register('middleName', { required: false })}
+                      id="mName"
+                      type="text"
+                      placeholder={t('middle_name')}
+                      className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
+                    />
+                  </div>
+                  <div className="w-[30%] flex-1">
+                    <label htmlFor="lName">
+                      {t('last_name')}
+                      <span className="text-red-500">
+                        * {errors && errors.lastName && errors.lastName.message}
+                      </span>
+                    </label>
+                    <input
+                      {...register('lastName', { required: true })}
+                      id="lName"
+                      type="text"
+                      placeholder={t('last_name')}
+                      className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
+                    />
+                  </div>
                 </div>
-                <div className="w-[30%] flex-1">
-                  <label htmlFor="lName">
-                    Last Name{' '}
-                    <span className="text-red-500">
-                      * {errors && errors.lastName && errors.lastName.message}
-                    </span>
-                  </label>
-                  <input
-                    {...register('lastName', { required: true })}
-                    id="lName"
-                    type="text"
-                    placeholder="Last Name"
-                    className="h-10 w-full rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
-                  />
-                </div>
-              </div>
+              )
             ) : (
               <div className="flex w-[70%] flex-col">
                 <label htmlFor="shopName">
-                  Shop Name{' '}
+                  {t('shop_name')}
                   <span className="text-red-500">
                     * {errors && errors.shopName && errors.shopName.message}
                   </span>
@@ -201,7 +255,7 @@ export default function Register() {
               </div>
               <div className="flex flex-col gap-1">
                 <label htmlFor="username">
-                  Username{' '}
+                  {t('username')}
                   <span className="text-red-500">
                     * {errors && errors.username && errors.username.message}
                   </span>
@@ -210,7 +264,7 @@ export default function Register() {
                   {...register('username', { required: true })}
                   id="username"
                   type="text"
-                  placeholder="Username"
+                  placeholder={t('username')}
                   className="h-10 rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
                 />
               </div>
@@ -220,7 +274,7 @@ export default function Register() {
               <div className="mx-5 grid w-[70%] grid-cols-2 gap-1">
                 <div className="flex w-full flex-col gap-1">
                   <label htmlFor="gender">
-                    Gender{' '}
+                    {t('gender')}
                     <span className="text-red-500">
                       * {errors && errors.gender && errors.gender.message}
                     </span>
@@ -230,13 +284,11 @@ export default function Register() {
                     name="dropdown"
                     id="gender"
                     placeholder="Gender"
-                    defaultValue={"male"}
+                    defaultValue={'male'}
                     className="h-10 rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
                   >
-                    <option value={'male'}>
-                      Male
-                    </option>
-                    <option value={'female'}>Female</option>
+                    <option value={'male'}>{t('male')}</option>
+                    <option value={'female'}>{t('female')}</option>
                   </select>
                 </div>
                 {/* <div className="flex w-full flex-col gap-1">
@@ -259,7 +311,7 @@ export default function Register() {
 
             <div className="mx-5 flex w-[70%] flex-col gap-1">
               <label htmlFor="password">
-                Password{' '}
+                {t('password')}
                 <span className="text-red-500">
                   * {errors && errors.password && errors.password.message}
                 </span>
@@ -268,7 +320,7 @@ export default function Register() {
                 {...register('password', { required: true })}
                 type="password"
                 id="password"
-                placeholder="Password"
+                placeholder={t('password')}
                 className="h-10 rounded-lg border border-zinc-500 bg-transparent px-5 outline-none"
               />
             </div>
@@ -277,7 +329,7 @@ export default function Register() {
               <input
                 className="inline-block rounded-full border-2 border-green-500 px-12 py-2 font-semibold text-green-500 hover:bg-green-500 hover:text-white"
                 type="submit"
-                value={'SIGN UP'}
+                value={t('sign_up').toUpperCase()}
               />
             </div>
           </div>

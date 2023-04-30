@@ -61,7 +61,7 @@ export default function Information({}: Props) {
       <Box display={"flex"} gap="1rem">
         <FormControl flex="1" isRequired>
           <FormLabel htmlFor="productName" fontSize={"sm"} fontWeight="bold">
-            Product Name
+            Tên sản phẩm
           </FormLabel>
           <Input
             id="productName"
@@ -77,7 +77,7 @@ export default function Information({}: Props) {
         </FormControl>
         <FormControl flex="1" position={"relative"} isRequired>
           <FormLabel htmlFor="category" fontSize={"sm"} fontWeight="bold">
-            Category
+            Phân loại
           </FormLabel>
           <Input
             value={
@@ -148,7 +148,7 @@ export default function Information({}: Props) {
                   left="50%"
                   transform={"translate(-50%, -50%)"}
                 >
-                  No result
+                  Không tìm thấy kết quả
                 </Text>
               )}
             </Box>

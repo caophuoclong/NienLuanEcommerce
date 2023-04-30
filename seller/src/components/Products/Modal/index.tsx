@@ -136,9 +136,9 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
           <ModalBody display={"flex"} flexDirection={"column"} gap="1rem">
             <Tabs>
               <TabList>
-                <Tab>Information</Tab>
-                <Tab>Detail</Tab>
-                <Tab>Variant</Tab>
+                <Tab>Thông tin</Tab>
+                <Tab>Chi tiết</Tab>
+                <Tab>Biến thể</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -166,7 +166,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
                         isDisabled={true}
                         value={"false"}
                       >
-                        Default
+                        Mặc định
                       </Radio>
                       <Radio
                         isDisabled={
@@ -174,7 +174,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
                         }
                         value={"true"}
                       >
-                        WithVariant
+                        Có biến thể
                       </Radio>
                     </Stack>
                   </RadioGroup>
@@ -198,7 +198,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
               isDisabled={product.deleted}
               onClick={handleSubmit}
             >
-              {name.toLocaleLowerCase().includes("add") ? "Add" : "Save"}
+              {name.toLocaleLowerCase().includes("add") ? "Thêm" : "Lưu"}
             </Button>
             {product.deleted ? (
               <Button
@@ -206,13 +206,13 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
                 colorScheme="orange"
                 color="white"
               >
-                Restore
+                Phục hồi
               </Button>
             ) : (
               !name.toLocaleLowerCase().includes("add") && (
                 <Button onClick={onOpen} variant="solid" colorScheme={"red"}>
                   <FaTimes size="24px" />
-                  Delete Product
+                  Xóa
                 </Button>
               )
             )}
@@ -229,17 +229,15 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
         <AlertDialogOverlay />
 
         <AlertDialogContent>
-          <AlertDialogHeader>Remove product?</AlertDialogHeader>
+          <AlertDialogHeader>Xóa sản phẩm?</AlertDialogHeader>
           <AlertDialogCloseButton />
-          <AlertDialogBody>
-            Are you sure you want to remove product
-          </AlertDialogBody>
+          <AlertDialogBody>Bạn có chắc là xóa sản phẩm</AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
-              No
+              Không
             </Button>
             <Button onClick={onRemoveDelete} colorScheme="red" ml={3}>
-              Yes
+              Có
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

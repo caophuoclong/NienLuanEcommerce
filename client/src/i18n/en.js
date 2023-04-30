@@ -126,5 +126,22 @@ export default {
     customer: 'Customer',
     description: 'Description',
     amount: 'Amount',
+    let_join_with_us: 'Let join with us',
+    remember_me: 'Remember me',
+    hello: 'Hello',
+    welcome_back: 'Welcome back',
+    let_login_to_connect_with_thousands_of_goods_and_services:
+      'Let login to connect with thousands of goods and services',
+    create_account: 'Create account',
+    account_type: 'Account type',
+    male: 'Male',
+    female: 'Female',
+    seller: 'Seller',
+    default: 'Default',
+    gender: 'Gender',
+    this_field_must_be_filled: 'This field must be filled',
+    email_invalid: "Email's format is invalid",
+    password_must_be_at_least_8_characters:
+      'Password must be at least 8 characters',
   },
 };

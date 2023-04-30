@@ -18,6 +18,7 @@ export default function Default({ children }) {
   const dispatch = useAppDispatch();
    useEffect(() => {
     const unwrap = dispatch(getHome());
+    dispatch(getAllCategories())
     const access_token = window.localStorage.getItem('access_token');
     if (
       access_token !== 'undefined' &&
@@ -26,7 +27,6 @@ export default function Default({ children }) {
     ) {
       (async () => {
         dispatch(getMe());
-        dispatch(getAllCategories())
         const unwrap1 = dispatch(getCart());
         const result1 = await unwrapResult(unwrap1);
         const result = await unwrapResult(unwrap);
