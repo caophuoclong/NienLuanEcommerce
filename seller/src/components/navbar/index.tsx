@@ -137,33 +137,33 @@ export default function NavBar() {
   const items: Array<item> = [
     {
       id: itemId.HOME,
-      name: "Home",
+      name: "Trang chủ",
       icon: <VscPackage size="24px" />,
       pageName: "home",
     },
     {
       id: itemId.SALES,
-      name: "Sales",
+      name: "Bán hàng",
       icon: <GiShoppingBag size="24px" />,
       subIcon: true,
       subItem: [
         {
-          name: "Products",
+          name: "Sản phẩm",
           id: SalesSubItemId.PRODUCTS,
           pageName: "products",
         },
         {
-          name: "Coupon",
+          name: "Mã khuyến mãi",
           id: SalesSubItemId.COUPON,
           pageName: "coupon",
         },
         {
-          name: "Categories",
+          name: "Phân loại",
           id: SalesSubItemId.CATEGORIES,
           pageName: "categories",
         },
         {
-          name: "Orders",
+          name: "Đơn hàng",
           id: SalesSubItemId.ORDERS,
           pageName: "orders",
         },
@@ -171,7 +171,7 @@ export default function NavBar() {
     },
     {
       id: itemId.RATING,
-      name: "Rating",
+      name: "Đánh giá",
       icon: <RiPieChartFill size="24px" />,
       subIcon: true,
       subItem: [
@@ -182,20 +182,20 @@ export default function NavBar() {
         },
         {
           id: RatingSubItemId.RATINGS,
-          name: "Ratings",
+          name: "Đánh giá",
           pageName: "ratings",
         },
       ],
     },
     {
       id: itemId.PROFILE,
-      name: "Profile",
+      name: "Hồ sơ",
       pageName: "profile",
       icon: <RiAccountCircleFill size="24px" />,
     },
     {
       id: itemId.REPORTS,
-      name: "Reports",
+      name: "Báo cáo",
       icon: <MdReport size="24px" />,
     },
   ]
@@ -244,7 +244,7 @@ export default function NavBar() {
       >
         <Box marginTop={"auto"} cursor="pointer" display={"flex"} gap="1rem">
           <BiLogOut size="24px" />
-          {showNavBar && <Text fontWeight={"semibold"}>Log out</Text>}
+          {showNavBar && <Text fontWeight={"semibold"}>Đăng xuất</Text>}
         </Box>
       </Box>
     </Box>

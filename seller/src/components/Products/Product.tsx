@@ -81,7 +81,7 @@ export default function Product({
           p=".5rem"
         >
           <BiEdit />
-          <Text>Edit item</Text>
+          <Text>Chỉnh sửa</Text>
         </Button>
       </Td>
     </Tr>

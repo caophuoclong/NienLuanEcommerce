@@ -20,7 +20,7 @@ function AddNewDetailButton({
         fontSize={"sm"}
         height={"32px"}
         fontWeight="semibold"
-        placeholder="Detail name"
+        placeholder="Tên chi  tiết"
         id="detail-name"
         variant={"unstyled"}
         value={detailName.charAt(0).toUpperCase() + detailName.slice(1)}
@@ -49,7 +49,7 @@ function AddNewDetailButton({
       >
         <Input
           flex="4"
-          placeholder="Detail value"
+          placeholder="Giá trị chi tiết"
           variant={"unstyled"}
           px="1rem"
           id="detail-value"

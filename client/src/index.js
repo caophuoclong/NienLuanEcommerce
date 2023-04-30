@@ -189,10 +189,10 @@ const App = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const lang = window.localStorage.getItem('lang') || 'vi';
+    changeLanguage(lang);
     const darkMode = window.localStorage.getItem('darkMode') || false;
     dispatch(changeLang(lang));
     dispatch(setDarkMode(darkMode));
-    changeLanguage(lang);
   }, []);
 
   // useEffect(() => {

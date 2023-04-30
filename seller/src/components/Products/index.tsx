@@ -10,6 +10,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 
@@ -53,6 +54,7 @@ export default function Products({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const homeState = useAppSelector((state) => state.homeSlice)
   const productState = useAppSelector((state) => state.productSlice)
+  const toast = useToast()
   const productStatus = productState.product.status
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -100,6 +102,12 @@ export default function Products({}: Props) {
             variants: copyVariants,
           })
         )
+        toast({
+          title: "Thêm sản phẩm thành công!",
+          status: "success",
+          position: "top-right",
+        })
+        onClose()
         break
       case ProductStatus.UPDATE:
         if (productState.updateVariantDetailList.length > 0) {
@@ -124,9 +132,9 @@ export default function Products({}: Props) {
       productStatus === ProductStatus.UPDATE
     ) {
       if (productStatus === ProductStatus.CREATE) {
-        setModalName("Create product")
+        setModalName("Thêm sản phẩm")
       } else {
-        setModalName("Update Product")
+        setModalName("Câp nhật sản phẩm")
       }
       onOpen()
     } else {
@@ -298,7 +306,7 @@ export default function Products({}: Props) {
           <Thead bgColor={"#f3f4f6"} position="sticky" top={0} zIndex="docked">
             <Tr>
               <Th width={"30%"}>
-                Name
+                Tên sản phẩm
                 <IconButton
                   variant="ghost"
                   aria-label="sort name"
@@ -313,7 +321,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Price{" "}
+                Đơn giá{" "}
                 <IconButton
                   variant="ghost"
                   aria-label="sort price"
@@ -328,7 +336,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="10%">
-                Category{" "}
+                Phân loại{" "}
                 <IconButton
                   variant="ghost"
                   aria-label="sort category"
@@ -343,7 +351,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Stock{" "}
+                Tồn kho{" "}
                 <IconButton
                   variant="ghost"
                   aria-label="sort stock"
@@ -358,7 +366,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Sold
+                Đã bán
                 <IconButton
                   variant="ghost"
                   aria-label="sort sold"
@@ -374,7 +382,7 @@ export default function Products({}: Props) {
               </Th>
 
               <Th w="5%">
-                Crated
+                Ngày thêm
                 <IconButton
                   variant="ghost"
                   aria-label="sort sold"
@@ -389,7 +397,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Updated
+                Ngày cập nhật
                 <IconButton
                   variant="ghost"
                   aria-label="sort sold"

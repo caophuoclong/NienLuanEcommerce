@@ -18,7 +18,7 @@ export default function Description({ description, onChange }: Props) {
         fontWeight={"bold"}
         marginBottom="1rem"
       >
-        Description
+        Mô tả sản phẩm
       </Text>
       <Textarea
         value={description}
