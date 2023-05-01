@@ -2,9 +2,25 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
 import { IProduct, ProductStatus } from "../../types/product"
 import { emptyCategory } from "../..//types/category"
 import { ProductService } from "../../service/api/product"
+
+interface ProductUpdate {
+  infomation: {
+    [key: string]: any
+  }
+  variants: Array<{
+    [key: string]: any
+  }>
+  variantsDetails: Array<{
+    [key: string]: any
+  }>
+  detail: Array<{
+    [key: string]: any
+  }>
+}
 interface ProductSlice {
   product: IProduct
   products: IProduct[]
+  update: ProductUpdate
   updateVariantDetailList: Array<{
     sku: string
     price: number
@@ -28,7 +44,13 @@ export const emptyProduct: IProduct = {
     requireDetail: "",
   },
   variantDetails: [],
-  variants: [],
+  variants: [
+    {
+      type: "",
+      _id: 0,
+      options: [],
+    },
+  ],
   detail: [],
   name: "",
   updatedAt: "",
@@ -47,6 +69,12 @@ export const emptyProduct: IProduct = {
 const initialState: ProductSlice = {
   product: emptyProduct,
   products: [],
+  update: {
+    infomation: {},
+    variants: [],
+    variantsDetails: [],
+    detail: [],
+  },
   updateVariantDetailList: [],
 }
 export const getMyProduct = createAsyncThunk("Get my product", () => {
@@ -185,6 +213,15 @@ export const ProductSlice = createSlice({
         }),
       }
     },
+    updateChange(state, action: PayloadAction<Partial<ProductUpdate>>) {
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          ...action.payload,
+        },
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -219,5 +256,6 @@ export const {
   updateVariantDetailInProducts,
   deleteProduct,
   restoreProduct,
+  updateChange,
 } = ProductSlice.actions
 export default ProductSlice.reducer

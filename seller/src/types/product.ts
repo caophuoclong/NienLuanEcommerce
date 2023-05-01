@@ -12,6 +12,7 @@ export interface IProduct {
   description?: string
   variants: Array<{
     type: string
+    _id: number
     options: {
       _id: number
       value: string

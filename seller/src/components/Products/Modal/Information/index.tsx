@@ -6,21 +6,23 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import {
   useAppDispatch,
   useAppSelector,
   useDebounce,
 } from "../../../../app/hooks"
-import { updateProduct } from "../../../../features/product"
+import { updateChange, updateProduct } from "../../../../features/product"
 import { CategoryService } from "../../../../service/api/category"
 import { emptyCategory, ICategory } from "../../../../types/category"
 import RenderCategoryResult from "./RenderCategoryResult"
 import Description from "./Description"
+import { ProductStatus } from "../../../../types/product"
 
 type Props = {}
 
 export default function Information({}: Props) {
+  const productSlice = useAppSelector((state) => state.productSlice)
   const product = useAppSelector((state) => state.productSlice.product)
   const dispatch = useAppDispatch()
   const [isSearching, setIsSearching] = useState<boolean>(false)
@@ -65,13 +67,23 @@ export default function Information({}: Props) {
           </FormLabel>
           <Input
             id="productName"
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               dispatch(
                 updateProduct({
                   name: e.target.value,
                 })
               )
-            }
+              if (product.status === ProductStatus.UPDATE) {
+                dispatch(
+                  updateChange({
+                    infomation: {
+                      ...productSlice.update.infomation,
+                      name: e.target.value,
+                    },
+                  })
+                )
+              }
+            }}
             value={product.name}
           />
         </FormControl>
@@ -86,12 +98,24 @@ export default function Information({}: Props) {
                 : product.category[`name_${lang}`]
             }
             onChange={(e) => {
-              if (Object.keys(product.category).length !== 0)
+              if (Object.keys(product.category).length !== 0) {
                 dispatch(
                   updateProduct({
                     category: emptyCategory,
                   })
                 )
+                if (product.status === ProductStatus.UPDATE) {
+                  dispatch(
+                    updateChange({
+                      infomation: {
+                        ...productSlice.update.infomation,
+                        category: emptyCategory,
+                      },
+                    })
+                  )
+                }
+              }
+
               setCategory(e.target.value)
             }}
           />
@@ -157,13 +181,23 @@ export default function Information({}: Props) {
       </Box>
       <Description
         description={product.description}
-        onChange={(str) =>
+        onChange={(str) => {
           dispatch(
             updateProduct({
               description: str,
             })
           )
-        }
+          if (product.status === ProductStatus.UPDATE) {
+            dispatch(
+              updateChange({
+                infomation: {
+                  ...productSlice.update.infomation,
+                  description: str,
+                },
+              })
+            )
+          }
+        }}
       />
     </Box>
   )

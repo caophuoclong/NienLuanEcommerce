@@ -1,11 +1,11 @@
 import { Box, IconButton, Input, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { RiSubtractFill } from "react-icons/ri"
 import AddNewDetailButton from "./AddNewDetailButton"
-import { IProductDetail } from "../../../types/product"
+import { IProductDetail, ProductStatus } from "../../../types/product"
 import { CiUndo } from "react-icons/ci"
 import { useAppSelector, useAppDispatch } from "../../..//app/hooks"
-import { updateProduct } from "../../..//features/product"
+import { updateChange, updateProduct } from "../../..//features/product"
 
 type Props = {}
 
@@ -15,6 +15,8 @@ export default function Detail({}: Props) {
     (state) => state.productSlice.product
   )
   const dispatch = useAppDispatch()
+  const productSlice = useAppSelector(state => state.productSlice);
+  const product = productSlice.product
   useEffect(() => {
     if (detail.length === 0) {
       if (Object.keys(category).length > 0) {
@@ -79,7 +81,6 @@ export default function Detail({}: Props) {
       key: string
     }
   ) => {
-    // const tmpDetail = [...detail];
     const index = detail.findIndex((d) => d.key === newDetail.key)
     if (index !== -1) {
       const tmpDetail = [...detail]
@@ -171,7 +172,18 @@ export default function Detail({}: Props) {
                           ? detail.find((x) => x.key === d.key)!.value
                           : ""
                       }
-                      onChange={(e) => {
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        if(product.status === ProductStatus.UPDATE){
+                          dispatch(
+                            updateChange({
+                              detail: [...productSlice.update.detail, {
+                                ...d,
+                                value: e.target.value
+                              }],
+                  
+                            })
+                          )
+                        }
                         handleUpdateDetail({
                           key: d.key,
                           value: e.target.value,

@@ -84,6 +84,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
   const { isOpen: open, onOpen, onClose } = useDisclosure()
   const dispatch = useAppDispatch()
   const product = useAppSelector((state) => state.productSlice.product)
+  console.log("🚀 ~ file: index.tsx:87 ~ ModalProduct ~ product:", product)
   const products = useAppSelector((state) => state.productSlice.products)
   const cancelRef = useRef(null)
   const handleSubmit = () => {
@@ -178,12 +179,6 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
                       </Radio>
                     </Stack>
                   </RadioGroup>
-                  {/* <Meta
-            meta={state.meta}
-            setMeta={(me: Array<IProductMeta>) => {
-              dispatch(setProductMeta(me))
-            }}
-          /> */}
                   <Box maxHeight="500px" overflowY="auto">
                     {product.hasVariant ? <WithVariant /> : <WithoutVariant />}
                   </Box>

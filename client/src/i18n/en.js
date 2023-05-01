@@ -143,5 +143,6 @@ export default {
     email_invalid: "Email's format is invalid",
     password_must_be_at_least_8_characters:
       'Password must be at least 8 characters',
+    quantity_not_less_than_1: 'Quantity not less than 1',
   },
 };
