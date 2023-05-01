@@ -136,7 +136,7 @@ export default function Receipt() {
           onClick={() => window.print()}
           className="not-show rounded-lg bg-blue-300 p-2 font-medium shadow-lg outline-none"
         >
-          {t('export_receipt')}
+          {t('print_receipt')}
         </button>
       </div>
     </div>

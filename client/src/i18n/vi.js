@@ -145,5 +145,8 @@ export default {
     email_invalid: 'Email không hợp lệ',
     password_must_be_at_least_8_characters: 'Mật khẩu phải có ít nhất 8 ký tự',
     quantity_not_less_than_1: 'Số lượng không được nhỏ hơn 1',
+    shop_name: 'Tên cửa hàng',
+    print_receipt: 'In hóa đơn',
+    refund: 'Hoàn tiền',
   },
 };
