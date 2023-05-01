@@ -169,7 +169,10 @@ export class CartService {
     };
   }
   async handleDeleteProductItem(sku: string, userId: string) {
-    console.log(userId);
+    console.log(
+      '🚀 ~ file: cart.service.ts:172 ~ CartService ~ handleDeleteProductItem ~ sku:',
+      sku,
+    );
     const cart = await this.cartRepository.findOneBy({
       customer: {
         _id: userId,
@@ -178,7 +181,7 @@ export class CartService {
     if (!cart) {
       throw new BadRequestException('Could not find cart with this user');
     }
-    const item = await this.cartItemRepository.findOneBy({
+    await this.cartItemRepository.delete({
       cart: {
         _id: cart._id,
       },
@@ -186,7 +189,19 @@ export class CartService {
         sku,
       },
     });
-    await this.cartItemRepository.remove(item);
+    // const item = await this.cartItemRepository.findOneBy({
+    //   cart: {
+    //     _id: cart._id,
+    //   },
+    //   product: {
+    //     sku,
+    //   },
+    // });
+    // console.log(
+    //   '🚀 ~ file: cart.service.ts:189 ~ CartService ~ handleDeleteProductItem ~ item:',
+    //   item,
+    // );
+    // // await this.cartItemRepository.remove(item);
     return 'Delete product item success';
   }
   async handleDeleteManyCartItem(cartItemId: number[]) {
@@ -195,6 +210,10 @@ export class CartService {
         _id: In(cartItemId),
       },
     });
+    console.log(
+      '🚀 ~ file: cart.service.ts:198 ~ CartService ~ handleDeleteManyCartItem ~ cartItems:',
+      cartItems,
+    );
     await this.cartItemRepository.remove(cartItems);
     return 'Remove cartitem success';
   }

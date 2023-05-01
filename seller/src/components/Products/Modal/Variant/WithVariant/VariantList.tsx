@@ -34,16 +34,9 @@ export default function VariantList({}: Props) {
     stock: 0,
   })
   const variants = product.variants
-  console.log(
-    "🚀 ~ file: VariantList.tsx:37 ~ VariantList ~ variants:",
-    variants
-  )
   const dispatch = useAppDispatch()
   const variantDetails = product.variantDetails
-  console.log(
-    "🚀 ~ file: VariantList.tsx:39 ~ VariantList ~ variantDetails:",
-    variantDetails
-  )
+
   const [image, setImage] = useState<{
     key: string
     data: File
@@ -57,7 +50,6 @@ export default function VariantList({}: Props) {
     variants.forEach(({ type, options }) =>
       options.forEach((opt) => isExist.push(opt._id))
     )
-    console.log(isExist.every((i) => i !== undefined && i !== -1))
     if (isExist.every((i) => i === -9999)) {
       const variantDetails: Array<any> = []
       if (variants.length == 1) {

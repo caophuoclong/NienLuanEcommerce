@@ -143,17 +143,18 @@ export class ProductService {
           variants
             .map((va) => va.type)
             .map(async (name) => {
-              const existVariant =
-                await this.productVariantRepository.findOneBy({
-                  name,
-                });
-              if (existVariant) {
-                return existVariant;
-              } else {
-                return await this.productVariantRepository.save({
-                  name,
-                });
-              }
+              return await this.productVariantRepository.save({
+                name,
+              });
+              // const existVariant =
+              //   await this.productVariantRepository.findOneBy({
+              //     name,
+              //   });
+              // if (existVariant) {
+              //   return existVariant;
+              // } else {
+
+              // }
             }),
         );
         const variantsOptions = await Promise.all(
@@ -253,11 +254,13 @@ export class ProductService {
       select: {
         productVariant: {
           name: true,
+          _id: true,
         },
       },
     });
     const groupVariants: {
       type: string;
+      _id: number;
       options: {
         _id: number;
         value: string;
@@ -271,6 +274,7 @@ export class ProductService {
       if (!isExist) {
         groupVariants.push({
           type: variant.productVariant.name,
+          _id: variant.productVariant._id,
           options: [
             {
               _id: variant._id,
@@ -323,28 +327,7 @@ export class ProductService {
         },
       },
     });
-
     return await this._getProdctInformation(product);
-    // const variant = await this.productvariantRepository.find({
-    //   where: {
-    //     product: {
-    //       _id: product._id,
-    //     },
-    //   },
-    // });
-    // const detail = await this.productDetailRepository.findBy({
-    //   product: {
-    //     _id: product._id,
-    //   },
-    // });
-    // const category = await this.categoryService.getParentCategory(
-    //   product.category._id,
-    // );
-    // const newProduct = this._parserProduct(product, variant, detail);
-    // return {
-    //   product: await newProduct,
-    //   category,
-    // };
   }
   async getProducts(dto: Partial<ProductGetDTO>, perPage?: number) {
     const { category, maxPrice, minPrice, name, shop, page = 0 } = dto;

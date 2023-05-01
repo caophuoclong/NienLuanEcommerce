@@ -144,5 +144,6 @@ export default {
     this_field_must_be_filled: 'Trường này phải được điền',
     email_invalid: 'Email không hợp lệ',
     password_must_be_at_least_8_characters: 'Mật khẩu phải có ít nhất 8 ký tự',
+    quantity_not_less_than_1: 'Số lượng không được nhỏ hơn 1',
   },
 };

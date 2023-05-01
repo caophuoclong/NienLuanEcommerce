@@ -1,5 +1,5 @@
 import { Box, IconButton, Input } from "@chakra-ui/react"
-import React from "react"
+import React, { ChangeEvent } from "react"
 import { FaCheck } from "react-icons/fa"
 
 function AddNewDetailButton({
@@ -20,11 +20,13 @@ function AddNewDetailButton({
         fontSize={"sm"}
         height={"32px"}
         fontWeight="semibold"
-        placeholder="Tên chi  tiết"
+        placeholder="Tên"
         id="detail-name"
         variant={"unstyled"}
         value={detailName.charAt(0).toUpperCase() + detailName.slice(1)}
-        onChange={(e) => setDetailName(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setDetailName(e.target.value)
+        }
         // on enter next input
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -49,7 +51,7 @@ function AddNewDetailButton({
       >
         <Input
           flex="4"
-          placeholder="Giá trị chi tiết"
+          placeholder="Giá trị"
           variant={"unstyled"}
           px="1rem"
           id="detail-value"

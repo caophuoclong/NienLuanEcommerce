@@ -17,6 +17,7 @@ export default function Variants({}: Props) {
   const handleAddVariant = () => {
     const variant = {
       type: "",
+      _id: 0,
       options: [],
     }
     const newVariants = variants ? [...variants] : []
@@ -83,6 +84,11 @@ export default function Variants({}: Props) {
                 </Box>
                 <Box w="85%">
                   <Input
+                    disabled={
+                      variants[i]._id === 1 || variants[i]._id === 2
+                        ? true
+                        : false
+                    }
                     w="30%"
                     size="sm"
                     id={`variantType${i}`}
@@ -167,7 +173,7 @@ export default function Variants({}: Props) {
           {variants.length < 2 && (
             <Box backgroundColor={"gray.200"} rounded="md" px="2" py="1">
               <Box display={"flex"} alignItems="center" gap="2">
-                <Text>Vairant {variants.length + 1}</Text>
+                <Text>Biến thể {variants.length + 1}</Text>
                 <Box
                   border="1px"
                   display={"flex"}
@@ -182,7 +188,7 @@ export default function Variants({}: Props) {
                   onClick={handleAddVariant}
                 >
                   <FaPlus size="16px" />
-                  AddVariant {variants.length + 1}
+                  Thêm biến thể {variants.length + 1}
                 </Box>
               </Box>
             </Box>

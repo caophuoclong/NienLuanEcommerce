@@ -30,7 +30,7 @@ export default function Item({ product, selected }) {
   const image = variants.find((x) => x.image !== '' && x.image !== null).image;
   const onUpdateQuantity = (q) => {
     if (q === null || q === undefined || +q === 0) {
-      alert('Please select at least 1 product!!!');
+     AppToast(t("quantity_not_less_than_1"), "warning")
     } else {
       (async () => {
         setLoading(true);
