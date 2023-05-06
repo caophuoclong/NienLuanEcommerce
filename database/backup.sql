@@ -29,7 +29,7 @@ CREATE TABLE `address` (
   `ward_code` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921231',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752229',
   PRIMARY KEY (`_id`),
   KEY `FK_9c9614b2f9d01665800ea8dbff7` (`customer_id`),
   KEY `FK_3b11e3dd0964b66967ce5acdfd8` (`ward_code`),
@@ -170,7 +170,7 @@ CREATE TABLE `cart_item` (
   `_id` int NOT NULL AUTO_INCREMENT,
   `quantity` int NOT NULL,
   `cart_id` varchar(36) DEFAULT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921238',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752233',
   `updatedAt` bigint NOT NULL DEFAULT '0',
   `productSku` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`_id`),
@@ -202,7 +202,7 @@ CREATE TABLE `category` (
   `_id` int NOT NULL AUTO_INCREMENT,
   `name_vi` varchar(255) NOT NULL,
   `name_en` varchar(255) NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921233',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752230',
   `requireDetail` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -260,7 +260,7 @@ CREATE TABLE `coupon` (
   `minium` int NOT NULL,
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921242',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752237',
   `updatedAt` bigint NOT NULL,
   PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -290,8 +290,8 @@ CREATE TABLE `credit_card` (
   `mm` int NOT NULL,
   `yy` int NOT NULL,
   `email` varchar(255) NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921239',
-  `balance` bigint NOT NULL DEFAULT '16829559',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752235',
+  `balance` bigint NOT NULL DEFAULT '16833588',
   PRIMARY KEY (`number`),
   KEY `FK_38b7a4683d23c797e8a48f3cfc5` (`customer_id`),
   CONSTRAINT `FK_38b7a4683d23c797e8a48f3cfc5` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`_id`)
@@ -321,7 +321,7 @@ CREATE TABLE `customer` (
   `middleName` varchar(255) DEFAULT NULL,
   `shop_name` varchar(255) DEFAULT NULL,
   `gender` enum('male','female','other') DEFAULT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921242',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752237',
   `updatedAt` bigint NOT NULL DEFAULT '0',
   `authUsername` varchar(255) DEFAULT NULL,
   `cart_id` varchar(36) DEFAULT NULL,
@@ -399,7 +399,7 @@ CREATE TABLE `order` (
   `payment_id` varchar(36) DEFAULT NULL,
   `address_id` int DEFAULT NULL,
   `shop_id` varchar(36) DEFAULT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921241',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752236',
   PRIMARY KEY (`_id`),
   KEY `FK_cd7812c96209c5bdd48a6b858b0` (`customer_id`),
   KEY `FK_859022ddb87e739046f4a215090` (`shippingProvider_id`),
@@ -466,7 +466,7 @@ CREATE TABLE `payment` (
   `_id` varchar(36) NOT NULL,
   `type` enum('COD','CREDIT_CARD','BANK_TRANSFER','PAYPAL') NOT NULL,
   `status` enum('PENDING','SUCCESS','FAILED') NOT NULL DEFAULT 'SUCCESS',
-  `createdAt` bigint NOT NULL DEFAULT '1682955921241',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752236',
   `customer_id` varchar(36) DEFAULT NULL,
   `creditCardNumber` varchar(255) DEFAULT NULL,
   `amount` int NOT NULL,
@@ -497,7 +497,7 @@ DROP TABLE IF EXISTS `product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `name` varchar(255) NOT NULL,
-  `createdAt` bigint NOT NULL DEFAULT '1682955921236',
+  `createdAt` bigint NOT NULL DEFAULT '1683358752232',
   `updatedAt` bigint NOT NULL DEFAULT '0',
   `category_id` int DEFAULT NULL,
   `shop_id` varchar(36) DEFAULT NULL,
@@ -522,7 +522,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('Quan short',1679443761068,0,15,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','Day la chiec quan short',1,NULL,NULL,NULL,58,0),('Ao thun',1679443761068,0,13,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','Day la cai ao thun',1,NULL,NULL,NULL,59,1),('What is this',1679451778150,0,14,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','Day la cai gi ay nho',1,NULL,NULL,NULL,60,1),('Shoe',1680237555445,0,7,'57bc9ee4-c869-4650-a929-fa7528995249','Day la doi giay',1,NULL,NULL,NULL,61,0),('hehih',1681386012751,0,7,'9b61828d-f25e-4ef8-8466-4adef1bcccc9','',1,NULL,NULL,NULL,67,0),('cogiday',1681386012751,0,9,'9b61828d-f25e-4ef8-8466-4adef1bcccc9','',1,NULL,NULL,NULL,68,0),('giay',1681386012751,0,7,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','',1,NULL,NULL,NULL,69,0),('Áo thun',1682880299037,0,3,'57bc9ee4-c869-4650-a929-fa7528995249','Đây là chiếc áo thun',1,NULL,NULL,NULL,70,0),('Quần short',1682880299037,0,15,'57bc9ee4-c869-4650-a929-fa7528995249','Đây là quần short dành cho mùa đông',1,NULL,NULL,NULL,71,0),('Quần short',1682880299037,0,15,'57bc9ee4-c869-4650-a929-fa7528995249','Đây là quần short dành cho mùa đông',1,NULL,NULL,NULL,72,0),('Quan long',1682911766408,0,15,'57bc9ee4-c869-4650-a929-fa7528995249','Day la cai quan',1,NULL,NULL,NULL,73,0);
+INSERT INTO `product` VALUES ('Quan short',1679443761068,0,15,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','Day la chiec quan short',1,NULL,NULL,NULL,58,0),('Ao thun',1679443761068,0,13,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','Day la cai ao thun',1,NULL,NULL,NULL,59,1),('What is this',1679451778150,0,14,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','Day la cai gi ay nho',1,NULL,NULL,NULL,60,1),('Shoe',1680237555445,0,7,'57bc9ee4-c869-4650-a929-fa7528995249','Day la doi giay',1,NULL,NULL,NULL,61,0),('hehih',1681386012751,0,7,'9b61828d-f25e-4ef8-8466-4adef1bcccc9','',1,NULL,NULL,NULL,67,0),('cogiday',1681386012751,0,9,'9b61828d-f25e-4ef8-8466-4adef1bcccc9','',1,NULL,NULL,NULL,68,0),('giay',1681386012751,0,7,'5bec39fd-8ba9-4cc9-90c6-8a7080f1a577','',1,NULL,NULL,NULL,69,0),('Áo thun',1682880299037,0,3,'57bc9ee4-c869-4650-a929-fa7528995249','Đây là chiếc áo thun',1,NULL,NULL,NULL,70,0),('Quần short',1682880299037,0,15,'57bc9ee4-c869-4650-a929-fa7528995249','Đây là quần short dành cho mùa đông',1,NULL,NULL,NULL,71,0),('Quần short',1682880299037,0,15,'57bc9ee4-c869-4650-a929-fa7528995249','Đây là quần short dành cho mùa đông',1,NULL,NULL,NULL,72,0);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -601,7 +601,7 @@ CREATE TABLE `product_variant_detail` (
 
 LOCK TABLES `product_variant_detail` WRITE;
 /*!40000 ALTER TABLE `product_variant_detail` DISABLE KEYS */;
-INSERT INTO `product_variant_detail` VALUES ('58_240_242',17000,15,0),('58_240_243',17000,8,0),('58_241_242',14000,13,0),('58_241_243',14000,15,0),('59_244_245',14000,15,0),('59_244_247',14000,19,0),('59_246_245',17000,5,0),('59_246_247',14000,15,0),('60_248_251',200000,5,0),('60_248_252',200000,12,0),('60_249_251',150000,0,0),('60_249_252',150000,6,0),('60_250_251',150000,17,0),('60_250_252',150000,5,0),('61_253_255',5,6,0),('61_253_257',170000,5,0),('61_254_255',150000,0,0),('61_254_257',150000,10,0),('61_256_255',190000,4,0),('61_256_257',190000,10,0),('66_270_271_272',10000,10,0),('66_270_273',10000,10,0),('66_271_272',10000,10,0),('66_271_272_273',10000,10,0),('67_275_274',10000,10,0),('68_276_278',100001,9,0),('68_277_278',10000,10,0),('69_280_279',10000,12,0),('69_280_281',10000,10,0),('69_282_279',10000,10,0),('69_282_281',10000,10,0),('70_283_285',50000,10,0),('70_283_286',10000,10,0),('70_284_285',15000,10,0),('70_284_286',10000,10,0),('71_287_288',15000,15,0),('71_287_290',10000,15,0),('71_289_288',10000,15,0),('71_289_290',5000,15,0),('72_291_292',10000,15,0),('72_291_294',5000,15,0),('72_293_292',15000,15,0),('72_293_294',10000,15,0);
+INSERT INTO `product_variant_detail` VALUES ('58_240_242',17000,15,0),('58_240_243',17000,8,0),('58_241_242',14000,13,0),('58_241_243',14000,15,0),('59_244_245',14000,15,0),('59_244_247',14000,19,0),('59_246_245',17000,5,0),('59_246_247',14000,15,0),('60_248_251',200000,5,0),('60_248_252',200000,12,0),('60_249_251',150000,0,0),('60_249_252',150000,6,0),('60_250_251',150000,17,0),('60_250_252',150000,5,0),('61_253_255',4000,6,0),('61_253_257',170000,5,0),('61_254_255',150000,0,0),('61_254_257',150000,10,0),('61_256_255',190000,4,0),('61_256_257',190000,10,0),('66_270_271_272',10000,10,0),('66_270_273',10000,10,0),('66_271_272',10000,10,0),('66_271_272_273',10000,10,0),('67_275_274',10000,10,0),('68_276_278',100001,9,0),('68_277_278',10000,10,0),('69_280_279',10000,12,0),('69_280_281',10000,10,0),('69_282_279',10000,10,0),('69_282_281',10000,10,0),('70_283_285',50000,10,0),('70_283_286',10000,10,0),('70_284_285',15000,10,0),('70_284_286',10000,10,0),('71_287_288',15000,15,0),('71_287_290',10000,15,0),('71_289_288',10000,15,0),('71_289_290',5000,15,0),('72_291_292',10000,15,0),('72_291_294',5000,15,0),('72_293_292',15000,15,0),('72_293_294',10000,15,0);
 /*!40000 ALTER TABLE `product_variant_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -763,4 +763,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-01 16:09:44
+-- Dump completed on 2023-05-06  8:43:34
