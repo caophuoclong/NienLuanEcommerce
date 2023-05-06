@@ -66,15 +66,16 @@ export const emptyProduct: IProduct = {
   deleted: false,
   status: ProductStatus.HIDE,
 }
+const emptyProductUpdate: ProductUpdate = {
+  infomation: {},
+  variants: [],
+  variantsDetails: [],
+  detail: [],
+}
 const initialState: ProductSlice = {
   product: emptyProduct,
   products: [],
-  update: {
-    infomation: {},
-    variants: [],
-    variantsDetails: [],
-    detail: [],
-  },
+  update: emptyProductUpdate,
   updateVariantDetailList: [],
 }
 export const getMyProduct = createAsyncThunk("Get my product", () => {
@@ -177,12 +178,6 @@ export const ProductSlice = createSlice({
         }),
       }
     },
-    // setProduct(state, action: PayloadAction<IProduct>) {
-    //   return {
-    //     ...state,
-    //     product: action.payload,
-    //   }
-    // },
     deleteProduct: (state, action: PayloadAction<string>) => {
       return {
         ...state,
@@ -222,6 +217,12 @@ export const ProductSlice = createSlice({
         },
       }
     },
+    makeEmptyProductUpdate(state) {
+      return {
+        ...state,
+        update: emptyProductUpdate,
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -257,5 +258,6 @@ export const {
   deleteProduct,
   restoreProduct,
   updateChange,
+  makeEmptyProductUpdate,
 } = ProductSlice.actions
 export default ProductSlice.reducer

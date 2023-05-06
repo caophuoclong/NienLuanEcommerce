@@ -45,7 +45,6 @@ export default function VariantList({}: Props) {
     if (variants.length < 1) {
       return
     }
-    // isExist in database
     const isExist: Array<number> = []
     variants.forEach(({ type, options }) =>
       options.forEach((opt) => isExist.push(opt._id))
