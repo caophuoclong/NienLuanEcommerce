@@ -33,7 +33,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { ChangeEvent, useEffect, useRef, useState } from "react"
 import { FaTimes } from "react-icons/fa"
 import { ICategory } from "../../../types/category"
 import { IProduct, ProductStatus } from "../../../types/product"
@@ -48,9 +48,11 @@ import WithoutVariant from "./Variant/WithoutVariant"
 import WithVariant from "./Variant/WithVariant"
 import { useAppDispatch } from "../../../app/hooks"
 import {
+  makeEmptyProductUpdate,
   restoreProduct,
   setEmptyNewProduct,
   setProductStatus,
+  updateChange,
   updateProduct,
 } from "../../../features/product"
 import { emptyCategory } from "../../../types/category"
@@ -83,9 +85,17 @@ enum Variant {
 export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
   const { isOpen: open, onOpen, onClose } = useDisclosure()
   const dispatch = useAppDispatch()
-  const product = useAppSelector((state) => state.productSlice.product)
-  console.log("🚀 ~ file: index.tsx:87 ~ ModalProduct ~ product:", product)
-  const products = useAppSelector((state) => state.productSlice.products)
+  const { product, products, update } = useAppSelector(
+    (state) => state.productSlice
+  )
+  console.log("🚀 ~ file: index.tsx:89 ~ ModalProduct ~ update:", update)
+
+  const handleClose = () => {
+    dispatch(makeEmptyProductUpdate())
+    dispatch(setProductStatus(ProductStatus.HIDE))
+    dispatch(setEmptyNewProduct())
+    onClose()
+  }
   const cancelRef = useRef(null)
   const handleSubmit = () => {
     onSubmit(product)
@@ -95,7 +105,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
       const response = await ProductService.deleteProduct(product._id)
       dispatch(setEmptyNewProduct())
       dispatch(deleteProduct(product._id))
-      onClose()
+      handleClose()
     } catch (error) {
       console.log("🚀 ~ file: index.tsx:97 ~ onRemoveDelete ~ error:", error)
     }
@@ -105,10 +115,6 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
       const response = await ProductService.restoreProduct(product._id)
       dispatch(restoreProduct(product._id))
       const newProduct = products.find((p) => p._id === product._id)!
-      console.log(
-        "🚀 ~ file: index.tsx:107 ~ handleRestore ~ newProduct:",
-        newProduct
-      )
       dispatch(
         updateProduct({
           ...newProduct,
@@ -122,14 +128,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
 
   return (
     <React.Fragment>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => {
-          dispatch(setProductStatus(ProductStatus.HIDE))
-          dispatch(setEmptyNewProduct())
-        }}
-        size="3xl"
-      >
+      <Modal isOpen={isOpen} onClose={handleClose} size="3xl">
         <ModalOverlay />
         <ModalContent padding="1rem">
           <ModalHeader borderBottom={"1px solid #eaeaee"}>{name}</ModalHeader>
@@ -151,7 +150,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
                 <TabPanel>
                   <RadioGroup
                     value={product.hasVariant.toString()}
-                    onChange={(e) => {
+                    onChange={(e: string) => {
                       dispatch(
                         updateProduct({
                           hasVariant: e === "true",
@@ -228,7 +227,7 @@ export default function ModalProduct({ name, isOpen, onSubmit }: Props) {
           <AlertDialogCloseButton />
           <AlertDialogBody>Bạn có chắc là xóa sản phẩm</AlertDialogBody>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
+            <Button ref={cancelRef} onClick={handleClose}>
               Không
             </Button>
             <Button onClick={onRemoveDelete} colorScheme="red" ml={3}>

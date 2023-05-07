@@ -56,6 +56,14 @@ export default function Information({}: Props) {
         category,
       })
     )
+    dispatch(
+      updateChange({
+        infomation: {
+          ...productSlice.update.infomation,
+          category,
+        },
+      })
+    )
     setCategory("")
   }
   return (

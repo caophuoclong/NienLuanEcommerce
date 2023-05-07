@@ -5,7 +5,7 @@ export class ProductVariant {
   @PrimaryGeneratedColumn()
   _id: number;
   @Column({
-    unique: true,
+    unique: false,
   })
   name: string;
 }
