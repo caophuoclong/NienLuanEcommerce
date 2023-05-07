@@ -51,7 +51,7 @@ export default function Profile() {
   };
   return (
     <div className="mx-auto w-2/3 bg-white p-2">
-      <p className="text-md border-b font-bold px-2">My Profile</p>
+      <p className="text-md border-b font-bold px-2">{t("profile")}</p>
       <div className="flex py-4">
         <div className="w-[80%] px-2">
           {state &&

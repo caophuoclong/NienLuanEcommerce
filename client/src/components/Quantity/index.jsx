@@ -3,6 +3,7 @@ import { FaMinus, FaPlus } from 'react-icons/fa';
 import Seprate from '../Seprate';
 
 export default function Quantity({
+  deleted,
   current,
   max = Infinity,
   onChange,
@@ -17,7 +18,7 @@ export default function Quantity({
   return (
     <div className="flex h-10 items-center">
       <button
-        disabled={isLoading}
+        disabled={isLoading || deleted}
         onClick={() => {
           if (current > 0) {
             handleSubstract();
@@ -31,7 +32,7 @@ export default function Quantity({
       <input
         className="h-full w-9 cursor-default text-center outline-none disabled:bg-gray-200"
         value={current}
-        disabled={isLoading}
+        disabled={isLoading || deleted}
         onChange={(e) => {
           const value = e.target.value;
           if (!isNaN(value)) {
@@ -46,7 +47,7 @@ export default function Quantity({
       <Seprate />
 
       <button
-        disabled={isLoading}
+        disabled={isLoading || deleted}
         onClick={() => {
           if (current + 1 > max) {
             alert('You are not');

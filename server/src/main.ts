@@ -29,6 +29,8 @@ async function bootstrap() {
       'https://shop.shopifyify.shop',
       'https://shopifyify.shop',
       'https://www.shopifyify.shop',
+      'https://www.bebes.site',
+      'https://bebes.site',
     ],
     credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTION, PATCH',

@@ -2,9 +2,25 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
 import { IProduct, ProductStatus } from "../../types/product"
 import { emptyCategory } from "../..//types/category"
 import { ProductService } from "../../service/api/product"
+
+interface ProductUpdate {
+  infomation: {
+    [key: string]: any
+  }
+  variants: Array<{
+    [key: string]: any
+  }>
+  variantsDetails: Array<{
+    [key: string]: any
+  }>
+  detail: Array<{
+    [key: string]: any
+  }>
+}
 interface ProductSlice {
   product: IProduct
   products: IProduct[]
+  update: ProductUpdate
   updateVariantDetailList: Array<{
     sku: string
     price: number
@@ -28,12 +44,18 @@ export const emptyProduct: IProduct = {
     requireDetail: "",
   },
   variantDetails: [],
-  variants: [],
+  variants: [
+    {
+      type: "",
+      _id: 0,
+      options: [],
+    },
+  ],
   detail: [],
   name: "",
   updatedAt: "",
   description: "",
-  hasVariant: false,
+  hasVariant: true,
   price: 0,
   stock: 0,
   sold: 0,
@@ -41,11 +63,19 @@ export const emptyProduct: IProduct = {
     type: "link",
     images: [],
   },
+  deleted: false,
   status: ProductStatus.HIDE,
+}
+const emptyProductUpdate: ProductUpdate = {
+  infomation: {},
+  variants: [],
+  variantsDetails: [],
+  detail: [],
 }
 const initialState: ProductSlice = {
   product: emptyProduct,
   products: [],
+  update: emptyProductUpdate,
   updateVariantDetailList: [],
 }
 export const getMyProduct = createAsyncThunk("Get my product", () => {
@@ -148,12 +178,51 @@ export const ProductSlice = createSlice({
         }),
       }
     },
-    // setProduct(state, action: PayloadAction<IProduct>) {
-    //   return {
-    //     ...state,
-    //     product: action.payload,
-    //   }
-    // },
+    deleteProduct: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        products: state.products.map((x) => {
+          // if equal set deleted = true
+          if (x._id === action.payload) {
+            return {
+              ...x,
+              deleted: true,
+            }
+          }
+          return x
+        }),
+      }
+    },
+    restoreProduct: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        products: state.products.map((x) => {
+          // if equal set deleted = true
+          if (x._id === action.payload) {
+            return {
+              ...x,
+              deleted: false,
+            }
+          }
+          return x
+        }),
+      }
+    },
+    updateChange(state, action: PayloadAction<Partial<ProductUpdate>>) {
+      return {
+        ...state,
+        update: {
+          ...state.update,
+          ...action.payload,
+        },
+      }
+    },
+    makeEmptyProductUpdate(state) {
+      return {
+        ...state,
+        update: emptyProductUpdate,
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -186,5 +255,9 @@ export const {
   updateVariantDetailProduct,
   emptyListVariantDetail,
   updateVariantDetailInProducts,
+  deleteProduct,
+  restoreProduct,
+  updateChange,
+  makeEmptyProductUpdate,
 } = ProductSlice.actions
 export default ProductSlice.reducer

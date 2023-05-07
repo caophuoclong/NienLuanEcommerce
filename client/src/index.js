@@ -40,7 +40,12 @@ import Completed from './pages/User/Purchase/Completed';
 import Refunded from './pages/User/Purchase/Refunded';
 import Shipping from './pages/User/Purchase/Shipping';
 import Canceled from './pages/User/Purchase/Canceled';
-
+import Active from './pages/Active';
+import { AuthService } from './services/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Receipt from './pages/Receipt';
+import { OrderService } from './services/order';
 const container = document.getElementById('root');
 const root = createRoot(container);
 const router = createBrowserRouter([
@@ -70,7 +75,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'purchase',
-            
+
             element: (
               <Purchase>
                 <Outlet />
@@ -78,7 +83,6 @@ const router = createBrowserRouter([
             ),
             children: [
               {
-               
                 index: true,
                 element: <AllOrders />,
               },
@@ -130,10 +134,31 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: '/signin',
-    element: <LogIn />,
-    errorElement: <NotFound />,
+    path: 'receipt/:id',
+    loader: async (data) => {
+      try {
+        const response = await OrderService.getReceipt(data.params.id);
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+      // return 'test';
+    },
+    element: <Receipt />,
   },
+  {
+    path: 'active/:token',
+    loader: async (data) => {
+      try {
+        const response = await AuthService.active(data.params.token);
+        return response;
+      } catch (error) {
+        return 0;
+      }
+    },
+    element: <Active />,
+  },
+
   {
     path: 'register',
     element: <Register />,
@@ -164,10 +189,10 @@ const App = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const lang = window.localStorage.getItem('lang') || 'vi';
+    changeLanguage(lang);
     const darkMode = window.localStorage.getItem('darkMode') || false;
     dispatch(changeLang(lang));
     dispatch(setDarkMode(darkMode));
-    changeLanguage(lang);
   }, []);
 
   // useEffect(() => {
@@ -189,6 +214,7 @@ const App = () => {
 };
 root.render(
   <Provider store={store}>
+    <ToastContainer />
     <App />
   </Provider>,
 );

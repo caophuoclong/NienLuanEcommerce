@@ -14,6 +14,7 @@ import { parseUrl } from '../../utils';
 import { CartService } from '../../services/cart';
 import Quantity from '../../components/Quantity';
 import { addCartItem } from '../../app/slices/cart.slice';
+import { AppToast } from '../../utils/appToast';
 const max = 1500;
 const min = 1000;
 export default function ProductView() {
@@ -29,6 +30,7 @@ export default function ProductView() {
   const prices = variantDetails?.map((v) => v.price);
   const stocks = variantDetails?.map((v) => v.stock);
   const images = [];
+  const { t } = useTranslation();
   variants?.forEach((v) => {
     v.options.forEach((opt) => {
       if (opt.image) images.push(opt.image);
@@ -81,27 +83,34 @@ export default function ProductView() {
     }
   }, [tmpVariant]);
   const onAddToCart = async () => {
-    console.log(Object.keys(variantDetail).length);
+    if (quantity < 1) {
+      AppToast(t('quantity_not_less_than_1'), 'warning');
+      return;
+    }
     if (Object.keys(variantDetail).length === 0) {
-      alert('Please select!!!');
+      AppToast(t('please_select_variant'), 'warning');
+      return;
     }
     const productId = variantDetail.sku.split('_');
     const isExist = cart.find(
       (item) => item.product.sku.split('_') === productId,
     );
     if (!isExist) {
-      const response = await CartService.addToCart({
-        productVariantDetail: variantDetail,
-        quantity,
-      });
-      console.log("🚀 ~ file: index.jsx:96 ~ onAddToCart ~ response:", response)
-      // dispatch(addCartItem(1))
-      dispatch(addCartItem(response));
-      alert("Add to cart success!")
-    }else{
-      alert("Product already existed!")
+      try {
+        const response = await CartService.addToCart({
+          productVariantDetail: variantDetail,
+          quantity,
+        });
+        dispatch(addCartItem(response));
+        AppToast(t('add_to_cart_success'), 'success');
+      } catch (err) {
+        AppToast(t('out_of_stock'), 'error');
+      }
+    } else {
+      AppToast(t('product_already_existed'), 'warning');
     }
   };
+  console.log(variantDetail);
 
   return (
     <div className="px-[2rem]">
@@ -195,7 +204,7 @@ export default function ProductView() {
 
           <div className="flex items-center gap-4">
             <div className="flex gap-4">
-              <span className="text-lg font-bold">Số lượng:</span>
+              <span className="text-lg font-bold">{t('quantity')}:</span>
               <Quantity
                 current={quantity}
                 onChange={(q) => setQuantity(q)}
@@ -203,12 +212,12 @@ export default function ProductView() {
               />
             </div>
             <span className="text-md text-gray-500">
-              Stock:{' '}
-              {variantDetail && variantDetail['stock']
+              {t('stock')}:{' '}
+              {variantDetail && variantDetail['stock'] > -1
                 ? variantDetail['stock']
                 : hasVariant
                 ? `
-        ${Math.min(...stocks)} - ${Math.max(...stocks)}
+              ${Math.min(...stocks)} - ${Math.max(...stocks)}
         `
                 : stock}
             </span>
@@ -218,7 +227,7 @@ export default function ProductView() {
             className="group ml-3 mt-6 flex h-10 flex-1 items-center justify-center gap-x-2 rounded-lg bg-green-400 text-white hover:bg-blue-500"
           >
             <MdOutlineAddShoppingCart className="ml-2" />
-            <p className="mr-3 font-bold">Thêm vào giỏ hàng</p>
+            <p className="mr-3 font-bold">{t('add_to_cart')}</p>
           </button>
         </div>
       </div>

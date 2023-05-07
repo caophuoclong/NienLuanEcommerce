@@ -10,6 +10,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 
@@ -53,6 +54,7 @@ export default function Products({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const homeState = useAppSelector((state) => state.homeSlice)
   const productState = useAppSelector((state) => state.productSlice)
+  const toast = useToast()
   const productStatus = productState.product.status
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -100,6 +102,12 @@ export default function Products({}: Props) {
             variants: copyVariants,
           })
         )
+        toast({
+          title: "Thêm sản phẩm thành công!",
+          status: "success",
+          position: "top-right",
+        })
+        onClose()
         break
       case ProductStatus.UPDATE:
         if (productState.updateVariantDetailList.length > 0) {
@@ -124,9 +132,9 @@ export default function Products({}: Props) {
       productStatus === ProductStatus.UPDATE
     ) {
       if (productStatus === ProductStatus.CREATE) {
-        setModalName("Create product")
+        setModalName("Thêm sản phẩm")
       } else {
-        setModalName("Update Product")
+        setModalName("Câp nhật sản phẩm")
       }
       onOpen()
     } else {
@@ -134,162 +142,6 @@ export default function Products({}: Props) {
       setModalName("")
     }
   }, [productStatus])
-  // useEffect(() => {
-  //   const sortType = homeState.sort.name
-  //   const newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (sortType === "down") {
-  //       if (a.name.charAt(0) < b.name.charAt(0)) {
-  //         return -1
-  //       } else {
-  //         return 1
-  //       }
-  //     } else {
-  //       if (a.name.charAt(0) < b.name.charAt(0)) {
-  //         return 1
-  //       } else {
-  //         return -1
-  //       }
-  //     }
-  //   })
-
-  //   setProducts(newProducts)
-  // }, [homeState.sort.name])
-  // useEffect(() => {
-  //   const sortType = homeState.sort.category
-  //   const newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (sortType === "down") {
-  //       if (homeState.lang === "en") {
-  //         if (a.category.name_en.charAt(0) < b.category.name_en.charAt(0)) {
-  //           return -1
-  //         } else {
-  //           return 1
-  //         }
-  //       } else {
-  //         if (a.category.name_vi.charAt(0) < b.category.name_vi.charAt(0)) {
-  //           return -1
-  //         } else {
-  //           return 1
-  //         }
-  //       }
-  //     } else {
-  //       if (homeState.lang === "en") {
-  //         if (a.category.name_en.charAt(0) < b.category.name_en.charAt(0)) {
-  //           return 1
-  //         } else {
-  //           return -1
-  //         }
-  //       } else {
-  //         if (a.category.name_vi.charAt(0) < b.category.name_vi.charAt(0)) {
-  //           return 1
-  //         } else {
-  //           return -1
-  //         }
-  //       }
-  //     }
-  //   })
-  //   setProducts(newProducts)
-  // }, [homeState.sort.category])
-  // useEffect(() => {
-  //   const sortType = homeState.sort.sold
-  //   const newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (sortType === "down") {
-  //       return (
-  //         a.meta.reduce((prev, current, i) => {
-  //           return current.sold + prev
-  //         }, 0) -
-  //         b.meta.reduce((prev, current, i) => {
-  //           return current.sold + prev
-  //         }, 0)
-  //       )
-  //     } else {
-  //       return (
-  //         b.meta.reduce((prev, current, i) => {
-  //           return current.sold + prev
-  //         }, 0) -
-  //         a.meta.reduce((prev, current, i) => {
-  //           return current.sold + prev
-  //         }, 0)
-  //       )
-  //     }
-  //   })
-
-  //   setProducts(newProducts)
-  // }, [homeState.sort.sold])
-  // useEffect(() => {
-  //   const sortType = homeState.sort.stock
-  //   const newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (sortType === "down") {
-  //       return (
-  //         a.meta.reduce((prev, current, i) => {
-  //           return current.stock + prev
-  //         }, 0) -
-  //         b.meta.reduce((prev, current, i) => {
-  //           return current.stock + prev
-  //         }, 0)
-  //       )
-  //     } else {
-  //       return (
-  //         b.meta.reduce((prev, current, i) => {
-  //           return current.stock + prev
-  //         }, 0) -
-  //         a.meta.reduce((prev, current, i) => {
-  //           return current.stock + prev
-  //         }, 0)
-  //       )
-  //     }
-  //   })
-
-  //   setProducts(newProducts)
-  // }, [homeState.sort.stock])
-  // useEffect(() => {
-  //   const sortType = homeState.sort.created
-  //   const newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (sortType === "down") {
-  //       return +a.createdAt - +b.createdAt
-  //     } else {
-  //       return +b.createdAt - +a.createdAt
-  //     }
-  //   })
-  //   setProducts(newProducts)
-  // }, [homeState.sort.created])
-  // useEffect(() => {
-  //   const sortType = homeState.sort.updated
-  //   const newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (sortType === "down") {
-  //       return +a.updatedAt - +b.updatedAt
-  //     } else {
-  //       return +b.updatedAt - +a.updatedAt
-  //     }
-  //   })
-  //   setProducts(newProducts)
-  // }, [homeState.sort.updated])
-  // useEffect(() => {
-  //   const s_o_r_t = homeState.sort
-  //   let newProducts = [...products]
-  //   newProducts.sort((a, b) => {
-  //     if (s_o_r_t.name === "down") {
-  //       if (a.name.charAt(0) < b.name.charAt(0)) {
-  //         return 1
-  //       } else {
-  //         return -1
-  //       }
-  //     } else {
-  //       if (a.name.charAt(0) < b.name.charAt(0)) {
-  //         return -1
-  //       } else {
-  //         return 1
-  //       }
-  //     }
-  //   })
-  //   setProducts(newProducts)
-  // }, [homeState.sort])
-
   return (
     <Box h="100%">
       <ProductHeader />
@@ -298,7 +150,7 @@ export default function Products({}: Props) {
           <Thead bgColor={"#f3f4f6"} position="sticky" top={0} zIndex="docked">
             <Tr>
               <Th width={"30%"}>
-                Name
+                Tên sản phẩm
                 <IconButton
                   variant="ghost"
                   aria-label="sort name"
@@ -313,7 +165,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Price{" "}
+                Đơn giá{" "}
                 <IconButton
                   variant="ghost"
                   aria-label="sort price"
@@ -328,7 +180,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="10%">
-                Category{" "}
+                Phân loại{" "}
                 <IconButton
                   variant="ghost"
                   aria-label="sort category"
@@ -343,7 +195,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Stock{" "}
+                Tồn kho{" "}
                 <IconButton
                   variant="ghost"
                   aria-label="sort stock"
@@ -358,7 +210,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Sold
+                Đã bán
                 <IconButton
                   variant="ghost"
                   aria-label="sort sold"
@@ -374,7 +226,7 @@ export default function Products({}: Props) {
               </Th>
 
               <Th w="5%">
-                Crated
+                Ngày thêm
                 <IconButton
                   variant="ghost"
                   aria-label="sort sold"
@@ -389,7 +241,7 @@ export default function Products({}: Props) {
                 />
               </Th>
               <Th w="5%">
-                Updated
+                Ngày cập nhật
                 <IconButton
                   variant="ghost"
                   aria-label="sort sold"

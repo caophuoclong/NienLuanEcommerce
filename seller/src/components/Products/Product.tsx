@@ -21,12 +21,13 @@ export default function Product({
   stock,
   sold,
   variantDetails,
+  deleted,
 }: Props) {
   const lang = useAppSelector((state) => state.homeSlice.lang)
   const prices = variantDetails.map((v) => v.price)
   const stocks = variantDetails.map((v) => v.stock)
   return (
-    <Tr>
+    <Tr bgColor={deleted ? "white" : "transparent"} opacity={deleted ? 0.5 : 1}>
       <Td>{name}</Td>
       <Td>
         {hasVariant ? (
@@ -80,7 +81,7 @@ export default function Product({
           p=".5rem"
         >
           <BiEdit />
-          <Text>Edit item</Text>
+          <Text>Chỉnh sửa</Text>
         </Button>
       </Td>
     </Tr>

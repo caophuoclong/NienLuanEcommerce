@@ -30,7 +30,24 @@ export class AuthService {
   ) {}
   async registration(dto: RegistrationDTO) {
     try {
-      const { firstName, lastName, middleName, shop_name, ...authDTO } = dto;
+      const { firstName, lastName, middleName, shop_name, dob, ...authDTO } =
+        dto;
+      const existAuth = await this.authRepository.findOne({
+        where: [{ username: authDTO.username }, { email: authDTO.email }],
+      });
+      if (existAuth) {
+        if (existAuth.username === authDTO.username) {
+          throw new BadRequestException({
+            name: 'username',
+            message: 'Username is exist',
+          });
+        } else {
+          throw new BadRequestException({
+            name: 'email',
+            message: 'Email is exist',
+          });
+        }
+      }
       const auth = await this.authRepository.save({
         ...authDTO,
         password: await hashPassword(authDTO.password),
@@ -54,7 +71,8 @@ export class AuthService {
           throw new BadRequestException('Role is not supported');
       }
     } catch (err) {
-      throw new BadRequestException(err.message);
+      console.log(err);
+      throw new BadRequestException(err.response);
     }
   }
   async loginSeller(dto: LoginDTO) {
@@ -229,10 +247,6 @@ export class AuthService {
   }
   async refreshToken(refreshToken: string) {
     try {
-      console.log(
-        '🚀 ~ file: auth.service.ts:225 ~ AuthService ~ refreshToken ~ refreshToken',
-        refreshToken,
-      );
       const keys = await this.cacheService.keys(`*-${refreshToken}`);
       const data = await this.cacheService.hGetAll(keys[0]);
       console.log(
@@ -293,6 +307,23 @@ export class AuthService {
     auth.active = true;
     this.authRepository.save(auth);
     this.cacheService.del(token);
-    return 'Active account successful!';
+    return {
+      role: auth.role,
+    };
+  }
+  async changePassword(newPassword: string, username: string) {
+    const auth = await this.authRepository.findOne({
+      where: {
+        username,
+      },
+    });
+    if (!auth) {
+      throw new BadRequestException('Could not find username');
+    }
+    auth.password = await hashPassword(newPassword);
+    this.authRepository.save(auth);
+    return {
+      role: auth.role,
+    };
   }
 }

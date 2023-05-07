@@ -70,6 +70,7 @@ export default function Process({ handleShowSummary }) {
   const handleBack = () => {
     switch (tabElements.find((tab) => tab.current).id) {
       case 'shipping_address':
+        navigate("/cart")
         break;
       case 'payment':
         handleChangeTab('shipping_address');
@@ -211,25 +212,25 @@ export default function Process({ handleShowSummary }) {
           <React.Fragment>
             <button
               onClick={handleBack}
-              className="w-1/6 rounded-md bg-black p-2 text-xl font-bold text-white hover:scale-[0.9] hover:shadow-xl"
+              className="w-2/6 rounded-md bg-black p-2 text-xl font-bold text-white hover:scale-[0.9] hover:shadow-xl"
             >
-              Back
+              {t("back")}
             </button>
             {tabElements.find((tab) => tab.current).id !== 'payment' ? (
               <button
                 disabled={!tabElements.find((tab) => tab.current).valid}
                 onClick={handleContinue}
-                className="w-1/6 rounded-md bg-blue-300 p-2 text-xl font-bold hover:scale-[1.10] hover:shadow-xl  disabled:hover:scale-100"
+                className="w-2/6 rounded-md bg-blue-300 p-2 text-xl font-bold hover:scale-[1.10] hover:shadow-xl  disabled:hover:scale-100"
               >
-                Continue
+                {t("continue")}
               </button>
             ) : (
               <button
                 disabled={!tabElements.find((tab) => tab.current).valid}
                 onClick={handleCheckOut}
-                className="w-1/6 rounded-md bg-blue-300 p-2 text-xl font-bold hover:scale-[1.10] hover:shadow-xl  disabled:hover:scale-100"
+                className="w-2/6 rounded-md bg-blue-300 p-2 text-xl font-bold hover:scale-[1.10] hover:shadow-xl  disabled:hover:scale-100"
               >
-                Checkout
+                {t("checkout")}
               </button>
             )}
           </React.Fragment>

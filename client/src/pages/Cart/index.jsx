@@ -4,22 +4,28 @@ import { BiTrash } from 'react-icons/bi';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   emptySelected,
+  removeManyCartItem,
   selectAllItem,
 } from '../../app/slices/cart.slice';
 import Item from './Item';
 import Shop from './Shop';
 import LoadingSkeleton from './LoadingSkeleton';
 import ItemSelected from './ItemSelected';
+import { useTranslation } from 'react-i18next';
+import { AppToast } from '../../utils/appToast';
+import { CartService } from '../../services/cart';
 
 export default function Cart() {
   const cart = useAppSelector((state) => state.cart.cart);
   const [cartShop, setCartShop] = useState({});
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (cart.length > 0) {
       const tmp = {};
       cart.forEach((cartItem)=>{
         const {product, quantity, selected} = cartItem;
+        console.log("🚀 ~ file: index.jsx:28 ~ cart.forEach ~ selected:", selected)
         const {shop, ...temp} = product;
         if(!tmp[shop._id]){
           tmp[shop._id] = {
@@ -56,17 +62,31 @@ export default function Cart() {
       dispatch(selectAllItem());
     }
   };
-
+  const handleDelete = async()=>{
+    const anySelected = cart.map(x => x.selected).every(x => x === false);
+    console.log(cart);
+    if(anySelected){
+      AppToast(t("please_choose_product"), "warning")
+    }else{
+      const cartSelected = cart.filter(cart => cart.selected);
+      try{
+        await CartService.handleDeleteManyCartItem(cartSelected.map(cart => cart._id))
+      AppToast(t("remove_product_success"), "success")
+        dispatch(removeManyCartItem(cartSelected.map(cart => cart._id)))
+        }catch(error){
+        AppToast(`${t("remove_product_fail")}, ${t("please_try_again")}`, "error")
+      }
+    }
+  }
   return (
-    <div className="mt-3">
+    <div className="mt-3 relative">
       <Link to="/" className="text-blue-500">
-        Trang chủ
+        {t("home")}
       </Link>
       {' > '}
       <Link to="'/Cart'" className="text-blue-500">
-        Giỏ Hàng
+        {t("cart")}
       </Link>
-      <h1 className="text-xl font-bold">Cart</h1>
       {cart.length > 0 ? (
         <React.Fragment>
           {/* Heading */}
@@ -79,11 +99,11 @@ export default function Cart() {
               type="checkbox"
               className="h-5 w-5"
             />
-            <div className="flex-[5]">All {cart.length} products</div>
-            <div className="flex-[1]">UnitPrice</div>
-            <div className="flex-[2]">Quantity</div>
-            <div className="flex-[2]">TotalPrice</div>
-            <button>
+            <div className="flex-[5]">{t("all")} {cart.length} {t("product")}</div>
+            <div className="flex-[1]">{t("unit_price")}</div>
+            <div className="flex-[2]">{t("quantity")}</div>
+            <div className="flex-[2]">{t("total_price")}</div>
+            <button onClick={handleDelete}>
               <BiTrash size="24px" />
             </button>
           </div>
@@ -104,7 +124,9 @@ export default function Cart() {
           <ItemSelected />
         </React.Fragment>
       ) : (
-        <div>Please buy goods</div>
+        <div className=" mx-auto w-1/2 bg-white shadow-xl h-20 rounded-lg flex items-center justify-center">
+          <p className="font-bold text-xl">{t("please_buy_more_product")}</p>
+        </div>
       )}
     </div>
   );

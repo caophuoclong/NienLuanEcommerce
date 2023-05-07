@@ -16,7 +16,7 @@ services:
     container_name: server
     restart: always
     ports:
-      - "3070:3003"
+      - "3003:3003"
     env_file: ./docker_env/server.env
     volumes:
       - ./public:/app/public
@@ -43,3 +43,4 @@ services:
     volumes:
       - ./redis:/data
       - ./redis.conf:/etc/redis/redis.conf
+    command: redis-server --appendonly yes

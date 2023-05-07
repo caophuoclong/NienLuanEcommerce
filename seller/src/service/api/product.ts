@@ -41,4 +41,10 @@ export class ProductService {
   ) {
     return (await axiosClient.put("/product/variantDetail", data)).data
   }
+  static async deleteProduct(_id: string) {
+    return (await axiosClient.delete("/product/" + _id)).data
+  }
+  static async restoreProduct(_id: string) {
+    return (await axiosClient.put("/product/restore/" + _id)).data
+  }
 }

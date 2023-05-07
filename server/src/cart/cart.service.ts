@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from 'src/database/entities/cart';
 import { CartItem } from 'src/database/entities/cart/cartItem';
 import { ProductVariantDetail } from 'src/database/entities/product/variant/detail';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { AddToCartDTO } from './dto/addToCartDTO';
 import { Product } from '../database/entities/product/index';
 import { ProductVariantOption } from 'src/database/entities/product/variant/options';
@@ -167,5 +167,54 @@ export class CartService {
       _id,
       field,
     };
+  }
+  async handleDeleteProductItem(sku: string, userId: string) {
+    console.log(
+      '🚀 ~ file: cart.service.ts:172 ~ CartService ~ handleDeleteProductItem ~ sku:',
+      sku,
+    );
+    const cart = await this.cartRepository.findOneBy({
+      customer: {
+        _id: userId,
+      },
+    });
+    if (!cart) {
+      throw new BadRequestException('Could not find cart with this user');
+    }
+    await this.cartItemRepository.delete({
+      cart: {
+        _id: cart._id,
+      },
+      product: {
+        sku,
+      },
+    });
+    // const item = await this.cartItemRepository.findOneBy({
+    //   cart: {
+    //     _id: cart._id,
+    //   },
+    //   product: {
+    //     sku,
+    //   },
+    // });
+    // console.log(
+    //   '🚀 ~ file: cart.service.ts:189 ~ CartService ~ handleDeleteProductItem ~ item:',
+    //   item,
+    // );
+    // // await this.cartItemRepository.remove(item);
+    return 'Delete product item success';
+  }
+  async handleDeleteManyCartItem(cartItemId: number[]) {
+    const cartItems = await this.cartItemRepository.find({
+      where: {
+        _id: In(cartItemId),
+      },
+    });
+    console.log(
+      '🚀 ~ file: cart.service.ts:198 ~ CartService ~ handleDeleteManyCartItem ~ cartItems:',
+      cartItems,
+    );
+    await this.cartItemRepository.remove(cartItems);
+    return 'Remove cartitem success';
   }
 }

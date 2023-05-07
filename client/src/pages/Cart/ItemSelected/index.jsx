@@ -5,6 +5,7 @@ import { emptySelected, selectAllItem } from '../../../app/slices/cart.slice';
 import Price from '../../../components/Price';
 import VietNamCurrency from '../../../components/Sign/VietNamCurrency';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function ItemSelected() {
   const cart = useAppSelector((state) => state.cart.cart);
@@ -25,7 +26,8 @@ export default function ItemSelected() {
   }
   useEffect(() => {
     if (cart.filter(c => c.selected).length > 0) {
-      const price = cart.reduce((prev, curr) => {
+      console.log(cart.map(c => c.selected))
+      const price = cart.filter(c => c.selected).reduce((prev, curr) => {
         return prev + curr.product.price * curr.quantity;
       }, 0);
       settotalPrice(price);
@@ -66,18 +68,19 @@ export default function ItemSelected() {
         );
     }
   }, [ref.current]);
+  const {t} = useTranslation();
   return (
     <div
       ref={ref}
       className="bottom-0 z-50 rounded-md bg-white text-lg drop-shadow-2xl"
     >
-      <div className="flex w-full items-center justify-end gap-2 border-b py-2 px-2">
+      {/* <div className="flex w-full items-center justify-end gap-2 border-b py-2 px-2">
         <p>Coupon</p>
         <button className="flex items-center justify-end gap-2 text-blue-400">
           <RiCoupon2Line size="16px" />
           Select coupon
         </button>
-      </div>
+      </div> */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
           <input
@@ -87,20 +90,20 @@ export default function ItemSelected() {
             checked={checked}
             onChange={handleSelectAll}
           />
-          <label htmlFor="selectAllItems">Select All ({cart.length})</label>
-          <button>Remove</button>
+          <label htmlFor="selectAllItems">{t("select_all")} ({cart.length})</label>
+          <button>{t("remove")}</button>
         </div>
         <div className="flex items-center gap-4">
           <p>
-            Total ({cart.filter(c => c.selected).length} products): <Price price={totalPrice} />{' '}
+            {t("total")} ({cart.filter(c => c.selected).length} {t("product").toLocaleLowerCase()}): <Price price={totalPrice} />{' '}
             <VietNamCurrency />{' '}
           </p>
           <button
             onClick={handleBuy}
-            disabled={cart.some(i => i.selected).length === 0 ? true : false}
+            disabled={cart.map(i => i.selected).every(i => i === false)}
             className="flex items-center justify-center rounded-md bg-blue-300 py-2 px-12 hover:scale-[1.05] disabled:cursor-not-allowed"
           >
-            Buy
+            {t("checkout")}
           </button>
         </div>
       </div>

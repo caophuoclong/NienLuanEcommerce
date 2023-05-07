@@ -36,20 +36,27 @@ export default function Home() {
       src: 'https://cf.shopee.vn/file/a08ab28962514a626195ef0415411585_xhdpi',
     },
   ];
-  const category = {
-    name: 'Men Clothes',
-    link: '/category/men-clothes.12',
-    src: 'https://cf.shopee.vn/file/687f3967b7c2fe6a134a2c11894eea4b_tn',
-  };
-  // generate categories with 24 categories
-
-  const categories = Array(15).fill(category);
+  const homeState = useAppSelector(state => state.home);
+  const settingState = useAppSelector(state => state.settings);
+  const [categories, setCategories] = useState([]);
+  useEffect(()=>{
+    if(homeState.categories.length > 0){
+      const temp = homeState.categories.filter(x => x._id !== 1).map((c)=>{
+        return {
+          name: c[`name_${settingState.lang}`],
+          src: "https://picsum.photos/40",
+          link: `/search?category=${c._id}`
+        }
+      })
+      setCategories(temp);
+    }
+  },[homeState.categories, settingState.lang ])
 
   const products = useAppSelector((state) => state.home.products);
   return (
     <div className="flex flex-col gap-4 pb-8">
       <Slider height={'400px'} width={'100%'} carousel={slider} />
-      <HotServices services={hotServices} />
+      {/* <HotServices services={hotServices} /> */}
       <Category categories={categories} />
       <Banner height="120px" number={3} banner={banner} />
       <SuggestProduct products={products} />

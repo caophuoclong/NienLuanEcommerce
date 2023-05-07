@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Address from 'src/database/entities/address';
 import { CartItem } from 'src/database/entities/cart/cartItem';
@@ -17,6 +21,7 @@ import { ProductVariantOption } from 'src/database/entities/product/variant/opti
 import { PaymentService } from 'src/payment/payment.service';
 import { In, Repository } from 'typeorm';
 import { CheckoutDTO, IAdress, ICard } from './dto/checkoutDTO';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class OrderService {
@@ -323,5 +328,89 @@ export class OrderService {
     });
     console.log('adfasdf');
     return orders.map(({ customer, ...order }) => order);
+  }
+  async updateStatusOrder({
+    _id,
+    status,
+  }: {
+    _id: number;
+    status: OrderStatus;
+  }) {
+    const order = await this.orderRepository.findOneBy({
+      _id,
+    });
+    if (!order) {
+      throw new NotFoundException('Could not found order');
+    }
+    order.status = status;
+    await this.orderRepository.save(order);
+    return 'Update status success';
+  }
+  async getReceipt(_id: number) {
+    const order = await this.orderRepository.findOne({
+      where: {
+        _id,
+      },
+      relations: {
+        shop: {
+          shop_address: {
+            ward: {
+              district: {
+                province: true,
+              },
+            },
+          },
+        },
+        customer: true,
+        address: {
+          ward: {
+            district: {
+              province: true,
+            },
+          },
+        },
+        orderItems: {
+          productVariantDetail: true,
+        },
+      },
+    });
+    const orderItems = await Promise.all(
+      order.orderItems.map(async (item) => {
+        const [productId, ...variantId] =
+          item.productVariantDetail.sku.split('_');
+        const product = await this.productRepository.findOne({
+          where: {
+            _id: +productId,
+          },
+        });
+        const { _id, price, stock, sold, ...newProduct } = product;
+        const variantOption = await this.productVariantOptionRepository.find({
+          where: {
+            _id: In(variantId),
+          },
+          relations: {
+            productVariant: true,
+          },
+        });
+        const variants = variantOption.map((variant) => {
+          return {
+            type: variant.productVariant.name,
+            value: variant.value,
+            Image: variant.image,
+          };
+        });
+        return {
+          ...newProduct,
+          price: item.price,
+          quantity: item.quantity,
+          variants,
+        };
+      }),
+    );
+
+    return {
+      ...order,
+      orderItems,
+    };
   }
 }

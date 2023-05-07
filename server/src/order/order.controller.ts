@@ -4,6 +4,7 @@ import {
   Get,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -39,5 +40,13 @@ export class OrderController {
   @Get('/shop')
   getOrdersPershop(@Req() { user: { _id } }: Request) {
     return this.orderService.getOrdersPerShop(_id);
+  }
+  @Patch('/status')
+  updateStatusOrder(@Body() data: { _id: number; status: OrderStatus }) {
+    return this.orderService.updateStatusOrder(data);
+  }
+  @Get('/receipt')
+  getReceipt(@Query('_id') _id: number) {
+    return this.orderService.getReceipt(_id);
   }
 }

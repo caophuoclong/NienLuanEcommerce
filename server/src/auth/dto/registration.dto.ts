@@ -23,4 +23,6 @@ export class RegistrationDTO {
   role: RolesEnum;
   @ApiPropertyOptional()
   shop_name: string;
+  @ApiProperty()
+  dob: Date;
 }

@@ -23,7 +23,9 @@ export default class Address {
   @ManyToOne(() => Ward, (ward) => ward.addresses)
   @JoinColumn({ name: 'ward_code' })
   ward: Ward;
-  @Column()
+  @Column({
+    nullable: true,
+  })
   detail: string;
   @Column()
   name: string;
@@ -34,4 +36,6 @@ export default class Address {
     type: 'bigint',
   })
   createdAt: number;
+  @OneToMany(() => Customer, (cus) => cus.shop_address)
+  shop: Customer;
 }

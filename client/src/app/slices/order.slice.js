@@ -12,7 +12,23 @@ export const getAllOrders = createAsyncThunk('Get all Orders', async () => {
 export const OrderSlice = createSlice({
   name: 'Order Slice',
   initialState,
-  reducers: {},
+  reducers: {
+    handleChangeStatus: (state, action)=>{
+      return {
+        ...state,
+        orders: state.orders.map((order) => {
+          if(order._id === action.payload._id){
+            return {
+              ...order,
+              status: action.payload.status
+            }
+          }else{
+            return order
+          }
+        })
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllOrders.pending, (state) => {
       return {
@@ -36,5 +52,5 @@ export const OrderSlice = createSlice({
   },
 });
 
-export const {} = OrderSlice.actions;
+export const {handleChangeStatus} = OrderSlice.actions;
 export default OrderSlice.reducer;

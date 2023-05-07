@@ -1,11 +1,11 @@
 import { Box, IconButton, Input, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { RiSubtractFill } from "react-icons/ri"
 import AddNewDetailButton from "./AddNewDetailButton"
-import { IProductDetail } from "../../../types/product"
+import { IProductDetail, ProductStatus } from "../../../types/product"
 import { CiUndo } from "react-icons/ci"
 import { useAppSelector, useAppDispatch } from "../../..//app/hooks"
-import { updateProduct } from "../../..//features/product"
+import { updateChange, updateProduct } from "../../..//features/product"
 
 type Props = {}
 
@@ -15,6 +15,8 @@ export default function Detail({}: Props) {
     (state) => state.productSlice.product
   )
   const dispatch = useAppDispatch()
+  const productSlice = useAppSelector((state) => state.productSlice)
+  const product = productSlice.product
   useEffect(() => {
     if (detail.length === 0) {
       if (Object.keys(category).length > 0) {
@@ -79,7 +81,6 @@ export default function Detail({}: Props) {
       key: string
     }
   ) => {
-    // const tmpDetail = [...detail];
     const index = detail.findIndex((d) => d.key === newDetail.key)
     if (index !== -1) {
       const tmpDetail = [...detail]
@@ -94,6 +95,41 @@ export default function Detail({}: Props) {
       )
     }
   }
+  const handleRemove = (d: IProductDetail) => {
+    if (product.status === ProductStatus.UPDATE) {
+      dispatch(
+        updateChange({
+          detail: [
+            ...productSlice.update.detail,
+            {
+              ...d,
+              deleted: true,
+            },
+          ],
+        })
+      )
+    }
+    handleUpdateDetail({
+      key: d.key,
+      deleted: true,
+    })
+  }
+  const handleRestore = (d: IProductDetail) => {
+    console.log(productSlice.update.detail)
+    if (product.status === ProductStatus.UPDATE) {
+      dispatch(
+        updateChange({
+          detail: productSlice.update.detail.filter(
+            (x) => x._id !== d._id || (x._id === d._id && !x.deleted)
+          ),
+        })
+      )
+    }
+    handleUpdateDetail({
+      key: d.key,
+      deleted: false,
+    })
+  }
   return (
     <Box maxHeight="200px" overflowY={"auto"} position="relative">
       <Text
@@ -105,7 +141,7 @@ export default function Detail({}: Props) {
         fontWeight={"bold"}
         marginBottom="1rem"
       >
-        Details
+        Chi tiết
       </Text>
       <Box>
         {chunks.length === 0 && (
@@ -133,12 +169,7 @@ export default function Detail({}: Props) {
                       </label>
                       {d.deleted ? (
                         <IconButton
-                          onClick={() =>
-                            handleUpdateDetail({
-                              key: d.key,
-                              deleted: false,
-                            })
-                          }
+                          onClick={() => handleRestore(d)}
                           aria-label="undo"
                           ml="auto"
                           size="sm"
@@ -147,12 +178,7 @@ export default function Detail({}: Props) {
                         />
                       ) : (
                         <IconButton
-                          onClick={() =>
-                            handleUpdateDetail({
-                              key: d.key,
-                              deleted: true,
-                            })
-                          }
+                          onClick={() => handleRemove(d)}
                           _groupHover={{ visibility: "visible" }}
                           visibility={"hidden"}
                           ml="auto"
@@ -171,7 +197,30 @@ export default function Detail({}: Props) {
                           ? detail.find((x) => x.key === d.key)!.value
                           : ""
                       }
-                      onChange={(e) => {
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        if (product.status === ProductStatus.UPDATE) {
+                          dispatch(
+                            updateChange({
+                              detail:
+                                productSlice.update.detail.length === 0
+                                  ? [
+                                      {
+                                        ...d,
+                                        value: e.target.value,
+                                      },
+                                    ]
+                                  : productSlice.update.detail.map((x) => {
+                                      if (x.key === d.key && !x.deleted) {
+                                        return {
+                                          ...x,
+                                          value: e.target.value,
+                                        }
+                                      }
+                                      return x
+                                    }),
+                            })
+                          )
+                        }
                         handleUpdateDetail({
                           key: d.key,
                           value: e.target.value,

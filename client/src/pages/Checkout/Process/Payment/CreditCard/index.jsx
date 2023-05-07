@@ -16,6 +16,7 @@ import { OrderService } from '../../../../../services/order';
 import { useEffect } from 'react';
 import Cards from 'react-credit-cards';
 import { BsCheck } from 'react-icons/bs';
+import { useTranslation } from 'react-i18next';
 export default function CreditCard() {
   const [state, dispatch] = useContext(CheckoutContext);
   const [existingCard, setExistingCard] = useState([]);
@@ -37,7 +38,7 @@ export default function CreditCard() {
       }
     })();
   }, []);
-  console.log(state);
+  const {t} = useTranslation();
   return (
     <div>
       <div className="flex gap-2">
@@ -53,7 +54,7 @@ export default function CreditCard() {
           type="radio"
           name="existingOrNot"
         />
-        <label htmlFor="newCard">New Card</label>
+        <label htmlFor="newCard">{t("new_card")}</label>
       </div>
       {existingCard.length > 0 && (
         <div className="flex gap-2">
@@ -70,7 +71,7 @@ export default function CreditCard() {
             type="radio"
             name="existingOrNot"
           />
-          <label htmlFor="existingCard">Use existing card</label>
+          <label htmlFor="existingCard">{t("use_existing_card")}</label>
         </div>
       )}
       {state.card._id === 'ADD_NEW_CARD' ? (

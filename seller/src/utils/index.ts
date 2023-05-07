@@ -1,5 +1,4 @@
 export const parseUrl = (name?: string) => {
-  console.log(name)
   try {
     if (!name) {
       return "https://picsum.photos/400"

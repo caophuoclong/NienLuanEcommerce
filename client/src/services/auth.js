@@ -9,5 +9,13 @@ export const AuthService = {
     },
     logout(){
         return axiosClient.post("/auth/logout")
+    },
+    register(data){
+        return axiosClient.post("/auth/register", data)
+    },
+    active(token){
+        return axiosClient.post("/auth/confirm",{
+            token
+        })
     }
 }
