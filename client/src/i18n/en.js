@@ -144,5 +144,6 @@ export default {
     password_must_be_at_least_8_characters:
       'Password must be at least 8 characters',
     quantity_not_less_than_1: 'Quantity not less than 1',
+    account_not_active: 'Account not active',
   },
 };

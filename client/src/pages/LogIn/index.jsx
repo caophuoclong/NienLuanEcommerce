@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth';
 import { useAppDispatch } from '../../app/hooks';
 import { getMe } from '../../app/slices/home.slice';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 export default function LogIn() {
   const [username, setUsername] = useState('');
@@ -24,6 +25,9 @@ export default function LogIn() {
       navigate("/")
     }catch(error){
       console.log(error);
+      if(error.response.status === 403 && error.response.data.message === "Your account is not active"){
+        toast.error(t("account_not_active"))
+      }else
       alert("Please login again!")
     }
 
