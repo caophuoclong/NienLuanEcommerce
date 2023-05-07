@@ -145,5 +145,9 @@ export default {
       'Password must be at least 8 characters',
     quantity_not_less_than_1: 'Quantity not less than 1',
     account_not_active: 'Account not active',
+    shop_name: "Shop name",
+    print_receipt: "Print invoice",
+    refund: "Refund"
+
   },
 };
